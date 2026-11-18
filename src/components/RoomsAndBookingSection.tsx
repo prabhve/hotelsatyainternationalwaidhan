@@ -690,12 +690,12 @@ export function RoomsAndBookingSection({
               <motion.article
                 key={room.id}
                 layout
-                initial={{ opacity: 0, y: 36, scale: 0.96 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false, amount: 0.1 }}
-                whileHover={{ y: -7, scale: 1.015 }}
-                transition={{ ...LUXURY_SPRING, delay: idx * 0.06 }}
-                className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-lg transition-colors"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.45, delay: idx * 0.04, ease: LUXURY_EASE }}
+                className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition-colors"
               >
                 <div>
                   {/* Room Image Slider */}

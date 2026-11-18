@@ -867,7 +867,7 @@ export function HeroSection({
             variants={staggerContainerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.12 }}
+            viewport={{ once: true, amount: 0.12 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {hotelHighlights.map((item) => {
@@ -876,9 +876,9 @@ export function HeroSection({
                 <motion.article
                   key={item.id}
                   variants={staggerItemVariants}
-                  whileHover={{ y: -8, scale: 1.015 }}
-                  transition={LUXURY_SPRING}
-                  className="group bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-xl overflow-hidden flex flex-col justify-between transition-colors shadow-2xs hover:shadow-lg"
+                  whileHover={{ y: -3 }}
+                  transition={{ duration: 0.25, ease: LUXURY_EASE }}
+                  className="group bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-xl overflow-hidden flex flex-col justify-between transition-colors shadow-2xs hover:shadow-md"
                 >
                   <div>
                     <div className="aspect-[16/10] w-full bg-[#EFECE4] overflow-hidden relative">

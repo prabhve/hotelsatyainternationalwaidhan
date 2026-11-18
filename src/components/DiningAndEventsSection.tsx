@@ -141,12 +141,8 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
       {/* =====================================================================
           DINING — SHARDA RESTAURANT, EUROPEAN BAKERY & BLUE DIAMOND BAR
           ===================================================================== */}
-      <motion.section
+      <section
         id="dining-events"
-        initial={{ opacity: 0, y: 38 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.08 }}
-        transition={LUXURY_SPRING}
         className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#EFECE4] scroll-mt-16"
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -445,17 +441,13 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
             </Reveal>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* =====================================================================
           BANQUETS, 3,000-GUEST LAWNS & CONFERENCES
           ===================================================================== */}
-      <motion.section
+      <section
         id="banquets"
-        initial={{ opacity: 0, y: 38 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.08 }}
-        transition={LUXURY_SPRING}
         className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#F8F6F0] scroll-mt-16"
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -482,13 +474,13 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
               return (
                 <motion.article
                   key={v.id}
-                  initial={{ opacity: 0, y: 36, scale: 0.96 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: false, amount: 0.1 }}
-                  whileHover={{ y: -7, scale: 1.015 }}
-                  transition={{ ...LUXURY_SPRING, delay: idx * 0.07 }}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  whileHover={{ y: -3 }}
+                  transition={{ duration: 0.45, delay: idx * 0.05, ease: LUXURY_EASE }}
                   onClick={() => setVenue(v.name)}
-                  className={`cursor-pointer bg-white border rounded-2xl overflow-hidden flex flex-col justify-between transition-colors shadow-xs hover:shadow-lg ${
+                  className={`cursor-pointer bg-white border rounded-2xl overflow-hidden flex flex-col justify-between transition-colors shadow-xs hover:shadow-md ${
                     isSelected
                       ? 'border-[#183D32] ring-1 ring-[#183D32]'
                       : 'border-[#E9E2D5] hover:border-[#C6A66B]'
@@ -770,7 +762,7 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
             </div>
           </div>
         </div>
-      </motion.section>
+      </section>
     </div>
   );
 }

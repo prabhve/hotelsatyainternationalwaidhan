@@ -12,23 +12,24 @@ export const LUXURY_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 export const LUXURY_SPRING = {
   type: 'spring' as const,
-  stiffness: 74,
-  damping: 18,
-  mass: 0.9,
+  stiffness: 90,
+  damping: 24,
+  mass: 0.85,
 };
 
 export const sectionContainerSpringVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 48,
+    y: 18,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      ...LUXURY_SPRING,
-      staggerChildren: 0.15,
-      delayChildren: 0.06,
+      duration: 0.55,
+      ease: LUXURY_EASE,
+      staggerChildren: 0.08,
+      delayChildren: 0.02,
     },
   },
 };
@@ -36,24 +37,27 @@ export const sectionContainerSpringVariants: Variants = {
 export const sectionChildSpringVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 38,
-    scale: 0.975,
+    y: 14,
   },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: LUXURY_SPRING,
+    transition: {
+      duration: 0.5,
+      ease: LUXURY_EASE,
+    },
   },
 };
 
 export const fadeUpVariants: Variants = {
-  hidden: { opacity: 0, y: 36, scale: 0.97 },
+  hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: LUXURY_SPRING,
+    transition: {
+      duration: 0.5,
+      ease: LUXURY_EASE,
+    },
   },
 };
 
@@ -62,19 +66,21 @@ export const staggerContainerVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.14,
-      delayChildren: 0.08,
+      staggerChildren: 0.08,
+      delayChildren: 0.03,
     },
   },
 };
 
 export const staggerItemVariants: Variants = {
-  hidden: { opacity: 0, y: 32, scale: 0.96 },
+  hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: LUXURY_SPRING,
+    transition: {
+      duration: 0.5,
+      ease: LUXURY_EASE,
+    },
   },
 };
 
@@ -91,17 +97,19 @@ export function Reveal({
   children,
   className = '',
   delay = 0,
-  y = 38,
-  once = false,
+  y = 16,
+  duration = 0.5,
+  once = true,
 }: RevealProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y, scale: 0.975 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, amount: 0.12 }}
       transition={{
-        ...LUXURY_SPRING,
+        duration,
         delay,
+        ease: LUXURY_EASE,
       }}
       className={className}
     >

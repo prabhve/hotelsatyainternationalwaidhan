@@ -32,7 +32,7 @@ import {
 } from '../data/hotelData';
 import { buildMailtoUrl, buildWhatsAppUrl, trackEvent } from '../lib/analytics';
 import { SafeImage } from './SafeImage';
-import { LUXURY_SPRING, Reveal } from './MotionPrimitives';
+import { LUXURY_EASE, Reveal } from './MotionPrimitives';
 
 interface HeritageAndLeadershipSectionProps {
   lang: Language;
@@ -93,12 +93,8 @@ export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSect
       {/* =====================================================================
           VERIFIED THREE-STAR HOTEL FACILITIES & RESIDENT SERVICES
           ===================================================================== */}
-      <motion.section
+      <section
         id="facilities"
-        initial={{ opacity: 0, y: 38 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.08 }}
-        transition={LUXURY_SPRING}
         className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#EFECE4] scroll-mt-16"
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -122,12 +118,12 @@ export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSect
               return (
                 <motion.div
                   key={fac.title}
-                  initial={{ opacity: 0, y: 28, scale: 0.96 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: false, amount: 0.1 }}
-                  whileHover={{ y: -5, scale: 1.015 }}
-                  transition={{ ...LUXURY_SPRING, delay: idx * 0.04 }}
-                  className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs hover:shadow-md transition-colors"
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  whileHover={{ y: -2 }}
+                  transition={{ duration: 0.4, delay: idx * 0.03, ease: LUXURY_EASE }}
+                  className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs transition-colors"
                 >
                   <div className="w-10 h-10 rounded-xl bg-[#F8F6F0] border border-[#E9E2D5] flex items-center justify-center text-[#183D32] shrink-0">
                     <IconComp className="w-4 h-4" />
@@ -188,17 +184,13 @@ export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSect
             </div>
           </Reveal>
         </div>
-      </motion.section>
+      </section>
 
       {/* =====================================================================
           CORPORATE & EXECUTIVE HOSPITALITY (NTPC, RELIANCE, HINDALCO, NCL)
           ===================================================================== */}
-      <motion.section
+      <section
         id="corporate"
-        initial={{ opacity: 0, y: 38 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.08 }}
-        transition={LUXURY_SPRING}
         className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#F8F6F0] scroll-mt-16"
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -425,12 +417,12 @@ export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSect
                 {LEADERSHIP_PROFILES.map((leader, idx) => (
                   <motion.article
                     key={leader.id}
-                    initial={{ opacity: 0, y: 32, scale: 0.96 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: false, amount: 0.15 }}
-                    whileHover={{ y: -5, scale: 1.01 }}
-                    transition={{ ...LUXURY_SPRING, delay: idx * 0.1 }}
-                    className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start shadow-2xs hover:shadow-md transition-colors"
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    whileHover={{ y: -2 }}
+                    transition={{ duration: 0.45, delay: idx * 0.06, ease: LUXURY_EASE }}
+                    className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start shadow-2xs transition-colors"
                   >
                     <SafeImage
                       src={leader.image}
@@ -454,7 +446,7 @@ export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSect
             </div>
           </Reveal>
         </div>
-      </motion.section>
+      </section>
     </div>
   );
 }

@@ -39,7 +39,7 @@ function SectionRevealWrapper({ children }: SectionRevealWrapperProps) {
       variants={sectionContainerSpringVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, amount: 0.07, margin: '0px 0px -48px 0px' }}
+      viewport={{ once: true, amount: 0.08 }}
     >
       {React.Children.map(children, (child, index) => (
         <motion.div key={index} variants={sectionChildSpringVariants}>
