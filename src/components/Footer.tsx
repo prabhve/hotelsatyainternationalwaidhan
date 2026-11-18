@@ -322,10 +322,10 @@ export function Footer({ lang, onBookStay }: FooterProps) {
                     />
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                     <button
                       type="submit"
-                      className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#183D32] text-white hover:bg-[#122E25] text-xs uppercase tracking-[0.15em] font-semibold transition-colors cursor-pointer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#183D32] text-white hover:bg-[#122E25] text-xs uppercase tracking-[0.15em] font-semibold transition-colors cursor-pointer"
                     >
                       <Send className="w-4 h-4 text-[#C6A66B]" />
                       <span>Send via WhatsApp Desk</span>
@@ -333,7 +333,7 @@ export function Footer({ lang, onBookStay }: FooterProps) {
                     <button
                       type="button"
                       onClick={handleContactEmailFallback}
-                      className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-[#F8F6F0] text-[#191D1B] hover:bg-[#EFECE4] border border-[#E9E2D5] text-xs uppercase tracking-[0.14em] font-semibold transition-colors cursor-pointer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#F8F6F0] text-[#191D1B] hover:bg-[#EFECE4] border border-[#E9E2D5] text-xs uppercase tracking-[0.14em] font-semibold transition-colors cursor-pointer"
                     >
                       <Mail className="w-4 h-4 text-[#183D32]" />
                       <span>Send via Email</span>

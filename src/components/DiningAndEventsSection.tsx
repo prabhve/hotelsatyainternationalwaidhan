@@ -162,10 +162,10 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
               <button
                 type="button"
                 onClick={handleRequestMenuWhatsApp}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-xl text-xs font-semibold text-[#191D1B] transition-colors shrink-0 cursor-pointer"
+                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-xl text-xs font-semibold text-[#191D1B] transition-colors shrink-0 cursor-pointer"
               >
-                <MessageSquare className="w-4 h-4 text-[#183D32]" aria-hidden="true" />
-                Request Current Menu & Cake Catalogue on WhatsApp
+                <MessageSquare className="w-4 h-4 text-[#183D32] shrink-0" aria-hidden="true" />
+                <span>Request Current Menu & Cake Catalogue on WhatsApp</span>
               </button>
             </div>
           </Reveal>
@@ -173,8 +173,8 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
           {/* 2-Card Showcase: Sharda Restaurant & Blue Diamond Bar */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             {/* Sharda Multi-Cuisine Restaurant & European Bakery */}
-            <Reveal className="lg:col-span-7 flex" delay={0.05}>
-              <article className="bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs w-full">
+            <Reveal className="lg:col-span-7 flex min-w-0" delay={0.05}>
+              <article className="bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs w-full min-w-0">
                 <div>
                   <div className="aspect-[16/9] bg-[#E9E2D5] overflow-hidden relative group">
                     <SafeImage
@@ -192,7 +192,7 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                     </div>
                   </div>
 
-                  <div className="p-6 sm:p-8">
+                  <div className="p-5 sm:p-8">
                     <p className="text-xs font-semibold text-[#183D32] uppercase tracking-wider mb-2">
                       6 Verified Cuisines: {DINING_AND_BAR.restaurant.cuisines.join(' · ')}
                     </p>
@@ -231,13 +231,13 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                           {(SHARDA_CULINARY_SPECIALTIES[activeMenuTab] || []).map((dish) => (
                             <div
                               key={dish.name}
-                              className="py-3 first:pt-0 last:pb-0 flex items-start justify-between gap-4"
+                              className="py-3.5 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4"
                             >
-                              <div>
-                                <div className="flex items-center gap-2">
+                              <div className="min-w-0">
+                                <div className="flex items-start gap-2">
                                   <span
                                     title={dish.isVeg ? 'Vegetarian Selection' : 'Vegetarian & Non-Vegetarian Options'}
-                                    className={`inline-flex items-center justify-center w-4 h-4 rounded-xs border ${
+                                    className={`inline-flex items-center justify-center w-4 h-4 rounded-xs border mt-0.5 ${
                                       dish.isVeg ? 'border-emerald-700' : 'border-red-700'
                                     } shrink-0`}
                                   >
@@ -247,15 +247,15 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                                       }`}
                                     />
                                   </span>
-                                  <p className="text-xs sm:text-sm font-bold text-[#191D1B]">
+                                  <p className="text-xs sm:text-sm font-bold text-[#191D1B] leading-snug">
                                     {dish.name}
                                   </p>
                                 </div>
-                                <p className="text-xs text-[#525854] mt-0.5 pl-6">
+                                <p className="text-xs text-[#525854] mt-1 pl-6 leading-relaxed">
                                   {dish.description}
                                 </p>
                               </div>
-                              <span className="text-[11px] font-semibold text-[#183D32] bg-white px-2.5 py-1 rounded-md border border-[#E9E2D5] whitespace-nowrap shrink-0">
+                              <span className="self-start ml-6 sm:ml-0 text-[11px] font-semibold text-[#183D32] bg-white px-2.5 py-1 rounded-md border border-[#E9E2D5] whitespace-nowrap shrink-0">
                                 {dish.cuisineTag}
                               </span>
                             </div>
@@ -266,13 +266,13 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                   </div>
                 </div>
 
-              <div className="px-6 py-4 bg-[#F8F6F0] border-t border-[#E9E2D5] flex flex-wrap items-center justify-between gap-2 text-xs text-[#525854]">
+              <div className="px-5 sm:px-6 py-4 bg-[#F8F6F0] border-t border-[#E9E2D5] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-[#525854]">
                 <span className="inline-flex items-center gap-1.5 font-semibold text-[#191D1B]">
-                  <Utensils className="w-3.5 h-3.5 text-[#183D32]" />
+                  <Utensils className="w-3.5 h-3.5 text-[#183D32] shrink-0" />
                   24-Hour Room Service Available
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-[#183D32] font-semibold">
-                  <Cake className="w-3.5 h-3.5" />
+                  <Cake className="w-3.5 h-3.5 shrink-0" />
                   100% Original European-Technology Custom Bakery
                 </span>
               </div>
@@ -280,8 +280,8 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
             </Reveal>
 
             {/* Blue Diamond Colonial Bar + Reserve Table / Custom Cake WhatsApp Form */}
-            <Reveal className="lg:col-span-5 flex flex-col gap-6" delay={0.12}>
-              <article className="bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden shadow-xs">
+            <Reveal className="lg:col-span-5 flex flex-col gap-6 min-w-0" delay={0.12}>
+              <article className="bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden shadow-xs min-w-0">
                 <div className="aspect-[16/9] bg-[#E9E2D5] overflow-hidden relative">
                   <SafeImage
                     src={DINING_AND_BAR.bar.image}
@@ -296,7 +296,7 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                   </div>
                 </div>
 
-                <div className="p-6 space-y-4">
+                <div className="p-5 sm:p-6 space-y-4">
                   <p className="text-sm text-[#525854] leading-relaxed">
                     {DINING_AND_BAR.bar.description}
                   </p>
@@ -323,7 +323,7 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
               {/* Reserve a Table / Order Custom Bakery Cake Form */}
               <form
                 onSubmit={handleReserveTableWhatsApp}
-                className="bg-white border border-[#E9E2D5] rounded-2xl p-6 space-y-3.5 shadow-xs"
+                className="bg-white border border-[#E9E2D5] rounded-2xl p-5 sm:p-6 space-y-3.5 shadow-xs min-w-0"
               >
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#183D32]">
@@ -341,21 +341,21 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                   <select
                     value={tableRequestType}
                     onChange={(e) => setTableRequestType(e.target.value as typeof tableRequestType)}
-                    className="w-full px-3 py-2 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl text-[#191D1B]"
+                    className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl text-[#191D1B]"
                   >
                     <option value="Table at Sharda Restaurant">
-                      Reserve Family / Executive Table at Sharda Restaurant
+                      Reserve Table — Sharda Restaurant
                     </option>
                     <option value="Custom Bakery / Celebration Cake">
-                      Pre-Order Custom Birthday / Anniversary / Wedding Cake
+                      Pre-Order Custom Celebration Cake
                     </option>
                     <option value="Blue Diamond Bar Lounge Table">
-                      Reserve Evening Table at Blue Diamond Bar (11 AM – 11 PM)
+                      Reserve Table — Blue Diamond Bar (11 AM – 11 PM)
                     </option>
                   </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-semibold text-[#525854] mb-1">
                       Your Name *
@@ -365,7 +365,7 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                       value={tableGuestName}
                       onChange={(e) => setTableGuestName(e.target.value)}
                       placeholder="Full name"
-                      className="w-full px-3 py-2 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl"
+                      className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl"
                       required
                     />
                   </div>
@@ -378,21 +378,21 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                       value={tablePhone}
                       onChange={(e) => setTablePhone(e.target.value)}
                       placeholder="+91 98765 43210"
-                      className="w-full px-3 py-2 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl"
+                      className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2.5">
-                  <div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  <div className="col-span-2 sm:col-span-1">
                     <label className="block text-xs font-semibold text-[#525854] mb-1">Date</label>
                     <input
                       type="date"
                       value={tableDate}
                       min={new Date().toISOString().split('T')[0]}
                       onChange={(e) => setTableDate(e.target.value)}
-                      className="w-full px-2.5 py-2 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl"
+                      className="w-full px-3 py-2.5 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl"
                       required
                     />
                   </div>
@@ -402,7 +402,7 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                       type="time"
                       value={tableTime}
                       onChange={(e) => setTableTime(e.target.value)}
-                      className="w-full px-2.5 py-2 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl"
+                      className="w-full px-3 py-2.5 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl"
                       required
                     />
                   </div>
@@ -414,7 +414,7 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                       max={60}
                       value={tableGuests}
                       onChange={(e) => setTableGuests(Number(e.target.value))}
-                      className="w-full px-2.5 py-2 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl price-tabular"
+                      className="w-full px-3 py-2.5 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl price-tabular"
                       required
                     />
                   </div>
@@ -426,7 +426,7 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                     value={tableNote}
                     onChange={(e) => setTableNote(e.target.value)}
                     placeholder="Optional: Cake flavor/message on cake or dietary preference..."
-                    className="w-full px-3 py-2 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl"
+                    className="w-full px-3 py-2.5 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl"
                   />
                 </div>
 

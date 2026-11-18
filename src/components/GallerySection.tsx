@@ -175,9 +175,9 @@ export function GallerySection({ lang }: GallerySectionProps) {
         )}
 
         {/* Private Venue & Suite Viewing Callout */}
-        <div className="bg-white border border-[#E9E2D5] rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#F8F6F0] border border-[#E9E2D5] flex items-center justify-center text-[#183D32] shrink-0">
+        <div className="bg-white border border-[#E9E2D5] rounded-2xl p-5 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="flex flex-col sm:flex-row items-start gap-3.5 sm:gap-4">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#F8F6F0] border border-[#E9E2D5] flex items-center justify-center text-[#183D32] shrink-0">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
@@ -187,18 +187,18 @@ export function GallerySection({ lang }: GallerySectionProps) {
               <h3 className="font-display text-2xl font-semibold text-[#191D1B] mt-0.5">
                 Planning a Wedding, Corporate Conference, or Long-Stay in Waidhan?
               </h3>
-              <p className="text-xs sm:text-sm text-[#525854] mt-1 max-w-2xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#525854] mt-1.5 max-w-2xl leading-relaxed">
                 Visit us on Belaunji Main Road for a guided tour of our 7 room and suite categories, Sharda Restaurant & Bakery, indoor Banquet Hall (200 guests), and 3,000-guest Open-Air Lawn.
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto shrink-0">
             <a
               href={tourWhatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackEvent('whatsapp_click', { source: 'gallery_tour_request' })}
-              className="inline-flex items-center gap-2 px-5 py-3 bg-[#183D32] hover:bg-[#122E25] text-white text-xs sm:text-sm font-semibold rounded-xl whitespace-nowrap transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#183D32] hover:bg-[#122E25] text-white text-xs sm:text-sm font-semibold rounded-xl whitespace-nowrap transition-colors"
             >
               <MessageSquare className="w-4 h-4 text-[#C6A66B]" />
               Schedule a Visit on WhatsApp
@@ -206,7 +206,7 @@ export function GallerySection({ lang }: GallerySectionProps) {
             <a
               href={`tel:${HOTEL_INFO.phones[0]}`}
               onClick={() => trackEvent('call_click', { source: 'gallery_tour_call' })}
-              className="inline-flex items-center gap-2 px-4 py-3 bg-[#F8F6F0] hover:bg-[#EFECE4] text-[#191D1B] border border-[#E9E2D5] text-xs sm:text-sm font-semibold rounded-xl whitespace-nowrap price-tabular transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#F8F6F0] hover:bg-[#EFECE4] text-[#191D1B] border border-[#E9E2D5] text-xs sm:text-sm font-semibold rounded-xl whitespace-nowrap price-tabular transition-colors"
             >
               <Phone className="w-4 h-4 text-[#183D32]" />
               {HOTEL_INFO.phones[0]}

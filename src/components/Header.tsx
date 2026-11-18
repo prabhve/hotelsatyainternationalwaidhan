@@ -111,7 +111,7 @@ export function Header({ lang, onToggleLang, onBookStay }: HeaderProps) {
         initial={{ y: -44, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.75, delay: 0.4, ease: LUXURY_EASE }}
-        className={`sticky top-0 z-40 transition-colors duration-300 ${
+        className={`sticky top-0 z-40 w-full max-w-full transition-colors duration-300 ${
           scrolled
             ? 'bg-[#F8F6F0]/95 backdrop-blur-md shadow-[0_6px_24px_rgba(25,29,27,0.08)]'
             : 'bg-[#F8F6F0]'
@@ -166,32 +166,32 @@ export function Header({ lang, onToggleLang, onBookStay }: HeaderProps) {
         </AnimatePresence>
 
         {/* Main Header Bar */}
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-[74px] sm:h-[82px] flex items-center justify-between gap-4">
+        <div className="max-w-[1440px] mx-auto px-3.5 sm:px-6 lg:px-8">
+          <div className="h-[68px] sm:h-[82px] flex items-center justify-between gap-2 sm:gap-4">
             {/* Brand Identity (Original Crest + Serif Wordmark + Waidhan Subtitle) */}
             <a
               href="#top"
               onClick={() => handleNavClick('#top')}
               aria-label={`${HOTEL_INFO.name} — Home`}
-              className="flex items-center gap-3 sm:gap-3.5 group shrink-0"
+              className="flex items-center gap-2.5 sm:gap-3.5 group min-w-0 flex-1 xl:flex-initial"
             >
               {/* Official Hotel Satya International Emblem Crest */}
               <div
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-white border border-[#E2DACB] shadow-2xs overflow-hidden flex items-center justify-start shrink-0 transition-transform duration-300 group-hover:scale-[1.04]"
+                className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-white border border-[#E2DACB] shadow-2xs overflow-hidden flex items-center justify-start shrink-0 transition-transform duration-300 group-hover:scale-[1.04]"
                 title="Hotel Satya International Official Crest"
               >
                 <img
                   src={HOTEL_INFO.logo}
                   alt="Hotel Satya International Crest"
-                  className="h-8 sm:h-9 w-auto max-w-none object-left object-contain ml-[3px]"
+                  className="h-7 sm:h-9 w-auto max-w-none object-left object-contain ml-[2.5px] sm:ml-[3px]"
                 />
               </div>
 
-              <div className="flex flex-col">
-                <span className="font-display text-xl sm:text-[23px] font-semibold tracking-tight text-[#191D1B] group-hover:text-[#183D32] transition-colors leading-none">
+              <div className="flex flex-col min-w-0">
+                <span className="font-display text-[17px] sm:text-[23px] font-semibold tracking-tight text-[#191D1B] group-hover:text-[#183D32] transition-colors leading-none truncate">
                   {HOTEL_INFO.name}
                 </span>
-                <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-[#77756F] font-semibold mt-1.5 leading-none">
+                <span className="text-[9px] sm:text-[11px] uppercase tracking-[0.11em] sm:tracking-[0.2em] text-[#77756F] font-semibold mt-1 sm:mt-1.5 leading-none truncate">
                   {t.brandSub}
                 </span>
               </div>
@@ -277,18 +277,18 @@ export function Header({ lang, onToggleLang, onBookStay }: HeaderProps) {
             </nav>
 
             {/* Right Actions: Language Toggle + Primary Booking CTA + Mobile Hamburger */}
-            <div className="flex items-center gap-2.5 sm:gap-3.5">
+            <div className="flex items-center gap-1.5 sm:gap-3.5 shrink-0">
               {/* Language Toggle (EN | हिन्दी) */}
               <div
                 role="group"
                 aria-label="Language Switcher"
-                className="inline-flex items-center rounded-lg border border-[#E2DACB] bg-white p-0.5 text-[11px] font-semibold"
+                className="inline-flex items-center rounded-lg border border-[#E2DACB] bg-white p-0.5 text-[10px] sm:text-[11px] font-semibold shrink-0"
               >
                 <button
                   type="button"
                   onClick={() => onToggleLang('en')}
                   aria-pressed={lang === 'en'}
-                  className={`px-2.5 py-1.5 rounded-md transition-colors cursor-pointer ${
+                  className={`px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-md transition-colors cursor-pointer ${
                     lang === 'en'
                       ? 'bg-[#183D32] text-white'
                       : 'text-[#77756F] hover:text-[#191D1B]'
@@ -300,7 +300,7 @@ export function Header({ lang, onToggleLang, onBookStay }: HeaderProps) {
                   type="button"
                   onClick={() => onToggleLang('hi')}
                   aria-pressed={lang === 'hi'}
-                  className={`px-2.5 py-1.5 rounded-md transition-colors cursor-pointer ${
+                  className={`px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-md transition-colors cursor-pointer ${
                     lang === 'hi'
                       ? 'bg-[#183D32] text-white'
                       : 'text-[#77756F] hover:text-[#191D1B]'
@@ -332,7 +332,7 @@ export function Header({ lang, onToggleLang, onBookStay }: HeaderProps) {
                 onClick={() => setMobileOpen((prev) => !prev)}
                 aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
                 aria-expanded={mobileOpen}
-                className="xl:hidden p-2.5 rounded-lg border border-[#E2DACB] bg-white text-[#191D1B] hover:border-[#183D32] transition-colors cursor-pointer"
+                className="xl:hidden p-2 sm:p-2.5 rounded-lg border border-[#E2DACB] bg-white text-[#191D1B] hover:border-[#183D32] transition-colors cursor-pointer shrink-0"
               >
                 {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>

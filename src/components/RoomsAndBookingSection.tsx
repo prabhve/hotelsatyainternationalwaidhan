@@ -277,15 +277,15 @@ export function RoomsAndBookingSection({
               </h2>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 max-w-full">
               {/* Tier Filter Chips */}
-              <div className="inline-flex items-center p-1 bg-[#EFECE4] border border-[#E9E2D5] rounded-xl">
+              <div className="inline-flex items-center p-1 bg-[#EFECE4] border border-[#E9E2D5] rounded-xl max-w-full overflow-x-auto no-scrollbar">
                 {(['All', 'Suite', 'Deluxe', 'Standard'] as const).map((tier) => (
                   <button
                     key={tier}
                     type="button"
                     onClick={() => setTierFilter(tier)}
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    className={`px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                       tierFilter === tier
                         ? 'bg-white text-[#191D1B] shadow-xs'
                         : 'text-[#525854] hover:text-[#191D1B]'
@@ -343,7 +343,7 @@ export function RoomsAndBookingSection({
             className="mb-12 bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden shadow-xs scroll-mt-24"
           >
             {/* 7-Room Selector Tabs */}
-            <div className="px-4 sm:px-6 py-3.5 bg-[#EFECE4] border-b border-[#E9E2D5] flex items-center gap-2 overflow-x-auto">
+            <div className="px-4 sm:px-6 py-3.5 bg-[#EFECE4] border-b border-[#E9E2D5] flex items-center gap-2 overflow-x-auto no-scrollbar">
               <span className="text-xs font-bold text-[#525854] whitespace-nowrap shrink-0 mr-1">
                 Inspect Category:
               </span>
@@ -368,7 +368,7 @@ export function RoomsAndBookingSection({
 
             <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
               {/* Left: Multi-Photo Gallery with Lightbox Trigger */}
-              <div className="lg:col-span-6 p-5 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#E9E2D5] bg-[#F8F6F0]">
+              <div className="lg:col-span-6 min-w-0 p-4 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#E9E2D5] bg-[#F8F6F0]">
                 <div>
                   <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-[#EFECE4] border border-[#E9E2D5]">
                     <AnimatePresence mode="wait">
@@ -433,7 +433,7 @@ export function RoomsAndBookingSection({
 
               {/* Included Amenities Grid */}
               <div className="mt-5 pt-4 border-t border-[#E9E2D5]">
-                <div className="flex items-center justify-between text-xs text-[#525854] mb-2.5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs text-[#525854] mb-2.5">
                   <span className="font-semibold text-[#191D1B]">Verified Room Privileges</span>
                   <span className="price-tabular">Check-in 2:00 PM · Check-out 12:00 PM</span>
                 </div>
@@ -449,7 +449,7 @@ export function RoomsAndBookingSection({
             </div>
 
             {/* Right: Verified 7-Category Published Tariff Schedule + Meal Plan Selector */}
-            <div className="lg:col-span-6 p-6 sm:p-8 flex flex-col justify-between">
+            <div className="lg:col-span-6 min-w-0 p-4 sm:p-8 flex flex-col justify-between">
               <div>
                 <p className="text-xs font-semibold text-[#183D32] uppercase tracking-wider mb-1">
                   {spotlightRoom.categoryLabel} · Official Published Tariff
@@ -580,7 +580,7 @@ export function RoomsAndBookingSection({
                   <button
                     type="button"
                     onClick={() => openModalForRoom(spotlightRoom)}
-                    className="btn-gold-sheen px-6 py-3.5 bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.14em] font-semibold rounded-xl shadow-xs transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    className="btn-gold-sheen w-full sm:w-auto px-6 py-3.5 bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.14em] font-semibold rounded-xl shadow-xs transition-colors whitespace-nowrap shrink-0 cursor-pointer text-center justify-center inline-flex items-center"
                   >
                     Request Booking ({occupancy} · {mealPlan})
                   </button>
@@ -739,9 +739,9 @@ export function RoomsAndBookingSection({
                       </div>
                     )}
 
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent px-4 py-3 flex items-center justify-between text-xs text-white">
-                      <span>{room.categoryLabel}</span>
-                      <span>{room.bedType}</span>
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-4 py-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs text-white">
+                      <span className="font-semibold text-[#C6A66B]">{room.categoryLabel}</span>
+                      <span className="text-white/90">{room.bedType}</span>
                     </div>
                   </div>
 

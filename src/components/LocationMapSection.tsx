@@ -211,16 +211,16 @@ export function LocationMapSection({ lang }: LocationMapSectionProps) {
               </h2>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full lg:w-auto">
               <button
                 type="button"
                 onClick={() => {
                   setShowCabModal(true);
                   trackEvent('cab_request', { action: 'open_modal' });
                 }}
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#183D32] text-white hover:bg-[#122E25] text-xs uppercase tracking-[0.14em] font-semibold transition-colors cursor-pointer shadow-xs"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#183D32] text-white hover:bg-[#122E25] text-xs uppercase tracking-[0.14em] font-semibold transition-colors cursor-pointer shadow-xs"
               >
-                <Car className="w-4 h-4 text-[#C6A66B]" />
+                <Car className="w-4 h-4 text-[#C6A66B] shrink-0" />
                 <span>
                   {lang === 'hi'
                     ? 'ट्रैवल डेस्क / कैब सहायता'
@@ -232,11 +232,11 @@ export function LocationMapSection({ lang }: LocationMapSectionProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent('cab_request', { action: 'directions_click' })}
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#191D1B] text-[#F8F6F0] hover:bg-[#2E3330] text-xs uppercase tracking-[0.14em] font-semibold transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#191D1B] text-[#F8F6F0] hover:bg-[#2E3330] text-xs uppercase tracking-[0.14em] font-semibold transition-colors"
               >
-                <Navigation className="w-4 h-4 text-[#C6A66B]" />
+                <Navigation className="w-4 h-4 text-[#C6A66B] shrink-0" />
                 <span>Open in Google Maps</span>
-                <ExternalLink className="w-3.5 h-3.5 opacity-75" />
+                <ExternalLink className="w-3.5 h-3.5 opacity-75 shrink-0" />
               </a>
             </div>
           </div>
@@ -245,14 +245,14 @@ export function LocationMapSection({ lang }: LocationMapSectionProps) {
         {/* Interactive Map + Verified Distance Table Split */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left 5 Cols: Official Address & 9 Verified Famous Places Distances */}
-          <div className="lg:col-span-5 space-y-5">
+          <div className="lg:col-span-5 space-y-5 min-w-0">
             {/* Official Address & Coordinates Card */}
-            <div className="p-6 rounded-2xl bg-white border border-[#E9E2D5] shadow-2xs">
-              <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#E9E2D5] shadow-2xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
                 <span className="text-[11px] uppercase tracking-[0.16em] text-[#183D32] font-bold">
                   Verified GPS & Postal Address
                 </span>
-                <span className="price-tabular text-xs font-bold text-[#525854] bg-[#F8F6F0] px-2.5 py-1 rounded-md border border-[#E9E2D5]">
+                <span className="self-start sm:self-auto price-tabular text-xs font-bold text-[#525854] bg-[#F8F6F0] px-2.5 py-1 rounded-md border border-[#E9E2D5]">
                   24.072285° N, 82.6206458° E
                 </span>
               </div>

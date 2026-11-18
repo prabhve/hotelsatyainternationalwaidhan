@@ -14,24 +14,32 @@
     --border-beige: #E9E2D5;
   }
 
-  html {
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
     background-color: #F8F6F0;
     color: #191D1B;
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     scroll-behavior: smooth;
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
-  }
-
-  body {
-    background-color: #F8F6F0;
-    color: #191D1B;
-    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, .font-display, .font-serif {
     font-family: 'Cormorant Garamond', Georgia, serif;
     letter-spacing: -0.01em;
   }
+}
+
+/* Hide scrollbars on horizontal chip/tab strips while preserving touch scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Tabular sans-serif for all ₹ prices, tariffs, distances, and metrics */

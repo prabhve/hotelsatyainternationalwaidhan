@@ -195,15 +195,15 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
               </h2>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
               <a
                 href={GOOGLE_MAPS_REVIEWS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-3 bg-[#183D32] hover:bg-[#122E25] text-white rounded-lg text-xs uppercase tracking-[0.14em] font-semibold transition-colors shrink-0"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#183D32] hover:bg-[#122E25] text-white rounded-xl text-xs uppercase tracking-[0.14em] font-semibold transition-colors shrink-0"
               >
                 <span>Read & Write Reviews on Google Maps</span>
-                <ExternalLink className="w-3.5 h-3.5 text-[#C6A66B]" />
+                <ExternalLink className="w-3.5 h-3.5 text-[#C6A66B] shrink-0" />
               </a>
             </div>
           </div>
@@ -242,7 +242,7 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
         {/* Review Feed + Authenticated Guest Review Composer */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left 7 Columns: Verified Portal Reviews & Google Maps Direct Verification Card */}
-          <div className="lg:col-span-7 space-y-5">
+          <div className="lg:col-span-7 space-y-5 min-w-0">
             {/* Filter & Search Bar */}
             <div className="bg-white border border-[#E9E2D5] rounded-xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-1">

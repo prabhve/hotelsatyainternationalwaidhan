@@ -79,7 +79,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <FirebaseProvider>
-        <div className="min-h-screen bg-[#F8F6F0] text-[#191D1B] flex flex-col selection:bg-[#183D32] selection:text-[#F8F6F0]">
+        <div className="min-h-screen w-full max-w-full overflow-x-clip bg-[#F8F6F0] text-[#191D1B] flex flex-col selection:bg-[#183D32] selection:text-[#F8F6F0]">
           {/* Luxury Opening Crest & Curtain Reveal on Page Start */}
           <OpeningWelcomeCurtain />
 
@@ -90,7 +90,7 @@ export default function App() {
             onBookStay={scrollToRooms}
           />
 
-          <main className="flex-1">
+          <main className="flex-1 w-full max-w-full overflow-x-clip">
             {/* Hero + Parallax Background + Staggered Headlines + Integrated Booking Search Interface (#booking-widget) + 4 Hotel Highlights */}
             <HeroSection
               lang={lang}

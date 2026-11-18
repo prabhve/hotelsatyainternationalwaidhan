@@ -425,7 +425,7 @@ export function HeroSection({
                 {/* Primary & Secondary Hero Call-to-Action Buttons */}
                 <motion.div
                   variants={heroLeftItemVariants}
-                  className="flex flex-wrap items-center gap-3.5 sm:gap-4 pt-1"
+                  className="grid grid-cols-1 sm:flex sm:flex-wrap items-center gap-3 sm:gap-4 pt-1"
                 >
                   <motion.a
                     href="#rooms"
@@ -435,7 +435,7 @@ export function HeroSection({
                     onClick={() =>
                       trackEvent('book_stay_click', { source: 'hero_explore_rooms' })
                     }
-                    className="btn-gold-sheen inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#C6A66B] hover:bg-[#b59457] text-[#191D1B] text-xs uppercase tracking-[0.16em] font-bold transition-colors shadow-sm whitespace-nowrap shrink-0"
+                    className="btn-gold-sheen w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 sm:py-4 rounded-lg bg-[#C6A66B] hover:bg-[#b59457] text-[#191D1B] text-xs uppercase tracking-[0.16em] font-bold transition-colors shadow-sm whitespace-nowrap"
                   >
                     <span>{t.hero.checkRatesBtn}</span>
                     <ArrowRight className="w-4 h-4" />
@@ -449,7 +449,7 @@ export function HeroSection({
                     onClick={() =>
                       trackEvent('book_stay_click', { source: 'hero_book_stay' })
                     }
-                    className="btn-gold-sheen inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white border border-white/15 text-xs uppercase tracking-[0.16em] font-semibold transition-colors shadow-sm whitespace-nowrap shrink-0"
+                    className="btn-gold-sheen w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 sm:py-4 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white border border-white/15 text-xs uppercase tracking-[0.16em] font-semibold transition-colors shadow-sm whitespace-nowrap"
                   >
                     <Calendar className="w-4 h-4 text-[#C6A66B]" />
                     <span>{t.nav.bookStay}</span>
@@ -458,7 +458,7 @@ export function HeroSection({
                   <a
                     href={`tel:${HOTEL_INFO.phones[0]}`}
                     onClick={() => trackEvent('call_click', { source: 'hero_phone' })}
-                    className="inline-flex items-center gap-2 px-3 py-3 text-xs font-semibold text-[#F8F6F0]/90 hover:text-[#C6A66B] transition-colors price-tabular whitespace-nowrap shrink-0"
+                    className="inline-flex items-center justify-center sm:justify-start gap-2 px-3 py-2.5 text-xs font-semibold text-[#F8F6F0]/90 hover:text-[#C6A66B] transition-colors price-tabular whitespace-nowrap"
                   >
                     <Phone className="w-3.5 h-3.5 text-[#C6A66B]" />
                     <span>{HOTEL_INFO.phones[0]}</span>
@@ -468,49 +468,38 @@ export function HeroSection({
                 {/* Hero Trust & Information Strip */}
                 <motion.div
                   variants={heroLeftItemVariants}
-                  className="pt-5 border-t border-white/15 flex flex-wrap items-center gap-x-3.5 gap-y-2 text-xs text-[#F8F6F0]/85 tracking-wide"
+                  className="pt-5 border-t border-white/15 flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-[#F8F6F0]/85 tracking-wide"
                 >
-                  <span>
-                    {lang === 'hi'
-                      ? 'स्थापना २०११, वैढ़न'
-                      : 'Est. 2011 in Waidhan'}
-                  </span>
-                  <span aria-hidden="true" className="text-[#C6A66B]">
-                    ·
-                  </span>
-                  <span>
-                    {lang === 'hi'
-                      ? '७ रूम व सुइट श्रेणियां'
-                      : '7 Room & Suite Categories'}
-                  </span>
-                  <span aria-hidden="true" className="text-[#C6A66B]">
-                    ·
-                  </span>
-                  <span>
-                    {lang === 'hi'
+                  {[
+                    lang === 'hi' ? 'स्थापना २०११, वैढ़न' : 'Est. 2011 in Waidhan',
+                    lang === 'hi' ? '७ रूम व सुइट श्रेणियां' : '7 Room & Suite Categories',
+                    lang === 'hi'
                       ? 'शारदा मल्टी-कुज़ीन रेस्टोरेंट और बेकरी'
-                      : 'Sharda Multi-Cuisine Restaurant & Bakery'}
-                  </span>
-                  <span aria-hidden="true" className="text-[#C6A66B]">
-                    ·
-                  </span>
-                  <span>
-                    {lang === 'hi'
+                      : 'Sharda Multi-Cuisine Restaurant & Bakery',
+                    lang === 'hi'
                       ? 'आउटडोर स्विमिंग पूल और लॉन'
-                      : 'Outdoor Swimming Pool & Lawn'}
-                  </span>
+                      : 'Outdoor Swimming Pool & Lawn',
+                  ].map((fact) => (
+                    <span
+                      key={fact}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/8 border border-white/12 text-[11px] sm:text-xs"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#C6A66B] shrink-0" />
+                      <span>{fact}</span>
+                    </span>
+                  ))}
                 </motion.div>
               </motion.div>
 
               {/* Right 5 Columns: Hero Property Information Card */}
               <motion.div
-                initial={{ opacity: 0, x: 44, y: 24, scale: 0.94 }}
-                animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+                initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{
                   ...LUXURY_SPRING,
                   delay: 0.72,
                 }}
-                className="lg:col-span-5 flex flex-col items-start lg:items-end justify-end"
+                className="lg:col-span-5 flex flex-col items-start lg:items-end justify-end min-w-0"
               >
                 <div className="w-full max-w-md bg-[#191D1B]/82 backdrop-blur-md border border-white/15 rounded-xl p-5 space-y-3.5 shadow-2xl">
                   <div className="flex items-center justify-between gap-2">
@@ -626,9 +615,9 @@ export function HeroSection({
               </div>
 
               <form onSubmit={handleWidgetSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3.5">
+                <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-3.5">
                   {/* Check-in Date */}
-                  <div>
+                  <div className="min-w-0">
                     <label
                       htmlFor="widget-checkin"
                       className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#77756F] mb-1.5"
@@ -641,13 +630,13 @@ export function HeroSection({
                       value={checkIn}
                       min={new Date().toISOString().split('T')[0]}
                       onChange={(e) => handleCheckInChange(e.target.value)}
-                      className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-medium focus:outline-none focus:border-[#183D32]"
+                      className="w-full px-2.5 sm:px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-medium focus:outline-none focus:border-[#183D32]"
                       required
                     />
                   </div>
 
                   {/* Check-out Date */}
-                  <div>
+                  <div className="min-w-0">
                     <label
                       htmlFor="widget-checkout"
                       className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#77756F] mb-1.5"
@@ -660,13 +649,13 @@ export function HeroSection({
                       value={checkOut}
                       min={checkIn}
                       onChange={(e) => handleCheckOutChange(e.target.value)}
-                      className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-medium focus:outline-none focus:border-[#183D32]"
+                      className="w-full px-2.5 sm:px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-medium focus:outline-none focus:border-[#183D32]"
                       required
                     />
                   </div>
 
                   {/* Room Category */}
-                  <div className="sm:col-span-2">
+                  <div className="col-span-2 min-w-0">
                     <label
                       htmlFor="widget-room-category"
                       className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#77756F] mb-1.5"
@@ -677,18 +666,18 @@ export function HeroSection({
                       id="widget-room-category"
                       value={selectedRoomId}
                       onChange={(e) => onSelectRoomId(e.target.value)}
-                      className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-semibold focus:outline-none focus:border-[#183D32]"
+                      className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-semibold focus:outline-none focus:border-[#183D32] truncate"
                     >
                       {ROOM_CATEGORIES.map((r) => (
                         <option key={r.id} value={r.id}>
-                          {r.title} — Single ₹{r.rates.single.toLocaleString('en-IN')} / Double ₹{r.rates.double.toLocaleString('en-IN')}
+                          {r.title} — ₹{r.rates.single.toLocaleString('en-IN')} / ₹{r.rates.double.toLocaleString('en-IN')}
                         </option>
                       ))}
                     </select>
                   </div>
 
                   {/* Occupancy & Rooms */}
-                  <div>
+                  <div className="col-span-2 sm:col-span-1 min-w-0">
                     <label
                       htmlFor="widget-occupancy"
                       className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#77756F] mb-1.5"
@@ -722,7 +711,7 @@ export function HeroSection({
                   </div>
 
                   {/* Meal Plan Preference */}
-                  <div>
+                  <div className="col-span-2 sm:col-span-1 min-w-0">
                     <label
                       htmlFor="widget-mealplan"
                       className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#77756F] mb-1.5"
@@ -821,7 +810,7 @@ export function HeroSection({
                       whileHover={{ y: -2, scale: 1.02 }}
                       whileTap={{ scale: 0.97 }}
                       transition={LUXURY_SPRING}
-                      className="btn-gold-sheen px-6 py-3.5 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.15em] font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-xs"
+                      className="btn-gold-sheen w-full sm:w-auto px-6 py-3.5 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.15em] font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-xs text-center justify-center inline-flex items-center"
                     >
                       {lang === 'hi' ? 'बुकिंग अनुरोध भेजें' : 'Proceed to Booking Request'}
                     </motion.button>
