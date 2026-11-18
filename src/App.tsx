@@ -12,7 +12,6 @@ import { RoomsAndBookingSection } from './components/RoomsAndBookingSection';
 import { DiningAndEventsSection } from './components/DiningAndEventsSection';
 import { HeritageAndLeadershipSection } from './components/HeritageAndLeadershipSection';
 import { GallerySection } from './components/GallerySection';
-import { AIConciergeHub } from './components/AIConciergeHub';
 import { ReviewsDashboardSection } from './components/ReviewsDashboardSection';
 import { LocationMapSection } from './components/LocationMapSection';
 import { SeoAeoSection } from './components/SeoAeoSection';
@@ -75,7 +74,7 @@ export default function App() {
               onQuickReserve={handleHeroQuickReserve}
             />
 
-            {/* Rooms & Suites (#rooms) — 7 Room Categories + Compare Drawer + 6-Step Booking Request Modal */}
+            {/* Rooms & Suites (#rooms) — 7 Verified Room Categories + Compare Drawer + Booking Request Modal */}
             <RoomsAndBookingSection
               lang={lang}
               selectedRoomId={selectedRoomId}
@@ -94,19 +93,16 @@ export default function App() {
             {/* Facilities (#facilities) + Corporate (#corporate) + About Us & Leadership (#about) */}
             <HeritageAndLeadershipSection lang={lang} />
 
-            {/* Filterable Photo Gallery (#gallery) + Lightbox + Video Tour Link */}
+            {/* Filterable Authentic Photo Gallery (#gallery) + Lightbox */}
             <GallerySection lang={lang} />
-
-            {/* AI Hospitality Concierge & Event Visualizer Studio (#concierge-studio) */}
-            <AIConciergeHub />
 
             {/* Verified Guest Reviews & Google Maps Portal (#reviews) */}
             <ReviewsDashboardSection lang={lang} />
 
-            {/* Interactive Location Map & Corridor Distance Matrix (#location) */}
+            {/* Interactive Location Map & Verified Corridor Distance Matrix (#location) */}
             <LocationMapSection lang={lang} />
 
-            {/* 14-Item Policies & FAQ Accordion + Owner Confirmation Checklist (#policies-faq) */}
+            {/* Guest Policies & Frequently Asked Questions Accordion (#policies-faq) */}
             <SeoAeoSection lang={lang} />
           </main>
 

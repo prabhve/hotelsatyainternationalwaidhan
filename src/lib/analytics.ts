@@ -2,16 +2,18 @@ import { BOOKING_CONFIG } from '../data/hotelData';
 
 /**
  * Analytics & Deep-Link Helper (/src/lib/analytics.ts)
- * Supports GA4 (gtag) & Meta Pixel (fbq) event dispatch plus WhatsApp & mailto builders.
+ * Dispatches booking & inquiry events and builds verified WhatsApp & mailto links.
  */
 
-export const ANALYTICS_CONFIG = {
-  ga4MeasurementId: 'G-XXXXXXXXXX', // [PLACEHOLDER: Replace with live GA4 Measurement ID]
-  metaPixelId: '000000000000000', // [PLACEHOLDER: Replace with live Meta Pixel ID]
-};
-
 export function trackEvent(
-  eventName: 'book_stay_click' | 'whatsapp_click' | 'call_click' | 'corporate_inquiry' | 'event_inquiry' | 'table_reserve' | 'cab_request',
+  eventName:
+    | 'book_stay_click'
+    | 'whatsapp_click'
+    | 'call_click'
+    | 'corporate_inquiry'
+    | 'event_inquiry'
+    | 'table_reserve'
+    | 'cab_request',
   payload?: Record<string, string | number | boolean>
 ) {
   try {
