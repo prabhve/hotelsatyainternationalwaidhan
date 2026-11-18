@@ -12,6 +12,7 @@ import { RoomsAndBookingSection } from './components/RoomsAndBookingSection';
 import { DiningAndEventsSection } from './components/DiningAndEventsSection';
 import { HeritageAndLeadershipSection } from './components/HeritageAndLeadershipSection';
 import { GallerySection } from './components/GallerySection';
+import { AIConciergeHub } from './components/AIConciergeHub';
 import { ReviewsDashboardSection } from './components/ReviewsDashboardSection';
 import { LocationMapSection } from './components/LocationMapSection';
 import { SeoAeoSection } from './components/SeoAeoSection';
@@ -34,8 +35,8 @@ export default function App() {
 
   const [bookingTrigger, setBookingTrigger] = useState<QuickSearchParams | null>(null);
 
-  const scrollToAccommodations = () => {
-    const el = document.getElementById('accommodations');
+  const scrollToRooms = () => {
+    const el = document.getElementById('rooms');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
@@ -46,18 +47,22 @@ export default function App() {
     setOccupancy(params.occupancy);
     setMealPlan(params.mealPlan);
     setBookingTrigger(params);
-    scrollToAccommodations();
+    scrollToRooms();
   };
 
   return (
     <ErrorBoundary>
       <FirebaseProvider>
-        <div className="min-h-screen bg-[#FAF8F4] text-[#1A1A1A] flex flex-col selection:bg-[#8A5A12] selection:text-[#FAF8F4]">
-          {/* Sticky Header */}
-          <Header lang={lang} onBookStay={scrollToAccommodations} />
+        <div className="min-h-screen bg-[#F8F6F0] text-[#191D1B] flex flex-col selection:bg-[#183D32] selection:text-[#F8F6F0]">
+          {/* Sticky Header with Active Scroll Tracking & Language Switcher */}
+          <Header
+            lang={lang}
+            onToggleLang={setLang}
+            onBookStay={scrollToRooms}
+          />
 
           <main className="flex-1">
-            {/* Top Announcement Strip + Language Toggle + Section 1 (Hero) + Section 2 (4 Highlight Cards) + Section 3 (Direct Booking Widget) */}
+            {/* Top Announcement Strip + Hero + Integrated Booking Search Interface (#booking-widget) + 4 Hotel Highlights */}
             <HeroSection
               lang={lang}
               onToggleLang={setLang}
@@ -70,7 +75,7 @@ export default function App() {
               onQuickReserve={handleHeroQuickReserve}
             />
 
-            {/* Section 4 — Accommodations & Published Tariffs (Synced with Hero Widget + Compare Drawer + GST/UPI Modal) */}
+            {/* Rooms & Suites (#rooms) — 7 Room Categories + Compare Drawer + 6-Step Booking Request Modal */}
             <RoomsAndBookingSection
               lang={lang}
               selectedRoomId={selectedRoomId}
@@ -83,27 +88,30 @@ export default function App() {
               onClearTrigger={() => setBookingTrigger(null)}
             />
 
-            {/* Section 5 (Sharda Restaurant & Blue Diamond Bar) + Section 6 (Banquets, 3,000-Guest Lawns & Event Enquiry Form) */}
+            {/* Dining (#dining-events: Sharda Restaurant & Blue Diamond Bar) + Banquets & Events (#banquets) */}
             <DiningAndEventsSection lang={lang} />
 
-            {/* Section 7 (16-Facility Icon Grid & Pool Rules) + Section 8 (Corporate & Long-Stay Block + Heritage & Leadership) */}
+            {/* Facilities (#facilities) + Corporate (#corporate) + About Us & Leadership (#about) */}
             <HeritageAndLeadershipSection lang={lang} />
 
-            {/* Section 9 — Filterable Photo Gallery (Larger 3-Col Cards + Lightbox + Video Tour Placeholder) */}
+            {/* Filterable Photo Gallery (#gallery) + Lightbox + Video Tour Link */}
             <GallerySection lang={lang} />
 
-            {/* Section 10 — Verified Guest Reviews Dashboard ([PLACEHOLDER REVIEW] benchmarks + Live Firestore + Spotlight Carousel) */}
+            {/* AI Hospitality Concierge & Event Visualizer Studio (#concierge-studio) */}
+            <AIConciergeHub />
+
+            {/* Verified Guest Reviews & Google Maps Portal (#reviews) */}
             <ReviewsDashboardSection lang={lang} />
 
-            {/* Section 11 — Location & Singrauli Power Corridor Distance Table + Cab/Pickup Booking Modal */}
+            {/* Interactive Location Map & Corridor Distance Matrix (#location) */}
             <LocationMapSection lang={lang} />
 
-            {/* Section 12 — 14-Item Policies & FAQ Accordion + Owner [PLACEHOLDER] Checklist + GEO/AEO Studio */}
+            {/* 14-Item Policies & FAQ Accordion + Owner Confirmation Checklist (#policies-faq) */}
             <SeoAeoSection lang={lang} />
           </main>
 
-          {/* Section 13 (24×7 Contact Form & Reception Desk) + Global Footer + Floating/Sticky Action Bars */}
-          <Footer lang={lang} onBookStay={scrollToAccommodations} />
+          {/* 24×7 Contact Form (#contact) + Global Footer + Floating/Sticky Action Bars */}
+          <Footer lang={lang} onBookStay={scrollToRooms} />
         </div>
       </FirebaseProvider>
     </ErrorBoundary>

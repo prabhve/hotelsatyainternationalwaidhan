@@ -391,10 +391,15 @@ export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSect
           </div>
 
           {/* Heritage & Leadership Messages (Est. 2011 · MD Mr. S. D. Singh & GM Mr. Rajan G.P.) */}
-          <div className="pt-10 border-t border-[#E5DFD3]">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8A5A12] mb-4">
-              Our Heritage Since {SINGRAULI_HERITAGE.foundingYear} · Leadership Desk
+          <div id="about" className="pt-12 border-t border-[#E5DFD3] scroll-mt-24">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#183D32] mb-2">
+              About Hotel Satya International · Est. {SINGRAULI_HERITAGE.foundingYear}
             </p>
+            <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[#191D1B] mb-6">
+              {lang === 'hi'
+                ? 'हमारी विरासत और नेतृत्व संदेश'
+                : 'Our Waidhan Hospitality Heritage & Leadership'}
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {LEADERSHIP_PROFILES.map((leader) => (
                 <article

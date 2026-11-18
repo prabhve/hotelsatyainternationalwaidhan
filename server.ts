@@ -173,10 +173,14 @@ app.get('/sitemap.xml', (req, res) => {
   <url><loc>${baseUrl}/</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>${baseUrl}/#rooms</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>${baseUrl}/#dining-events</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>${baseUrl}/#heritage</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>${baseUrl}/#banquets</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>${baseUrl}/#facilities</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>${baseUrl}/#gallery</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>${baseUrl}/#about</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>${baseUrl}/#reviews</loc><lastmod>${now}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>${baseUrl}/#location</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>${baseUrl}/#faq</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>${baseUrl}/#policies-faq</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>${baseUrl}/#contact</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>`);
 });
 
@@ -184,6 +188,30 @@ app.get('/sitemap.xml', (req, res) => {
 app.get('/api/config/maps', (_req, res) => {
   const apiKey = process.env.VITE_GOOGLE_MAPS_API_KEY || process.env.GOOGLE_MAPS_API_KEY || '';
   res.json({ apiKey });
+});
+
+// AI-SEO Snippet Studio endpoint
+app.post('/api/seo-concierge', async (req, res) => {
+  const { query } = req.body as { query?: string };
+  if (!query || !query.trim()) {
+    return res.status(400).json({ error: 'Please provide a query.' });
+  }
+  try {
+    const ai = getGeminiClient();
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.1-flash-lite',
+      contents: query.trim(),
+      config: {
+        systemInstruction: `${HOTEL_CONTEXT}\nAnswer factually and concisely in 2-4 sentences using only verified property details.`,
+      },
+    });
+    res.json({ answer: response.text ?? '' });
+  } catch {
+    res.json({
+      answer:
+        'Hotel Satya International (Main Road, Belaunji, Waidhan, Singrauli 486886; Ph: +91-7805-350217) is located 4 km from NTPC Vindhyanagar and 18 km from Reliance Sasan, offering 7 room & suite categories (₹2,000 to ₹9,000), Sharda Multi-Cuisine Restaurant & Bakery, Blue Diamond Bar, outdoor swimming pool, and celebration lawns.',
+    });
+  }
 });
 
 // 1. Low-latency Quick Concierge (gemini-3.1-flash-lite)

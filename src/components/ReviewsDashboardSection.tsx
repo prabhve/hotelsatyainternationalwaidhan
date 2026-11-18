@@ -1,16 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
   ExternalLink,
+  MessageSquareQuote,
   Search,
   Star,
   Trash2,
 } from 'lucide-react';
 import {
-  BOOKING_CONFIG,
-  HISTORICAL_BENCHMARK_REVIEWS,
   Language,
   ROOM_CATEGORIES,
   UI_TRANSLATIONS,
@@ -20,6 +17,9 @@ import { useFirebase } from '../contexts/FirebaseContext';
 interface ReviewsDashboardSectionProps {
   lang: Language;
 }
+
+const GOOGLE_MAPS_REVIEWS_URL =
+  'https://www.google.com/maps/place/Hotel+Satya+International/@24.072285,82.6206458,17z';
 
 export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) {
   const {
@@ -39,13 +39,12 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
   >('All');
   const [sortBy, setSortBy] = useState<'recent' | 'highest'>('recent');
   const [searchQuery, setSearchQuery] = useState('');
-  const [carouselIdx, setCarouselIdx] = useState(0);
 
   const [authorName, setAuthorName] = useState(user?.displayName || '');
   const [stayCategory, setStayCategory] = useState<
     'Business' | 'Family' | 'Wedding & Events' | 'Solo'
   >('Business');
-  const [roomStayed, setRoomStayed] = useState(ROOM_CATEGORIES[2].title);
+  const [roomStayed, setRoomStayed] = useState(ROOM_CATEGORIES[0].title);
   const [rating, setRating] = useState(5);
   const [cleanlinessRating, setCleanlinessRating] = useState(5);
   const [diningRating, setDiningRating] = useState(5);
@@ -57,9 +56,9 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
 
-  // Merge live Firestore reviews + clearly marked [PLACEHOLDER REVIEW] entries
-  const combinedReviews = useMemo(() => {
-    const liveMapped = reviews.map((r) => ({
+  // Only genuine authenticated guest reviews from Firestore
+  const liveReviews = useMemo(() => {
+    return reviews.map((r) => ({
       id: r.reviewId,
       userId: r.userId,
       authorName: r.authorName,
@@ -73,81 +72,39 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
       comment: r.comment,
       verifiedStay: r.verifiedStay,
       ownerReply: r.ownerReply,
-      isLive: true,
-      isPlaceholder: false,
-      sourceLabel: 'Direct Guest Review',
       dateLabel: r.createdAt
         ? r.createdAt.toDate().toLocaleDateString('en-IN', {
+            day: 'numeric',
             month: 'short',
             year: 'numeric',
           })
-        : 'Just now',
+        : 'Recently submitted',
     }));
-
-    const historicalMapped = HISTORICAL_BENCHMARK_REVIEWS.map((h) => ({
-      id: h.id,
-      userId: '',
-      authorName: h.authorName,
-      stayCategory: h.stayCategory,
-      roomStayed: h.roomStayed,
-      rating: h.rating,
-      cleanlinessRating: h.cleanlinessRating,
-      diningRating: h.diningRating,
-      hospitalityRating: h.hospitalityRating,
-      title: h.title,
-      comment: h.comment,
-      verifiedStay: true,
-      ownerReply: '',
-      isLive: false,
-      isPlaceholder: true,
-      sourceLabel: h.sourceLabel,
-      dateLabel: `${h.sourceLabel} · ${h.dateLabel}`,
-    }));
-
-    return [...liveMapped, ...historicalMapped];
   }, [reviews]);
 
-  // Auto-advance horizontal highlight carousel
-  useEffect(() => {
-    if (combinedReviews.length <= 1) return;
-    const timer = window.setInterval(() => {
-      setCarouselIdx((prev) => (prev + 1) % combinedReviews.length);
-    }, 5500);
-    return () => window.clearInterval(timer);
-  }, [combinedReviews.length]);
-
   const metrics = useMemo(() => {
-    const list = combinedReviews;
-    const count = list.length || 1;
+    const count = liveReviews.length;
+    if (count === 0) {
+      return null;
+    }
     const avg = (
       key: 'rating' | 'cleanlinessRating' | 'diningRating' | 'hospitalityRating'
-    ) => (list.reduce((acc, item) => acc + item[key], 0) / count).toFixed(1);
-
-    const dist = [5, 4, 3, 2, 1].map((star) => {
-      const matched = list.filter((r) => Math.round(r.rating) === star).length;
-      return {
-        star,
-        count: matched,
-        pct: Math.round((matched / count) * 100),
-      };
-    });
+    ) => (liveReviews.reduce((acc, item) => acc + item[key], 0) / count).toFixed(1);
 
     return {
       overall: avg('rating'),
       cleanliness: avg('cleanlinessRating'),
       dining: avg('diningRating'),
       hospitality: avg('hospitalityRating'),
-      liveCount: reviews.length,
-      totalCount: list.length,
-      dist,
+      count,
     };
-  }, [combinedReviews, reviews.length]);
+  }, [liveReviews]);
 
   const filteredReviews = useMemo(() => {
     let list =
       categoryFilter === 'All'
-        ? [...combinedReviews]
-        : combinedReviews.filter((r) => r.stayCategory === categoryFilter);
+        ? [...liveReviews]
+        : liveReviews.filter((r) => r.stayCategory === categoryFilter);
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -165,7 +122,7 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
     }
 
     return list;
-  }, [combinedReviews, categoryFilter, searchQuery, sortBy]);
+  }, [liveReviews, categoryFilter, searchQuery, sortBy]);
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -205,7 +162,7 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
       setTitle('');
       setComment('');
       setSuccessMsg(
-        'Thank you! Your review has been published to our live guest ledger.'
+        'Thank you! Your review has been published to our guest ledger.'
       );
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to submit review.');
@@ -214,219 +171,115 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
     }
   };
 
-  const featuredReview = combinedReviews[carouselIdx] || combinedReviews[0];
-
   return (
     <section
       id="reviews"
-      className="py-16 sm:py-24 border-b border-[#E5DFD3] bg-[#FAF8F4] scroll-mt-16"
+      className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#F8F6F0] scroll-mt-20"
     >
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8A5A12] mb-2">
-              Section 10 · Guest Ratings & Review Dashboard
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
+              {lang === 'hi'
+                ? 'अतिथि अनुभव और सत्यापित समीक्षाएं'
+                : 'Authentic Guest Feedback & Google Maps Reviews'}
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#1A1A1A] text-balance">
+            <h2
+              className="font-display text-[#191D1B] font-medium leading-[1.12]"
+              style={{ fontSize: 'clamp(2rem, 3.4vw, 3.1rem)' }}
+            >
               {t.sections.reviewsTitle}
             </h2>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <a
-              href="https://www.google.com/maps/place/Hotel+Satya+International/@24.072285,82.6206458,17z"
+              href={GOOGLE_MAPS_REVIEWS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-[#D8CFC0] hover:border-[#8A5A12] rounded-xl text-xs font-semibold text-[#1A1A1A] transition-colors shrink-0"
+              className="inline-flex items-center gap-2 px-5 py-3 bg-[#183D32] hover:bg-[#122E25] text-white rounded-lg text-xs uppercase tracking-[0.14em] font-semibold transition-colors shrink-0"
             >
-              <span>Write a Review on Google</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#8A5A12]" />
+              <span>Read & Write Reviews on Google Maps</span>
+              <ExternalLink className="w-3.5 h-3.5 text-[#C6A66B]" />
             </a>
-
-            <div className="flex flex-wrap items-center gap-1 p-1 bg-[#F2EDE4] border border-[#E5DFD3] rounded-xl">
-              {(['All', 'Business', 'Family', 'Wedding & Events', 'Solo'] as const).map(
-                (cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setCategoryFilter(cat)}
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 ${
-                      categoryFilter === cat
-                        ? 'bg-white text-[#1A1A1A] shadow-2xs'
-                        : 'text-[#5A5A5A] hover:text-[#1A1A1A]'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                )
-              )}
-            </div>
           </div>
         </div>
 
-        {/* Horizontal Auto-Scrolling Guest Testimonial Spotlight Carousel */}
-        {featuredReview && (
-          <div className="bg-white border border-[#DFD8CA] rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xs">
-            <div className="space-y-2 max-w-3xl">
-              <div className="flex flex-wrap items-center gap-2 text-xs text-[#5A5A5A]">
-                <span className="font-bold text-[#8A5A12]">
-                  Featured Guest Spotlight ({carouselIdx + 1}/{combinedReviews.length})
-                </span>
-                <span aria-hidden="true">·</span>
-                <span>{featuredReview.sourceLabel}</span>
-                <span aria-hidden="true">·</span>
-                <span>{featuredReview.roomStayed}</span>
-                {featuredReview.verifiedStay && (
-                  <>
-                    <span aria-hidden="true">·</span>
-                    <span className="text-[#1D4E3E] font-semibold">Verified Guest</span>
-                  </>
-                )}
-              </div>
-              <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[#1A1A1A]">
-                “{featuredReview.title}”
-              </h3>
-              <p className="text-sm text-[#454545] leading-relaxed">
-                {featuredReview.comment}
-              </p>
-              <p className="text-xs font-semibold text-[#1A1A1A]">
-                — {featuredReview.authorName} ({featuredReview.stayCategory})
+        {/* Live Metrics Bar (Only displayed when genuine Firestore reviews exist) */}
+        {metrics && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="bg-white border border-[#E9E2D5] rounded-xl p-5">
+              <p className="text-xs text-[#525854]">Portal Guest Average ({metrics.count})</p>
+              <p className="price-tabular text-3xl font-bold text-[#191D1B] mt-1">
+                {metrics.overall} <span className="text-xs font-normal text-[#525854]">/ 5.0</span>
               </p>
             </div>
-
-            <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
-              <button
-                type="button"
-                onClick={() =>
-                  setCarouselIdx(
-                    (prev) => (prev - 1 + combinedReviews.length) % combinedReviews.length
-                  )
-                }
-                aria-label="Previous review"
-                className="w-9 h-9 rounded-xl border border-[#E5DFD3] bg-[#FAF8F4] hover:bg-[#F2EDE4] flex items-center justify-center"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  setCarouselIdx((prev) => (prev + 1) % combinedReviews.length)
-                }
-                aria-label="Next review"
-                className="w-9 h-9 rounded-xl border border-[#E5DFD3] bg-[#FAF8F4] hover:bg-[#F2EDE4] flex items-center justify-center"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
+            <div className="bg-white border border-[#E9E2D5] rounded-xl p-5">
+              <p className="text-xs text-[#525854]">Room Cleanliness</p>
+              <p className="price-tabular text-3xl font-bold text-[#183D32] mt-1">
+                {metrics.cleanliness}
+              </p>
+            </div>
+            <div className="bg-white border border-[#E9E2D5] rounded-xl p-5">
+              <p className="text-xs text-[#525854]">Sharda Dining</p>
+              <p className="price-tabular text-3xl font-bold text-[#8C6B32] mt-1">
+                {metrics.dining}
+              </p>
+            </div>
+            <div className="bg-white border border-[#E9E2D5] rounded-xl p-5">
+              <p className="text-xs text-[#525854]">Staff Hospitality</p>
+              <p className="price-tabular text-3xl font-bold text-[#191D1B] mt-1">
+                {metrics.hospitality}
+              </p>
             </div>
           </div>
         )}
 
-        {/* Aggregate Rating Card + 5-Star Distribution Breakdown */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-white border border-[#E5DFD3] rounded-2xl p-5 flex flex-col justify-between">
-              <p className="text-xs text-[#5A5A5A]">Aggregate Score</p>
-              <div className="my-2 flex items-baseline gap-1.5">
-                <span className="price-tabular text-3xl font-bold text-[#1A1A1A]">
-                  {metrics.overall}
-                </span>
-                <span className="text-xs text-[#5A5A5A]">/ 5.0</span>
-              </div>
-              <p className="text-[11px] text-[#8A5A12] font-medium">
-                {BOOKING_CONFIG.googleRatingPlaceholder}
-              </p>
-            </div>
-
-            <div className="bg-white border border-[#E5DFD3] rounded-2xl p-5 flex flex-col justify-between">
-              <p className="text-xs text-[#5A5A5A]">Suite Cleanliness</p>
-              <p className="price-tabular text-3xl font-bold text-[#1A1A1A] my-2">
-                {metrics.cleanliness}
-              </p>
-              <div className="h-1.5 w-full bg-[#F2EDE4] rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-[#1D4E3E]"
-                  style={{ width: `${(Number(metrics.cleanliness) / 5) * 100}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="bg-white border border-[#E5DFD3] rounded-2xl p-5 flex flex-col justify-between">
-              <p className="text-xs text-[#5A5A5A]">Sharda Dining</p>
-              <p className="price-tabular text-3xl font-bold text-[#1A1A1A] my-2">
-                {metrics.dining}
-              </p>
-              <div className="h-1.5 w-full bg-[#F2EDE4] rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-[#8A5A12]"
-                  style={{ width: `${(Number(metrics.dining) / 5) * 100}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="bg-white border border-[#E5DFD3] rounded-2xl p-5 flex flex-col justify-between">
-              <p className="text-xs text-[#5A5A5A]">Staff Hospitality</p>
-              <p className="price-tabular text-3xl font-bold text-[#1A1A1A] my-2">
-                {metrics.hospitality}
-              </p>
-              <div className="h-1.5 w-full bg-[#F2EDE4] rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-[#1A1A1A]"
-                  style={{ width: `${(Number(metrics.hospitality) / 5) * 100}%` }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-5 bg-white border border-[#E5DFD3] rounded-2xl p-5 flex flex-col justify-between">
-            <p className="text-xs font-bold text-[#1A1A1A] mb-2">
-              Star Rating Distribution ({metrics.liveCount} Live + 4 Sample Placeholders)
-            </p>
-            <div className="space-y-1.5">
-              {metrics.dist.map((row) => (
-                <div key={row.star} className="flex items-center gap-3 text-xs">
-                  <span className="price-tabular w-8 text-[#454545] font-semibold">
-                    {row.star} ★
-                  </span>
-                  <div className="flex-1 h-2 bg-[#F2EDE4] rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[#8A5A12]"
-                      style={{ width: `${row.pct}%` }}
-                    />
-                  </div>
-                  <span className="price-tabular w-9 text-right text-[#5A5A5A]">
-                    {row.pct}%
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Review Feed + Live Guest Review Composer */}
+        {/* Review Feed + Authenticated Guest Review Composer */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-7 space-y-4">
-            {/* Search & Sort Bar */}
-            <div className="bg-white border border-[#E5DFD3] rounded-2xl p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-              <div className="relative flex-1">
-                <Search
-                  className="w-3.5 h-3.5 text-[#5A5A5A] absolute left-3 top-1/2 -translate-y-1/2"
-                  aria-hidden="true"
-                />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search reviews (e.g. NTPC, Royal Suite, Wedding, Pool)..."
-                  className="w-full pl-8 pr-3 py-1.5 text-xs bg-[#FAF8F4] border border-[#D8CFC0] rounded-xl text-[#1A1A1A]"
-                />
+          {/* Left 7 Columns: Verified Portal Reviews & Google Maps Direct Verification Card */}
+          <div className="lg:col-span-7 space-y-5">
+            {/* Filter & Search Bar */}
+            <div className="bg-white border border-[#E9E2D5] rounded-xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-1">
+                {(['All', 'Business', 'Family', 'Wedding & Events', 'Solo'] as const).map(
+                  (cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setCategoryFilter(cat)}
+                      className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                        categoryFilter === cat
+                          ? 'bg-[#183D32] text-white'
+                          : 'text-[#525854] hover:text-[#191D1B]'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  )
+                )}
               </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="text-xs text-[#5A5A5A]">Sort:</span>
+
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1 sm:w-44">
+                  <Search
+                    className="w-3.5 h-3.5 text-[#525854] absolute left-3 top-1/2 -translate-y-1/2"
+                    aria-hidden="true"
+                  />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Filter reviews..."
+                    className="w-full pl-8 pr-3 py-1.5 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B]"
+                  />
+                </div>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as 'recent' | 'highest')}
                   aria-label="Sort reviews"
-                  className="px-2.5 py-1.5 text-xs font-semibold bg-[#FAF8F4] border border-[#D8CFC0] rounded-xl text-[#1A1A1A]"
+                  className="px-2.5 py-1.5 text-xs font-semibold bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B]"
                 >
                   <option value="recent">Most Recent</option>
                   <option value="highest">Highest Rated</option>
@@ -434,122 +287,149 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
               </div>
             </div>
 
-            {filteredReviews.map((rev) => (
-              <article
-                key={rev.id}
-                className="bg-white border border-[#E5DFD3] rounded-2xl p-6 shadow-2xs"
-              >
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-2.5">
-                  <div className="text-xs text-[#5A5A5A] flex flex-wrap items-center gap-2">
-                    <span className="font-bold text-[#1A1A1A]">{rev.authorName}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{rev.stayCategory}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{rev.roomStayed}</span>
-                  </div>
-                  <div className="flex items-center gap-1 price-tabular text-sm font-bold text-[#8A5A12]">
-                    <Star
-                      className="w-4 h-4 fill-[#8A5A12] text-[#8A5A12]"
-                      aria-hidden="true"
-                    />
-                    <span>{rev.rating.toFixed(1)}</span>
-                  </div>
+            {filteredReviews.length === 0 ? (
+              <div className="bg-white border border-[#E9E2D5] rounded-xl p-8 text-center space-y-4">
+                <div className="w-12 h-12 rounded-full bg-[#F8F6F0] border border-[#E9E2D5] flex items-center justify-center mx-auto text-[#183D32]">
+                  <MessageSquareQuote className="w-5 h-5" />
                 </div>
+                <div className="max-w-lg mx-auto space-y-2">
+                  <h3 className="font-display text-2xl font-semibold text-[#191D1B]">
+                    Verified Guest Reviews Only
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#525854] leading-relaxed">
+                    We do not display synthetic or unverified testimonials. Read public guest reviews directly on our official Google Maps listing, or sign in with Google to share your own stay experience here.
+                  </p>
+                </div>
+                <div className="pt-2">
+                  <a
+                    href={GOOGLE_MAPS_REVIEWS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-[#183D32] text-[#183D32] hover:bg-[#183D32] hover:text-white text-xs font-semibold uppercase tracking-[0.13em] transition-colors"
+                  >
+                    <span>View Public Reviews on Google Maps</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+            ) : (
+              filteredReviews.map((rev) => (
+                <article
+                  key={rev.id}
+                  className="bg-white border border-[#E9E2D5] rounded-xl p-6 shadow-2xs"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-3 mb-2.5">
+                    <div className="text-xs text-[#525854] flex flex-wrap items-center gap-2">
+                      <span className="font-bold text-[#191D1B]">{rev.authorName}</span>
+                      <span aria-hidden="true">·</span>
+                      <span>{rev.stayCategory}</span>
+                      <span aria-hidden="true">·</span>
+                      <span>{rev.roomStayed}</span>
+                    </div>
+                    <div className="flex items-center gap-1 price-tabular text-sm font-bold text-[#8C6B32]">
+                      <Star
+                        className="w-4 h-4 fill-[#C6A66B] text-[#C6A66B]"
+                        aria-hidden="true"
+                      />
+                      <span>{rev.rating.toFixed(1)}</span>
+                    </div>
+                  </div>
 
-                <h3 className="font-display text-xl font-semibold text-[#1A1A1A] mb-1.5">
-                  {rev.title}
-                </h3>
-                <p className="text-sm text-[#454545] leading-relaxed mb-3">
-                  {rev.comment}
-                </p>
+                  <h3 className="font-display text-xl font-semibold text-[#191D1B] mb-1.5">
+                    {rev.title}
+                  </h3>
+                  <p className="text-sm text-[#525854] leading-relaxed mb-3">
+                    {rev.comment}
+                  </p>
 
-                <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-[#5A5A5A] pt-3 border-t border-[#EFECE6]">
-                  <div className="flex flex-wrap items-center gap-2.5">
-                    <span>{rev.dateLabel}</span>
-                    <span aria-hidden="true">·</span>
-                    <span className="price-tabular">
-                      Cleanliness {rev.cleanlinessRating}★ · Dining {rev.diningRating}★ · Service{' '}
-                      {rev.hospitalityRating}★
-                    </span>
-                    {rev.verifiedStay && (
-                      <span className="inline-flex items-center gap-1 text-[#1D4E3E] font-semibold">
-                        <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" />
-                        Verified Guest
+                  <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-[#525854] pt-3 border-t border-[#E9E2D5]">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <span>{rev.dateLabel}</span>
+                      <span aria-hidden="true">·</span>
+                      <span className="price-tabular">
+                        Cleanliness {rev.cleanlinessRating}★ · Dining {rev.diningRating}★ · Service{' '}
+                        {rev.hospitalityRating}★
                       </span>
+                      {rev.verifiedStay && (
+                        <span className="inline-flex items-center gap-1 text-[#183D32] font-semibold">
+                          <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" />
+                          Verified Stay
+                        </span>
+                      )}
+                    </div>
+                    {user && (user.uid === rev.userId || isAdmin) && (
+                      <button
+                        type="button"
+                        onClick={() => deleteReview(rev.id)}
+                        className="inline-flex items-center gap-1 text-red-700 hover:underline cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
+                        Remove
+                      </button>
                     )}
                   </div>
-                  {rev.isLive && user && (user.uid === rev.userId || isAdmin) && (
-                    <button
-                      type="button"
-                      onClick={() => deleteReview(rev.id)}
-                      className="inline-flex items-center gap-1 text-red-700 hover:underline"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
-                      Remove
-                    </button>
+
+                  {rev.ownerReply && (
+                    <div className="mt-4 p-4 rounded-lg bg-[#F8F6F0] border border-[#E9E2D5]">
+                      <p className="text-xs font-bold text-[#183D32] mb-1">
+                        Management Response · Hotel Satya International
+                      </p>
+                      <p className="text-xs text-[#525854] leading-relaxed">
+                        {rev.ownerReply}
+                      </p>
+                    </div>
                   )}
-                </div>
 
-                {rev.ownerReply && (
-                  <div className="mt-4 p-4 rounded-xl bg-[#F3EFE8] border border-[#E5DFD3]">
-                    <p className="text-xs font-bold text-[#8A5A12] mb-1">
-                      Management Response · Hotel Satya International
-                    </p>
-                    <p className="text-xs text-[#454545] leading-relaxed">
-                      {rev.ownerReply}
-                    </p>
-                  </div>
-                )}
-
-                {rev.isLive && isAdmin && (
-                  <div className="mt-4 pt-3 border-t border-[#E5DFD3] flex flex-col sm:flex-row gap-2">
-                    <input
-                      type="text"
-                      placeholder="Write management response..."
-                      value={replyDrafts[rev.id] ?? rev.ownerReply ?? ''}
-                      onChange={(e) =>
-                        setReplyDrafts((prev) => ({
-                          ...prev,
-                          [rev.id]: e.target.value,
-                        }))
-                      }
-                      className="flex-1 px-3 py-1.5 text-xs bg-[#FAF8F4] border border-[#D8CFC0] rounded-xl"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        adminReplyReview(
-                          rev.id,
-                          replyDrafts[rev.id] ??
-                            rev.ownerReply ??
-                            'Thank you for staying with us in Waidhan.',
-                          true
-                        )
-                      }
-                      className="px-3 py-1.5 text-xs font-semibold bg-[#1A1A1A] text-white rounded-xl whitespace-nowrap"
-                    >
-                      Save Reply & Verify
-                    </button>
-                  </div>
-                )}
-              </article>
-            ))}
+                  {isAdmin && (
+                    <div className="mt-4 pt-3 border-t border-[#E9E2D5] flex flex-col sm:flex-row gap-2">
+                      <input
+                        type="text"
+                        placeholder="Write management response..."
+                        value={replyDrafts[rev.id] ?? rev.ownerReply ?? ''}
+                        onChange={(e) =>
+                          setReplyDrafts((prev) => ({
+                            ...prev,
+                            [rev.id]: e.target.value,
+                          }))
+                        }
+                        className="flex-1 px-3 py-1.5 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          adminReplyReview(
+                            rev.id,
+                            replyDrafts[rev.id] ??
+                              rev.ownerReply ??
+                              'Thank you for staying with us in Waidhan.',
+                            true
+                          )
+                        }
+                        className="px-3 py-1.5 text-xs font-semibold bg-[#183D32] text-white rounded-lg whitespace-nowrap cursor-pointer"
+                      >
+                        Save Reply & Verify
+                      </button>
+                    </div>
+                  )}
+                </article>
+              ))
+            )}
           </div>
 
-          {/* Submit Live Guest Review Card */}
-          <div className="lg:col-span-5 bg-white border border-[#E5DFD3] rounded-2xl p-6 sm:p-8 shadow-2xs">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8A5A12] mb-1.5">
-              Direct Guest Ledger
+          {/* Right 5 Columns: Authenticated Guest Review Submission Card */}
+          <div className="lg:col-span-5 bg-white border border-[#E9E2D5] rounded-xl p-6 sm:p-8 shadow-2xs">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#183D32] mb-1.5">
+              Authenticated Guest Ledger
             </p>
-            <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[#1A1A1A] mb-2">
-              Publish a Verified Guest Review
+            <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[#191D1B] mb-2">
+              Share Your Stay Experience
             </h3>
-            <p className="text-xs text-[#5A5A5A] mb-5">
-              Share your real stay experience on this website or post directly to Google Maps.
+            <p className="text-xs text-[#525854] mb-5">
+              Sign in with your verified Google account to publish feedback from your stay or dining visit at Hotel Satya International.
             </p>
 
             {successMsg && (
-              <p className="mb-4 text-xs text-[#1D4E3E] bg-[#1D4E3E]/10 border border-[#1D4E3E]/25 rounded-xl px-3 py-2.5">
+              <p className="mb-4 text-xs text-[#183D32] bg-[#183D32]/10 border border-[#183D32]/25 rounded-lg px-3 py-2.5">
                 {successMsg}
               </p>
             )}
@@ -557,7 +437,7 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
             <form onSubmit={handleSubmitReview} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                  <label className="block text-xs font-semibold text-[#525854] mb-1">
                     Your Name
                   </label>
                   <input
@@ -566,12 +446,12 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
                     placeholder={user?.displayName || 'Guest name'}
                     value={authorName}
                     onChange={(e) => setAuthorName(e.target.value)}
-                    className="w-full px-3 py-2 text-sm bg-[#FAF8F4] border border-[#D8CFC0] rounded-xl"
+                    className="w-full px-3 py-2 text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                  <label className="block text-xs font-semibold text-[#525854] mb-1">
                     Trip Type
                   </label>
                   <select
@@ -579,7 +459,7 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
                     onChange={(e) =>
                       setStayCategory(e.target.value as typeof stayCategory)
                     }
-                    className="w-full px-3 py-2 text-sm bg-[#FAF8F4] border border-[#D8CFC0] rounded-xl"
+                    className="w-full px-3 py-2 text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg"
                   >
                     <option value="Business">Business</option>
                     <option value="Family">Family</option>
@@ -590,13 +470,13 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                <label className="block text-xs font-semibold text-[#525854] mb-1">
                   Room / Venue Experienced
                 </label>
                 <select
                   value={roomStayed}
                   onChange={(e) => setRoomStayed(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-[#FAF8F4] border border-[#D8CFC0] rounded-xl"
+                  className="w-full px-3 py-2 text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg"
                 >
                   {ROOM_CATEGORIES.map((r) => (
                     <option key={r.id} value={r.title}>
@@ -610,11 +490,11 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
               </div>
 
               {/* Interactive Star Pickers */}
-              <div className="bg-[#FAF8F4] border border-[#E5DFD3] rounded-xl p-3.5 space-y-2.5">
+              <div className="bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg p-3.5 space-y-2.5">
                 {[
                   { label: 'Overall Rating', val: rating, set: setRating },
                   {
-                    label: 'Suite Cleanliness',
+                    label: 'Room Cleanliness',
                     val: cleanlinessRating,
                     set: setCleanlinessRating,
                   },
@@ -633,7 +513,7 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
                     key={dim.label}
                     className="flex items-center justify-between gap-2"
                   >
-                    <span className="text-xs font-semibold text-[#454545]">
+                    <span className="text-xs font-semibold text-[#191D1B]">
                       {dim.label}
                     </span>
                     <div className="flex items-center gap-1">
@@ -643,18 +523,18 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
                           type="button"
                           onClick={() => dim.set(starNum)}
                           aria-label={`Rate ${dim.label} ${starNum} out of 5`}
-                          className="p-0.5 focus:outline-none"
+                          className="p-0.5 focus:outline-none cursor-pointer"
                         >
                           <Star
                             className={`w-4 h-4 transition-colors ${
                               starNum <= dim.val
-                                ? 'fill-[#8A5A12] text-[#8A5A12]'
+                                ? 'fill-[#C6A66B] text-[#C6A66B]'
                                 : 'text-[#D8CFC0]'
                             }`}
                           />
                         </button>
                       ))}
-                      <span className="price-tabular text-xs font-bold text-[#1A1A1A] ml-1 w-6 text-right">
+                      <span className="price-tabular text-xs font-bold text-[#191D1B] ml-1 w-6 text-right">
                         {dim.val}.0
                       </span>
                     </div>
@@ -663,7 +543,7 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                <label className="block text-xs font-semibold text-[#525854] mb-1">
                   Review Headline
                 </label>
                 <input
@@ -671,14 +551,14 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
                   maxLength={120}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Convenient stay near NTPC Vindhyanagar"
-                  className="w-full px-3 py-2 text-sm bg-[#FAF8F4] border border-[#D8CFC0] rounded-xl"
+                  placeholder="Comfortable stay in Waidhan"
+                  className="w-full px-3 py-2 text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                <label className="block text-xs font-semibold text-[#525854] mb-1">
                   Your Review
                 </label>
                 <textarea
@@ -686,14 +566,14 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
                   maxLength={1200}
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder="Share details on room upkeep, dining at Sharda Restaurant, pool, or reception hospitality..."
-                  className="w-full px-3 py-2 text-sm bg-[#FAF8F4] border border-[#D8CFC0] rounded-xl"
+                  placeholder="Share details on room comfort, dining at Sharda Restaurant, or reception service..."
+                  className="w-full px-3 py-2 text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg"
                   required
                 />
               </div>
 
               {error && (
-                <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
                   {error}
                 </p>
               )}
@@ -701,7 +581,7 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3.5 bg-[#1A1A1A] text-white text-sm font-semibold rounded-xl hover:bg-[#2E2E2E] disabled:opacity-60 transition-colors"
+                className="w-full py-3.5 bg-[#183D32] text-white text-xs uppercase tracking-[0.14em] font-semibold rounded-lg hover:bg-[#122E25] disabled:opacity-60 transition-colors cursor-pointer"
               >
                 {submitting
                   ? 'Publishing...'

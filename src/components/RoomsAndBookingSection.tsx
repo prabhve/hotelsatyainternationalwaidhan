@@ -205,12 +205,12 @@ export function RoomsAndBookingSection({
 
     setSubmitting(true);
     try {
-      let refId = `HSI-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      let refId = `ENQ-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
       const combinedNotes = [
         specialRequests.trim(),
         isCorporateGst ? `Corporate GST: ${companyName.trim()} (GSTIN: ${gstinNumber.trim() || 'Pending'})` : '',
         includeExtraBed ? 'Extra Bed Included' : '',
-        `Rooms: ${roomsCount} | Payment Preference: ${paymentMode === 'upi' ? 'Advance via UPI' : 'Pay at Hotel'}`,
+        `Rooms: ${roomsCount} | Payment: Pay at Hotel Reception upon Confirmation`,
       ]
         .filter(Boolean)
         .join(' | ');
@@ -234,15 +234,15 @@ export function RoomsAndBookingSection({
             specialRequests: combinedNotes.slice(0, 580),
           });
         } catch {
-          // Fallback to generated refId if guest hasn't signed in to Firebase
+          // Fallback to generated enquiry refId if guest is not signed in with a verified account
         }
       }
 
-      const summaryText = `Namaste Hotel Satya International (Waidhan),\nNew Direct Booking Request [${refId}]:\n• Guest: ${guestName.trim()} (${guestPhone.trim()})\n• Room: ${modalRoom.title} (${roomsCount} Room, ${occupancy}${includeExtraBed ? ' + Extra Bed' : ''}, ${mealPlan} Plan)\n• Check-In: ${checkInDate} (2:00 PM) → Check-Out: ${checkOutDate} (12:00 PM) (${nights} Night${nights > 1 ? 's' : ''})\n• Guests: ${adults} Adults, ${children} Children\n${isCorporateGst ? `• Corporate GST: ${companyName.trim()} | GSTIN: ${gstinNumber.trim()}\n` : ''}• Payment Mode: ${paymentMode === 'upi' ? 'UPI Advance' : 'Pay at Hotel Reception'}\n• Total (Incl. ${gstPercent}% GST): ₹${grandTotalInr.toLocaleString('en-IN')}\n${specialRequests.trim() ? `• Special Notes: ${specialRequests.trim()}` : ''}`;
+      const summaryText = `Namaste Hotel Satya International (Waidhan Reception),\nNew Room Booking Request / Enquiry [Ref: ${refId}]:\n• Status: Pending Reception Availability Confirmation\n• Guest: ${guestName.trim()} (${guestPhone.trim()})\n• Room Requested: ${modalRoom.title} (${roomsCount} Room, ${occupancy}${includeExtraBed ? ' + Extra Bed' : ''}, ${mealPlan} Plan)\n• Check-In: ${checkInDate} (2:00 PM) → Check-Out: ${checkOutDate} (12:00 PM) (${nights} Night${nights > 1 ? 's' : ''})\n• Guests: ${adults} Adults, ${children} Children\n${isCorporateGst ? `• Corporate GST: ${companyName.trim()} | GSTIN: ${gstinNumber.trim()}\n` : ''}• Payment: Pay at Hotel Reception upon Confirmation\n• Estimated Tariff (Incl. ${gstPercent}% GST): ₹${grandTotalInr.toLocaleString('en-IN')}\n${specialRequests.trim() ? `• Special Notes: ${specialRequests.trim()}` : ''}`;
 
       const whatsappUrl = buildWhatsAppUrl(summaryText);
       const mailtoUrl = buildMailtoUrl(
-        `Direct Booking [${refId}] — ${modalRoom.title} (${checkInDate} to ${checkOutDate})`,
+        `Room Booking Request [${refId}] — ${modalRoom.title} (${checkInDate} to ${checkOutDate})`,
         summaryText
       );
 
@@ -963,49 +963,69 @@ export function RoomsAndBookingSection({
         </div>
       )}
 
-      {/* SECTION 3 / 4 — BOOKING CONFIRMATION MODAL (Corporate GST, UPI QR, WhatsApp & Email Deep-Links) */}
+      {/* SECTION 4 — 6-STEP ROOM BOOKING REQUEST MODAL */}
       {modalRoom && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          className="fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-labelledby="booking-modal-title"
         >
-          <div className="bg-[#FAF8F4] border border-[#E5DFD3] rounded-2xl max-w-2xl w-full p-6 sm:p-8 my-8 relative shadow-xl">
+          <div className="bg-[#F8F6F0] border border-[#E9E2D5] rounded-2xl max-w-2xl w-full p-6 sm:p-8 my-8 relative shadow-xl">
             <button
               type="button"
               onClick={() => setModalRoom(null)}
-              aria-label="Close booking modal"
-              className="absolute top-5 right-5 w-10 h-10 rounded-xl border border-[#E5DFD3] bg-white flex items-center justify-center text-[#1A1A1A] hover:bg-[#F2EDE4]"
+              aria-label="Close booking request modal"
+              className="absolute top-5 right-5 w-10 h-10 rounded-xl border border-[#E9E2D5] bg-white flex items-center justify-center text-[#191D1B] hover:bg-[#EFECE4] cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8A5A12] mb-1">
-              Direct Hotel Reservation · Best Rate Guarantee
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#183D32] mb-1">
+              Room Reservation Enquiry · Subject to Reception Availability Confirmation
             </p>
             <h3
               id="booking-modal-title"
-              className="font-display text-3xl font-semibold text-[#1A1A1A] mb-5 pr-12"
+              className="font-display text-3xl font-semibold text-[#191D1B] mb-3 pr-12"
             >
               {modalRoom.title}
             </h3>
 
+            {/* 6-Step Journey Indicator */}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#525854] pb-4 mb-5 border-b border-[#E9E2D5]">
+              <span className="font-semibold text-[#183D32]">1. Dates & Guests</span>
+              <span>→</span>
+              <span className="font-semibold text-[#183D32]">2. Room Selected</span>
+              <span>→</span>
+              <span className="font-semibold text-[#183D32]">3. Meal Plan ({mealPlan})</span>
+              <span>→</span>
+              <span className={!confirmedBooking ? 'font-bold text-[#191D1B] underline' : 'font-semibold text-[#183D32]'}>
+                4–5. Guest Details & Review
+              </span>
+              <span>→</span>
+              <span className={confirmedBooking ? 'font-bold text-[#183D32] underline' : ''}>
+                6. Enquiry Reference
+              </span>
+            </div>
+
             {confirmedBooking ? (
-              <div className="bg-white border border-[#E5DFD3] rounded-2xl p-6 space-y-5">
-                <div className="flex items-center gap-2 text-[#1D4E3E] font-bold text-base">
-                  <CalendarCheck2 className="w-5 h-5" aria-hidden="true" />
-                  <span>Booking Reference Generated: {confirmedBooking.refId}</span>
+              <div className="bg-white border border-[#E9E2D5] rounded-xl p-6 space-y-5">
+                <div className="flex items-start gap-2.5 text-[#183D32] font-bold text-base">
+                  <CalendarCheck2 className="w-5 h-5 shrink-0 mt-0.5" aria-hidden="true" />
+                  <div>
+                    <span>Booking Enquiry Reference: {confirmedBooking.refId}</span>
+                    <span className="block text-xs font-medium text-[#8C6B32] mt-0.5">
+                      Status: Enquiry Logged (Pending Front-Desk Availability Confirmation)
+                    </span>
+                  </div>
                 </div>
 
-                <p className="text-sm text-[#454545] leading-relaxed">
-                  Thank you, <strong>{guestName}</strong>! Your reservation summary for{' '}
-                  <strong>{modalRoom.title}</strong> ({nights} night{nights > 1 ? 's' : ''},{' '}
-                  {mealPlan} Plan, Total{' '}
-                  <strong className="price-tabular">₹{grandTotalInr.toLocaleString('en-IN')}</strong>) is ready. Send your instant confirmation to our 24×7 Waidhan Reception via WhatsApp or Email below:
+                <p className="text-sm text-[#525854] leading-relaxed">
+                  Thank you, <strong>{guestName}</strong>. Please note this reference is a{' '}
+                  <strong>booking request</strong> and not an automated room lock. To finalize room availability and receive confirmation from our 24×7 Waidhan Front Office, please send your enquiry via WhatsApp or Email below:
                 </p>
 
-                <div className="bg-[#FAF8F4] border border-[#E5DFD3] rounded-xl p-3.5 text-xs text-[#333333] whitespace-pre-wrap leading-relaxed">
+                <div className="bg-[#F8F6F0] border border-[#E9E2D5] rounded-xl p-3.5 text-xs text-[#191D1B] whitespace-pre-wrap leading-relaxed">
                   {confirmedBooking.summaryText}
                 </div>
 
@@ -1015,17 +1035,17 @@ export function RoomsAndBookingSection({
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => trackEvent('whatsapp_click', { source: 'booking_modal_success' })}
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#1D4E3E] hover:bg-[#163D30] text-white text-xs sm:text-sm font-semibold rounded-xl transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#183D32] hover:bg-[#122E25] text-white text-xs sm:text-sm font-semibold rounded-xl transition-colors"
                   >
                     <MessageSquare className="w-4 h-4" />
-                    Send Confirmation via WhatsApp
+                    Send Booking Request on WhatsApp
                   </a>
                   <a
                     href={confirmedBooking.mailtoUrl}
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#8A5A12] hover:bg-[#72490D] text-white text-xs sm:text-sm font-semibold rounded-xl transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#191D1B] hover:bg-[#2E3330] text-white text-xs sm:text-sm font-semibold rounded-xl transition-colors"
                   >
-                    <Mail className="w-4 h-4" />
-                    Send via Email to Reception
+                    <Mail className="w-4 h-4 text-[#C6A66B]" />
+                    Send Request via Email
                   </a>
                 </div>
 
@@ -1033,7 +1053,7 @@ export function RoomsAndBookingSection({
                   <button
                     type="button"
                     onClick={() => setModalRoom(null)}
-                    className="px-5 py-2 text-xs font-semibold text-[#5A5A5A] hover:text-[#1A1A1A]"
+                    className="px-5 py-2 text-xs font-semibold text-[#525854] hover:text-[#191D1B] cursor-pointer"
                   >
                     Close Window
                   </button>
@@ -1043,7 +1063,7 @@ export function RoomsAndBookingSection({
               <form onSubmit={handleConfirmBooking} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                    <label className="block text-xs font-semibold text-[#525854] mb-1">
                       Check-In (2:00 PM)
                     </label>
                     <input
@@ -1051,12 +1071,12 @@ export function RoomsAndBookingSection({
                       value={checkInDate}
                       min={new Date().toISOString().split('T')[0]}
                       onChange={(e) => setCheckInDate(e.target.value)}
-                      className="w-full px-3 py-2 text-sm bg-white border border-[#D8CFC0] rounded-xl"
+                      className="w-full px-3 py-2 text-sm bg-white border border-[#E9E2D5] rounded-lg"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                    <label className="block text-xs font-semibold text-[#525854] mb-1">
                       Check-Out (12:00 PM)
                     </label>
                     <input
@@ -1064,18 +1084,18 @@ export function RoomsAndBookingSection({
                       value={checkOutDate}
                       min={checkInDate}
                       onChange={(e) => setCheckOutDate(e.target.value)}
-                      className="w-full px-3 py-2 text-sm bg-white border border-[#D8CFC0] rounded-xl"
+                      className="w-full px-3 py-2 text-sm bg-white border border-[#E9E2D5] rounded-lg"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                    <label className="block text-xs font-semibold text-[#525854] mb-1">
                       Number of Rooms
                     </label>
                     <select
                       value={roomsCount}
                       onChange={(e) => setRoomsCount(Number(e.target.value))}
-                      className="w-full px-3 py-2 text-sm bg-white border border-[#D8CFC0] rounded-xl"
+                      className="w-full px-3 py-2 text-sm bg-white border border-[#E9E2D5] rounded-lg"
                     >
                       {[1, 2, 3, 4, 5, 6, 8, 10].map((n) => (
                         <option key={n} value={n}>
@@ -1088,7 +1108,7 @@ export function RoomsAndBookingSection({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                    <label className="block text-xs font-semibold text-[#525854] mb-1">
                       Occupancy
                     </label>
                     <select
@@ -1103,7 +1123,7 @@ export function RoomsAndBookingSection({
                           onChangeOccupancy(val as OccupancyType);
                         }
                       }}
-                      className="w-full px-3 py-2 text-sm bg-white border border-[#D8CFC0] rounded-xl"
+                      className="w-full px-3 py-2 text-sm bg-white border border-[#E9E2D5] rounded-lg"
                     >
                       <option value="Single">
                         Single Occupancy (₹{modalRoom.rates.single[mealPlan].toLocaleString('en-IN')}/night)
@@ -1117,13 +1137,13 @@ export function RoomsAndBookingSection({
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                    <label className="block text-xs font-semibold text-[#525854] mb-1">
                       Meal Plan
                     </label>
                     <select
                       value={mealPlan}
                       onChange={(e) => onChangeMealPlan(e.target.value as MealPlanCode)}
-                      className="w-full px-3 py-2 text-sm bg-white border border-[#D8CFC0] rounded-xl"
+                      className="w-full px-3 py-2 text-sm bg-white border border-[#E9E2D5] rounded-lg"
                     >
                       {MEAL_PLANS.map((m) => (
                         <option key={m.code} value={m.code}>
@@ -1136,7 +1156,7 @@ export function RoomsAndBookingSection({
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                    <label className="block text-xs font-semibold text-[#525854] mb-1">
                       Guest Full Name *
                     </label>
                     <input
@@ -1145,12 +1165,12 @@ export function RoomsAndBookingSection({
                       maxLength={100}
                       onChange={(e) => setGuestName(e.target.value)}
                       placeholder="Full name as on ID"
-                      className="w-full px-3 py-2 text-sm bg-white border border-[#D8CFC0] rounded-xl"
+                      className="w-full px-3 py-2 text-sm bg-white border border-[#E9E2D5] rounded-lg"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                    <label className="block text-xs font-semibold text-[#525854] mb-1">
                       Mobile / WhatsApp *
                     </label>
                     <input
@@ -1159,12 +1179,12 @@ export function RoomsAndBookingSection({
                       maxLength={25}
                       onChange={(e) => setGuestPhone(e.target.value)}
                       placeholder="+91 98765 43210"
-                      className="w-full px-3 py-2 text-sm bg-white border border-[#D8CFC0] rounded-xl"
+                      className="w-full px-3 py-2 text-sm bg-white border border-[#E9E2D5] rounded-lg"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
+                    <label className="block text-xs font-semibold text-[#525854] mb-1">
                       Email Address
                     </label>
                     <input
@@ -1173,19 +1193,19 @@ export function RoomsAndBookingSection({
                       maxLength={160}
                       onChange={(e) => setGuestEmail(e.target.value)}
                       placeholder="you@company.com"
-                      className="w-full px-3 py-2 text-sm bg-white border border-[#D8CFC0] rounded-xl"
+                      className="w-full px-3 py-2 text-sm bg-white border border-[#E9E2D5] rounded-lg"
                     />
                   </div>
                 </div>
 
                 {/* Corporate / GST Booking Checkbox */}
-                <div className="bg-white border border-[#E5DFD3] rounded-xl p-3.5 space-y-3">
-                  <label className="inline-flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#1A1A1A]">
+                <div className="bg-white border border-[#E9E2D5] rounded-xl p-3.5 space-y-3">
+                  <label className="inline-flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#191D1B]">
                     <input
                       type="checkbox"
                       checked={isCorporateGst}
                       onChange={(e) => setIsCorporateGst(e.target.checked)}
-                      className="accent-[#8A5A12] w-4 h-4 rounded"
+                      className="accent-[#183D32] w-4 h-4 rounded"
                     />
                     <span>Corporate / B2B GST Booking (Request Tax Invoice for Company)</span>
                   </label>
@@ -1193,7 +1213,7 @@ export function RoomsAndBookingSection({
                   {isCorporateGst && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#5A5A5A] mb-1">
+                        <label className="block text-[11px] font-semibold text-[#525854] mb-1">
                           Company / Organization Name *
                         </label>
                         <input
@@ -1201,12 +1221,12 @@ export function RoomsAndBookingSection({
                           value={companyName}
                           onChange={(e) => setCompanyName(e.target.value)}
                           placeholder="e.g. NTPC Ltd. / Reliance Power"
-                          className="w-full px-3 py-1.5 text-xs bg-[#FAF8F4] border border-[#D8CFC0] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg"
                           required={isCorporateGst}
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#5A5A5A] mb-1">
+                        <label className="block text-[11px] font-semibold text-[#525854] mb-1">
                           Company 15-Digit GSTIN
                         </label>
                         <input
@@ -1215,72 +1235,26 @@ export function RoomsAndBookingSection({
                           maxLength={15}
                           onChange={(e) => setGstinNumber(e.target.value.toUpperCase())}
                           placeholder="23AAAAA0000A1Z5"
-                          className="w-full px-3 py-1.5 text-xs bg-[#FAF8F4] border border-[#D8CFC0] rounded-lg uppercase"
+                          className="w-full px-3 py-1.5 text-xs bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg uppercase"
                         />
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* Payment Mode: Pay at Hotel vs Pay Advance via UPI */}
-                <div className="bg-white border border-[#E5DFD3] rounded-xl p-3.5 space-y-3">
-                  <p className="text-xs font-semibold text-[#1A1A1A]">Payment Preference</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                    <label
-                      className={`flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer ${
-                        paymentMode === 'hotel'
-                          ? 'border-[#8A5A12] bg-[#FAF8F4] font-semibold'
-                          : 'border-[#E5DFD3]'
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="payment-mode"
-                        checked={paymentMode === 'hotel'}
-                        onChange={() => setPaymentMode('hotel')}
-                        className="accent-[#8A5A12]"
-                      />
-                      <span>Pay at Hotel Reception (Cash / Card / UPI)</span>
-                    </label>
-                    <label
-                      className={`flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer ${
-                        paymentMode === 'upi'
-                          ? 'border-[#8A5A12] bg-[#FAF8F4] font-semibold'
-                          : 'border-[#E5DFD3]'
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="payment-mode"
-                        checked={paymentMode === 'upi'}
-                        onChange={() => setPaymentMode('upi')}
-                        className="accent-[#8A5A12]"
-                      />
-                      <span>Pay Advance via UPI QR</span>
-                    </label>
-                  </div>
-
-                  {paymentMode === 'upi' && (
-                    <div className="p-3 bg-[#FAF8F4] border border-[#E5DFD3] rounded-lg flex items-center gap-4">
-                      <div className="w-16 h-16 rounded-lg bg-white border border-[#D8CFC0] flex flex-col items-center justify-center shrink-0 text-[#8A5A12]">
-                        <QrCode className="w-8 h-8" />
-                        <span className="text-[9px] font-bold mt-0.5">UPI QR</span>
-                      </div>
-                      <div className="text-xs text-[#454545]">
-                        <p className="font-bold text-[#1A1A1A]">
-                          Merchant UPI ID: {BOOKING_CONFIG.upiIdPlaceholder}
-                        </p>
-                        <p className="mt-0.5">
-                          [PLACEHOLDER: Scan official hotel UPI QR & share screenshot on WhatsApp after generating booking reference.]
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                {/* Transparent Payment Policy (No fabricated online payment flow) */}
+                <div className="bg-white border border-[#E9E2D5] rounded-xl p-3.5 text-xs text-[#525854]">
+                  <p className="font-semibold text-[#191D1B] mb-1">
+                    No Advance Online Payment Required to Submit Enquiry
+                  </p>
+                  <p>
+                    Your enquiry will be reviewed by our 24×7 Waidhan Reception. Payment is collected at the hotel upon check-in or after formal reservation confirmation (Cash, Credit/Debit Card, UPI, or Corporate NEFT).
+                  </p>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#4A4A4A] mb-1">
-                    Special Requests (Railway/Airport Pickup, Early Check-In, Dietary)
+                  <label className="block text-xs font-semibold text-[#525854] mb-1">
+                    Special Requests (Station/Airport Pickup, Early Check-In, Dietary)
                   </label>
                   <textarea
                     rows={2}
@@ -1288,31 +1262,31 @@ export function RoomsAndBookingSection({
                     value={specialRequests}
                     onChange={(e) => setSpecialRequests(e.target.value)}
                     placeholder="Optional: Singrauli station cab pickup, early morning check-in, extra pillows..."
-                    className="w-full px-3 py-2 text-sm bg-white border border-[#D8CFC0] rounded-xl"
+                    className="w-full px-3 py-2 text-sm bg-white border border-[#E9E2D5] rounded-lg"
                   />
                 </div>
 
                 {submitError && (
-                  <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                  <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
                     {submitError}
                   </p>
                 )}
 
-                <div className="pt-3 border-t border-[#E5DFD3] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="pt-3 border-t border-[#E9E2D5] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <p className="price-tabular text-2xl font-bold text-[#1A1A1A]">
+                    <p className="price-tabular text-2xl font-bold text-[#191D1B]">
                       ₹{grandTotalInr.toLocaleString('en-IN')}
                     </p>
-                    <p className="text-xs text-[#5A5A5A] price-tabular">
-                      {nights}N × {roomsCount}R · {occupancy} · {mealPlan} · Incl. {gstPercent}% GST (₹{gstAmount.toLocaleString('en-IN')})
+                    <p className="text-xs text-[#525854] price-tabular">
+                      Estimated for {nights}N × {roomsCount}R · {occupancy} · {mealPlan} · Incl. {gstPercent}% GST (₹{gstAmount.toLocaleString('en-IN')})
                     </p>
                   </div>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-6 py-3.5 bg-[#1A1A1A] text-white text-sm font-semibold rounded-xl hover:bg-[#2E2E2E] disabled:opacity-60 transition-colors whitespace-nowrap shrink-0"
+                    className="px-6 py-3.5 bg-[#183D32] text-white text-xs uppercase tracking-[0.14em] font-semibold rounded-lg hover:bg-[#122E25] disabled:opacity-60 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                   >
-                    {submitting ? 'Generating Booking...' : 'Generate Booking & Confirm'}
+                    {submitting ? 'Submitting Enquiry...' : 'Submit Booking Request'}
                   </button>
                 </div>
               </form>

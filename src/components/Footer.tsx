@@ -372,37 +372,47 @@ export function Footer({ lang, onBookStay }: FooterProps) {
               </h4>
               <ul className="space-y-2.5 text-sm text-[#FAF8F4]/80">
                 <li>
-                  <a href="#accommodations" className="hover:text-[#D9A74A] transition-colors">
+                  <a href="#rooms" className="hover:text-[#C6A66B] transition-colors">
                     7 Room & Suite Tiers (₹2,000 – ₹9,000)
                   </a>
                 </li>
                 <li>
-                  <a href="#dining-events" className="hover:text-[#D9A74A] transition-colors">
+                  <a href="#dining-events" className="hover:text-[#C6A66B] transition-colors">
                     Sharda Multi-Cuisine Restaurant & Bakery
                   </a>
                 </li>
                 <li>
-                  <a href="#dining-events" className="hover:text-[#D9A74A] transition-colors">
+                  <a href="#dining-events" className="hover:text-[#C6A66B] transition-colors">
                     Blue Diamond Colonial Bar & Lounge
                   </a>
                 </li>
                 <li>
-                  <a href="#banquets" className="hover:text-[#D9A74A] transition-colors">
-                    3,000-Guest Lawns & Conference Halls
+                  <a href="#banquets" className="hover:text-[#C6A66B] transition-colors">
+                    Celebration Lawns & Banquet Halls
                   </a>
                 </li>
                 <li>
-                  <a href="#facilities" className="hover:text-[#D9A74A] transition-colors">
+                  <a href="#facilities" className="hover:text-[#C6A66B] transition-colors">
                     Swimming Pool & 16 Facilities
                   </a>
                 </li>
                 <li>
-                  <a href="#gallery" className="hover:text-[#D9A74A] transition-colors">
+                  <a href="#gallery" className="hover:text-[#C6A66B] transition-colors">
                     Verified Photo Gallery
                   </a>
                 </li>
                 <li>
-                  <a href="#policies-faq" className="hover:text-[#D9A74A] transition-colors">
+                  <a href="#about" className="hover:text-[#C6A66B] transition-colors">
+                    About Us & Leadership (Est. 2011)
+                  </a>
+                </li>
+                <li>
+                  <a href="#concierge-studio" className="hover:text-[#C6A66B] transition-colors">
+                    Hospitality Concierge & Event Studio
+                  </a>
+                </li>
+                <li>
+                  <a href="#policies-faq" className="hover:text-[#C6A66B] transition-colors">
                     Guest Policies & 14 FAQs
                   </a>
                 </li>

@@ -175,8 +175,8 @@ export function GallerySection({ lang }: GallerySectionProps) {
             </div>
           </div>
           <a
-            href="#ai-concierge"
-            className="px-5 py-3 bg-[#1A1A1A] hover:bg-[#2E2E2E] text-white text-xs sm:text-sm font-semibold rounded-xl whitespace-nowrap shrink-0"
+            href="#concierge-studio"
+            className="px-5 py-3 bg-[#183D32] hover:bg-[#122E25] text-white text-xs sm:text-sm font-semibold rounded-xl whitespace-nowrap shrink-0 transition-colors"
           >
             Open Motion Video Studio
           </a>
