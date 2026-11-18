@@ -9,15 +9,49 @@ import {
 
 export const LUXURY_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
+export const LUXURY_SPRING = {
+  type: 'spring' as const,
+  stiffness: 82,
+  damping: 22,
+  mass: 0.88,
+};
+
+export const sectionContainerSpringVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 36,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      ...LUXURY_SPRING,
+      staggerChildren: 0.14,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+export const sectionChildSpringVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 26,
+    scale: 0.992,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: LUXURY_SPRING,
+  },
+};
+
 export const fadeUpVariants: Variants = {
   hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.65,
-      ease: LUXURY_EASE,
-    },
+    transition: LUXURY_SPRING,
   },
 };
 
@@ -26,7 +60,7 @@ export const staggerContainerVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.11,
       delayChildren: 0.05,
     },
   },
@@ -37,10 +71,7 @@ export const staggerItemVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.6,
-      ease: LUXURY_EASE,
-    },
+    transition: LUXURY_SPRING,
   },
 };
 
@@ -57,7 +88,6 @@ export function Reveal({
   className = '',
   delay = 0,
   y = 24,
-  duration = 0.65,
 }: RevealProps) {
   const shouldReduceMotion = useReducedMotion();
 
@@ -69,7 +99,10 @@ export function Reveal({
       transition={
         shouldReduceMotion
           ? { duration: 0 }
-          : { duration, delay, ease: LUXURY_EASE }
+          : {
+              ...LUXURY_SPRING,
+              delay,
+            }
       }
       className={className}
     >

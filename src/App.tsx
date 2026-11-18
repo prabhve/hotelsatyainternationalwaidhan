@@ -17,7 +17,10 @@ import { ReviewsDashboardSection } from './components/ReviewsDashboardSection';
 import { LocationMapSection } from './components/LocationMapSection';
 import { SeoAeoSection } from './components/SeoAeoSection';
 import { Footer } from './components/Footer';
-import { LUXURY_EASE } from './components/MotionPrimitives';
+import {
+  sectionChildSpringVariants,
+  sectionContainerSpringVariants,
+} from './components/MotionPrimitives';
 import {
   ROOM_CATEGORIES,
   OccupancyType,
@@ -36,16 +39,16 @@ function SectionRevealWrapper({
 }: SectionRevealWrapperProps) {
   return (
     <motion.div
-      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.08 }}
-      transition={
-        shouldReduceMotion
-          ? { duration: 0 }
-          : { duration: 0.7, ease: LUXURY_EASE }
-      }
+      variants={sectionContainerSpringVariants}
+      initial={shouldReduceMotion ? 'visible' : 'hidden'}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.08, margin: '0px 0px -48px 0px' }}
     >
-      {children}
+      {React.Children.map(children, (child, index) => (
+        <motion.div key={index} variants={sectionChildSpringVariants}>
+          {child}
+        </motion.div>
+      ))}
     </motion.div>
   );
 }
