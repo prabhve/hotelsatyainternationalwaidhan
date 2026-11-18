@@ -1,0 +1,264 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net: deny everything by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Core primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email == 'prabhve5@gmail.com'
+      );
+    }
+
+    // Entity validation blueprints (strict key allowlists, sizes, types, regexes, temporal integrity)
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll(['uid', 'displayName', 'email', 'role', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'displayName', 'email', 'photoURL', 'role', 'createdAt', 'updatedAt'])
+        && isValidId(data.uid)
+        && data.uid == userId
+        && data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 100
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 160
+        && (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500))
+        && data.role == 'guest'
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidBooking(data, bookingId) {
+      return data.keys().hasAll([
+          'bookingId', 'userId', 'guestName', 'guestEmail', 'guestPhone',
+          'roomId', 'roomTitle', 'occupancy', 'mealPlan',
+          'checkInDate', 'checkOutDate', 'nights', 'adults', 'children',
+          'totalInr', 'specialRequests', 'status', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'bookingId', 'userId', 'guestName', 'guestEmail', 'guestPhone',
+          'roomId', 'roomTitle', 'occupancy', 'mealPlan',
+          'checkInDate', 'checkOutDate', 'nights', 'adults', 'children',
+          'totalInr', 'specialRequests', 'status', 'createdAt', 'updatedAt'
+        ])
+        && isValidId(data.bookingId) && data.bookingId == bookingId && data.bookingId.size() >= 4
+        && isValidId(data.userId)
+        && data.guestName is string && data.guestName.size() >= 2 && data.guestName.size() <= 100
+        && data.guestEmail is string && data.guestEmail.size() >= 3 && data.guestEmail.size() <= 160
+        && data.guestPhone is string && data.guestPhone.size() >= 7 && data.guestPhone.size() <= 25
+        && isValidId(data.roomId) && data.roomId.size() >= 2 && data.roomId.size() <= 64
+        && data.roomTitle is string && data.roomTitle.size() >= 2 && data.roomTitle.size() <= 100
+        && data.occupancy in ['Single', 'Double']
+        && data.mealPlan in ['EP', 'CP', 'MAP', 'AP']
+        && data.checkInDate is string && data.checkInDate.size() == 10 && data.checkInDate.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && data.checkOutDate is string && data.checkOutDate.size() == 10 && data.checkOutDate.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && data.nights is int && data.nights >= 1 && data.nights <= 60
+        && data.adults is int && data.adults >= 1 && data.adults <= 10
+        && data.children is int && data.children >= 0 && data.children <= 8
+        && (data.totalInr is int || data.totalInr is float) && data.totalInr >= 1000 && data.totalInr <= 1000000
+        && data.specialRequests is string && data.specialRequests.size() <= 600
+        && data.status in ['pending', 'confirmed', 'cancelled']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidReview(data, reviewId) {
+      return data.keys().hasAll([
+          'reviewId', 'userId', 'authorName', 'stayCategory', 'roomStayed',
+          'rating', 'cleanlinessRating', 'diningRating', 'hospitalityRating',
+          'title', 'comment', 'verifiedStay', 'ownerReply', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'reviewId', 'userId', 'authorName', 'stayCategory', 'roomStayed',
+          'rating', 'cleanlinessRating', 'diningRating', 'hospitalityRating',
+          'title', 'comment', 'verifiedStay', 'ownerReply', 'createdAt', 'updatedAt'
+        ])
+        && isValidId(data.reviewId) && data.reviewId == reviewId && data.reviewId.size() >= 4
+        && isValidId(data.userId)
+        && data.authorName is string && data.authorName.size() >= 2 && data.authorName.size() <= 80
+        && data.stayCategory in ['Business', 'Family', 'Wedding & Events', 'Solo']
+        && data.roomStayed is string && data.roomStayed.size() >= 2 && data.roomStayed.size() <= 80
+        && (data.rating is int || data.rating is float) && data.rating >= 1 && data.rating <= 5
+        && (data.cleanlinessRating is int || data.cleanlinessRating is float) && data.cleanlinessRating >= 1 && data.cleanlinessRating <= 5
+        && (data.diningRating is int || data.diningRating is float) && data.diningRating >= 1 && data.diningRating <= 5
+        && (data.hospitalityRating is int || data.hospitalityRating is float) && data.hospitalityRating >= 1 && data.hospitalityRating <= 5
+        && data.title is string && data.title.size() >= 3 && data.title.size() <= 120
+        && data.comment is string && data.comment.size() >= 10 && data.comment.size() <= 1200
+        && data.verifiedStay is bool
+        && data.ownerReply is string && data.ownerReply.size() <= 600
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidInquiry(data, inquiryId) {
+      return data.keys().hasAll([
+          'inquiryId', 'userId', 'contactName', 'contactPhone', 'venue',
+          'eventDate', 'guestCount', 'notes', 'status', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'inquiryId', 'userId', 'contactName', 'contactPhone', 'venue',
+          'eventDate', 'guestCount', 'notes', 'status', 'createdAt', 'updatedAt'
+        ])
+        && isValidId(data.inquiryId) && data.inquiryId == inquiryId && data.inquiryId.size() >= 4
+        && isValidId(data.userId)
+        && data.contactName is string && data.contactName.size() >= 2 && data.contactName.size() <= 100
+        && data.contactPhone is string && data.contactPhone.size() >= 7 && data.contactPhone.size() <= 25
+        && data.venue in [
+          'Open-Air Lawn (3000 Pax)',
+          'Grand Banquet Hall (200 Pax)',
+          'Party Room (40 Pax)',
+          'Executive Meeting Room (20 Pax)'
+        ]
+        && data.eventDate is string && data.eventDate.size() == 10 && data.eventDate.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && data.guestCount is int && data.guestCount >= 5 && data.guestCount <= 5000
+        && data.notes is string && data.notes.size() <= 600
+        && data.status in ['new', 'reviewed']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // 1. Private User Profiles (PII isolated to owner or admin)
+    match /users/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isValidId(userId)
+        && isVerifiedUser()
+        && isOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId)
+        && isVerifiedUser()
+        && isOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().uid == existing().uid
+        && incoming().role == existing().role
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'email', 'photoURL', 'updatedAt']);
+      allow delete: if false;
+    }
+
+    // 2. Room Bookings (PII isolated to owner or admin)
+    match /bookings/{bookingId} {
+      allow get: if isValidId(bookingId) && isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isValidId(bookingId)
+        && isVerifiedUser()
+        && isValidBooking(incoming(), bookingId)
+        && incoming().userId == request.auth.uid
+        && incoming().status == 'pending'
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(bookingId)
+        && isVerifiedUser()
+        && isValidBooking(incoming(), bookingId)
+        && incoming().bookingId == existing().bookingId
+        && incoming().userId == existing().userId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          isAdmin() ||
+          (
+            existing().userId == request.auth.uid
+            && existing().status != 'cancelled'
+            && incoming().status == 'cancelled'
+            && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+          )
+        );
+      allow delete: if isValidId(bookingId) && isAdmin();
+    }
+
+    // 3. Public Guest Reviews (Zero PII; public read, authenticated verified author write)
+    match /reviews/{reviewId} {
+      allow get: if isValidId(reviewId);
+      allow list: if true;
+      allow create: if isValidId(reviewId)
+        && isVerifiedUser()
+        && isValidReview(incoming(), reviewId)
+        && incoming().userId == request.auth.uid
+        && incoming().verifiedStay == false
+        && incoming().ownerReply == ''
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(reviewId)
+        && isVerifiedUser()
+        && isValidReview(incoming(), reviewId)
+        && incoming().reviewId == existing().reviewId
+        && incoming().userId == existing().userId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          (
+            isAdmin() &&
+            incoming().diff(existing()).affectedKeys().hasOnly(['verifiedStay', 'ownerReply', 'updatedAt'])
+          ) ||
+          (
+            existing().userId == request.auth.uid
+            && incoming().verifiedStay == existing().verifiedStay
+            && incoming().ownerReply == existing().ownerReply
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'authorName', 'stayCategory', 'roomStayed',
+              'rating', 'cleanlinessRating', 'diningRating', 'hospitalityRating',
+              'title', 'comment', 'updatedAt'
+            ])
+          )
+        );
+      allow delete: if isValidId(reviewId) && isVerifiedUser() && (existing().userId == request.auth.uid || isAdmin());
+    }
+
+    // 4. Banquet & Event Inquiries (PII isolated to owner or admin)
+    match /inquiries/{inquiryId} {
+      allow get: if isValidId(inquiryId) && isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isValidId(inquiryId)
+        && isVerifiedUser()
+        && isValidInquiry(incoming(), inquiryId)
+        && incoming().userId == request.auth.uid
+        && incoming().status == 'new'
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(inquiryId)
+        && isAdmin()
+        && isValidInquiry(incoming(), inquiryId)
+        && incoming().inquiryId == existing().inquiryId
+        && incoming().userId == existing().userId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt']);
+      allow delete: if isValidId(inquiryId) && isAdmin();
+    }
+
+    // 5. Admin registry (read-only for self, no client writes)
+    match /admins/{adminId} {
+      allow get: if isValidId(adminId) && isOwner(adminId);
+      allow list, create, update, delete: if false;
+    }
+  }
+}

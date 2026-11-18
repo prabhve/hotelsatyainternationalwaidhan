@@ -1,0 +1,6 @@
+{
+  "name": "Hotel Satya International",
+  "description": "Official luxury hospitality portal, direct room & banquet booking engine, guest review analytics, interactive Singrauli map, and AI concierge for Hotel Satya International, Waidhan.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
