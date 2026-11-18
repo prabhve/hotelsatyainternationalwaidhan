@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import {
   ArrowRight,
+  BedDouble,
   Calendar,
   ChevronLeft,
   ChevronRight,
-  Compass,
   MapPin,
   Phone,
+  Sparkles,
   Users,
+  UtensilsCrossed,
+  Wine,
   X,
 } from 'lucide-react';
 import {
@@ -70,7 +73,6 @@ function calcNights(checkIn: string, checkOut: string): number {
 
 export function HeroSection({
   lang,
-  onToggleLang,
   selectedRoomId,
   onSelectRoomId,
   occupancy,
@@ -81,10 +83,10 @@ export function HeroSection({
 }: HeroSectionProps) {
   const t = UI_TRANSLATIONS[lang];
 
-  // Top hospitality utility bar state
+  // Top announcement bar state
   const [showAnnouncement, setShowAnnouncement] = useState(true);
 
-  // Full-width cinematic hero slide state
+  // Hero visual slide state
   const [slideIdx, setSlideIdx] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -101,7 +103,7 @@ export function HeroSection({
     if (isPaused) return;
     const timer = window.setInterval(() => {
       setSlideIdx((prev) => (prev + 1) % HERO_CAROUSEL_SLIDES.length);
-    }, 6500);
+    }, 6000);
     return () => window.clearInterval(timer);
   }, [isPaused]);
 
@@ -176,134 +178,102 @@ export function HeroSection({
     });
   };
 
-  // Asymmetric Bento Grid Highlights (Section 3D)
+  // Four Hotel Highlights (Section 3D) with authentic property photography
   const hotelHighlights = [
     {
       id: 'rooms-highlight',
-      number: '01.',
-      spanClass: 'lg:col-span-7',
+      number: '01',
       title: lang === 'hi' ? 'आरामदायक रूम्स और सुइट्स' : 'Comfortable Rooms & Suites',
-      kicker: lang === 'hi' ? '७ रूम व सुइट श्रेणियां · ₹2,000 से प्रारंभ' : 'Seven Room & Suite Tiers · Starting at ₹2,000',
+      subtitle: lang === 'hi' ? '७ रूम व सुइट श्रेणियां' : 'Seven Room & Suite Categories',
       description:
         lang === 'hi'
-          ? 'स्टैंडर्ड एसी रूम से लेकर विशाल रॉयल सुइट तक, शांत वातावरण, आधुनिक सुविधाओं और EP, CP, MAP व AP मील प्लान विकल्पों के साथ।'
-          : 'Thoughtfully appointed accommodations ranging from Standard A/C Rooms to our 680 sq. ft. Royal Suite, designed for visiting corporate executives and families.',
+          ? 'स्टैंडर्ड एसी रूम से लेकर विशाल रॉयल सुइट तक, शांत वातावरण, आधुनिक सुविधाओं और EP/CP/MAP/AP मील प्लान के साथ।'
+          : 'Thoughtfully appointed accommodations ranging from Standard A/C Rooms to our flagship Royal Suite, tailored for corporate and family stays.',
       image: HERO_CAROUSEL_SLIDES[2].image, // Royal Suite authentic photo
       href: '#rooms',
-      cta: lang === 'hi' ? 'सभी ७ रूम श्रेणियां देखें' : 'Explore Rooms & Tariffs',
+      cta: lang === 'hi' ? 'सभी रूम देखें' : 'Explore Rooms',
+      icon: BedDouble,
     },
     {
       id: 'sharda-highlight',
-      number: '02.',
-      spanClass: 'lg:col-span-5',
+      number: '02',
       title:
         lang === 'hi'
           ? 'शारदा मल्टी-कुज़ीन रेस्टोरेंट'
           : 'Sharda Multi-Cuisine Restaurant',
-      kicker: lang === 'hi' ? '६ पाक शैलियां और यूरोपियन बेकरी' : 'Six Cuisines & Custom Bakery',
+      subtitle: lang === 'hi' ? 'रेस्टोरेंट और इन-हाउस बेकरी' : 'Fine Dining & Custom Bakery',
       description:
         lang === 'hi'
           ? 'भारतीय, मुगलई, चाइनीज़ और कॉन्टिनेंटल व्यंजनों के साथ ताज़ा यूरोपियन-स्टाइल बेकरी और कस्टम सेलिब्रेशन केक।'
-          : 'Savor Indian, Mughlai, Chinese, and Continental dishes alongside freshly baked breads, pastries, and custom celebration cakes.',
+          : 'Savor Indian, Mughlai, Chinese, and Continental delicacies alongside freshly baked breads, pastries, and custom celebration cakes.',
       image: HERO_CAROUSEL_SLIDES[4].image, // Sharda Restaurant authentic photo
       href: '#dining-events',
-      cta: lang === 'hi' ? 'मेनू और डाइनिंग देखें' : 'Explore Sharda Dining',
+      cta: lang === 'hi' ? 'डाइनिंग देखें' : 'Discover Dining',
+      icon: UtensilsCrossed,
     },
     {
       id: 'bar-highlight',
-      number: '03.',
-      spanClass: 'lg:col-span-5',
+      number: '03',
       title: lang === 'hi' ? 'ब्लू डायमंड बार' : 'Blue Diamond Bar',
-      kicker: lang === 'hi' ? 'औपनिवेशिक शैली लाउंज · 11 AM – 11 PM' : 'Colonial-Inspired Lounge · 11 AM – 11 PM',
+      subtitle: lang === 'hi' ? 'औपनिवेशिक शैली लाउंज' : 'Colonial-Inspired Lounge',
       description:
         lang === 'hi'
           ? 'दिन भर की कार्य बैठकों के बाद शांत और गरिमापूर्ण माहौल में प्रीमियम पेय और मॉकटेल्स का आनंद लें।'
           : 'Unwind in a classic, wood-accented lounge setting offering curated spirits, beverages, and attentive evening hospitality in Waidhan.',
       image: HERO_CAROUSEL_SLIDES[5].image, // Blue Diamond Bar authentic photo
       href: '#dining-events',
-      cta: lang === 'hi' ? 'लाउंज विवरण देखें' : 'Discover Blue Diamond Bar',
+      cta: lang === 'hi' ? 'लाउंज देखें' : 'View Lounge Details',
+      icon: Wine,
     },
     {
       id: 'events-highlight',
-      number: '04.',
-      spanClass: 'lg:col-span-7',
+      number: '04',
       title:
         lang === 'hi'
           ? 'वेडिंग्स, बैंक्वेट और समारोह'
           : 'Weddings, Banquets & Celebrations',
-      kicker: lang === 'hi' ? 'विशाल ओपन-एयर लॉन और कॉन्फ्रेंस हॉल' : 'Open-Air Lawn, Grand Banquet & Boardrooms',
+      subtitle: lang === 'hi' ? 'विशाल लॉन और कॉन्फ्रेंस हॉल' : 'Lawns, Banquet & Boardrooms',
       description:
         lang === 'hi'
-          ? 'भव्य विवाह समारोहों, रिसेप्शन, कॉर्पोरेट सेमिनार और पारिवारिक उत्सवों के लिए सुसज्जित ओपन-एयर लॉन और इनडोर बैंक्वेट हॉल।'
-          : 'Host memorable weddings, receptions, corporate conferences, and executive meetings across our expansive lawn and indoor banquet venues.',
+          ? 'भव्य विवाह समारोहों, रिसेप्शन, कॉर्पोरेट सेमिनार और पारिवारिक उत्सवों के लिए सुसज्जित ओपन-एयर लॉन और बैंक्वेट हॉल।'
+          : 'Host memorable weddings, receptions, corporate conferences, and executive meetings across our open-air lawn and indoor banquet venues.',
       image: HERO_CAROUSEL_SLIDES[6].image, // Banquet Hall authentic photo
       href: '#banquets',
-      cta: lang === 'hi' ? 'वेन्यू और पैकेज देखें' : 'Plan Your Event or Wedding',
+      cta: lang === 'hi' ? 'वेन्यू देखें' : 'Plan an Event',
+      icon: Sparkles,
     },
   ];
 
   return (
     <div id="top" className="bg-[#F8F6F0]">
-      {/* Top Hospitality Utility Bar (Forest Green #183D32 & Champagne Gold #C6A66B) */}
+      {/* Subtle Top Hospitality Strip (Dismissible) */}
       {showAnnouncement && (
-        <div className="bg-[#183D32] text-[#F8F6F0] border-b border-[#C6A66B]/30 px-4 sm:px-8 py-2.5 text-xs">
-          <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <span className="font-semibold tracking-wide text-[#C6A66B]">
-                {lang === 'hi' ? 'स्वागत है · अतिथि देवो भव:' : 'Atithi Devo Bhava · Est. 2011'}
+        <div className="bg-[#183D32] text-[#F8F6F0] border-b border-[#C6A66B]/25 px-4 py-2 text-xs">
+          <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <span className="font-semibold text-[#C6A66B]">
+                {lang === 'hi' ? 'अतिथि देवो भव:' : 'Atithi Devo Bhava'}
               </span>
-              <span className="hidden sm:inline text-[#F8F6F0]/35" aria-hidden="true">·</span>
+              <span className="hidden sm:inline text-[#F8F6F0]/40">·</span>
               <span className="text-[#F8F6F0]/90">
                 {lang === 'hi'
-                  ? 'बेलौंजी मेन रोड, वैढ़न · नि:शुल्क वाई-फाई और स्विमिंग पूल सुविधा'
-                  : 'Main Road, Belaunji, Waidhan · Complimentary Wi-Fi & Resident Swimming Pool Access'}
+                  ? 'वैढ़न, सिंगरौली में डायरेक्ट बुकिंग और २४×७ रिसेप्शन सहायता'
+                  : 'Direct Reservation Assistance · Complimentary Wi-Fi & Resident Swimming Pool Access'}
               </span>
             </div>
-
-            <div className="flex items-center gap-4 shrink-0 ml-auto">
+            <div className="flex items-center gap-4 shrink-0">
               <a
                 href={`tel:${HOTEL_INFO.phones[0]}`}
-                onClick={() => trackEvent('call_click', { source: 'top_utility_bar' })}
-                className="hidden md:inline-flex items-center gap-1.5 price-tabular font-semibold text-[#C6A66B] hover:underline whitespace-nowrap"
+                onClick={() => trackEvent('call_click', { source: 'announcement_bar' })}
+                className="hidden md:inline-flex items-center gap-1.5 price-tabular font-semibold text-[#C6A66B] hover:underline"
               >
-                <Phone className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>24×7 Reception: {HOTEL_INFO.phones[0]}</span>
+                <Phone className="w-3 h-3" />
+                <span>{HOTEL_INFO.phones[0]}</span>
               </a>
-
-              {/* Bilingual Switcher (EN | हिन्दी) */}
-              <div
-                className="inline-flex items-center rounded-md border border-[#C6A66B]/40 bg-[#122E25] p-0.5 text-[11px]"
-                role="group"
-                aria-label="Language Switcher"
-              >
-                <button
-                  type="button"
-                  onClick={() => onToggleLang('en')}
-                  className={`px-2 py-0.5 rounded font-semibold transition-colors cursor-pointer whitespace-nowrap ${
-                    lang === 'en'
-                      ? 'bg-[#C6A66B] text-[#191D1B]'
-                      : 'text-[#F8F6F0]/80 hover:text-white'
-                  }`}
-                >
-                  EN
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onToggleLang('hi')}
-                  className={`px-2 py-0.5 rounded font-semibold transition-colors cursor-pointer whitespace-nowrap ${
-                    lang === 'hi'
-                      ? 'bg-[#C6A66B] text-[#191D1B]'
-                      : 'text-[#F8F6F0]/80 hover:text-white'
-                  }`}
-                >
-                  हिन्दी
-                </button>
-              </div>
-
               <button
                 type="button"
                 onClick={() => setShowAnnouncement(false)}
-                aria-label="Dismiss announcement strip"
+                aria-label="Dismiss announcement"
                 className="text-[#F8F6F0]/70 hover:text-white p-0.5 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
@@ -314,143 +284,116 @@ export function HeroSection({
       )}
 
       {/* =====================================================================
-          CINEMATIC FULL-WIDTH HERO SECTION (Forest Green #183D32 & Champagne Gold #C6A66B)
+          SECTION 3B — EXCEPTIONAL CINEMATIC HERO SECTION
           ===================================================================== */}
-      <section
-        className="relative bg-[#191D1B] text-[#F8F6F0] overflow-hidden"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        {/* Full-Bleed Architectural & Property Canvas */}
-        <div className="relative min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] flex items-end">
-          {/* Animated Background Photograph */}
-          <div className="absolute inset-0 z-0 overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentSlide.id}
-                initial={{ opacity: 0, scale: 1.04 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full h-full"
-              >
-                <SafeImage
-                  src={currentSlide.image}
-                  alt={`${currentSlide.title} — Hotel Satya International, Waidhan, Singrauli`}
-                  priority={true}
-                  className="w-full h-full object-cover object-center"
-                />
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Measured Multi-Stop Forest Green & Rich Charcoal Scrim for Guaranteed WCAG Contrast */}
+      <section className="relative bg-[#191D1B] text-[#F8F6F0] overflow-hidden">
+        {/* Background Authentic Property Image with Editorial Scrim */}
+        <div
+          className="relative min-h-[600px] lg:min-h-[680px] flex items-center"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div className="absolute inset-0 z-0">
+            <SafeImage
+              src={currentSlide.image}
+              alt={`${currentSlide.title} — Hotel Satya International, Waidhan, Singrauli`}
+              priority={true}
+              className="w-full h-full object-cover object-center transition-all duration-700 scale-[1.01]"
+            />
+            {/* Carefully balanced multi-stop dark editorial overlay for guaranteed text contrast */}
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(95deg, rgba(18, 46, 37, 0.94) 0%, rgba(24, 61, 50, 0.80) 46%, rgba(25, 29, 27, 0.42) 100%), linear-gradient(180deg, rgba(25, 29, 27, 0.30) 0%, rgba(25, 29, 27, 0.88) 100%)',
+                  'linear-gradient(90deg, rgba(25,29,27,0.92) 0%, rgba(25,29,27,0.78) 52%, rgba(25,29,27,0.45) 100%), linear-gradient(180deg, rgba(25,29,27,0.35) 0%, rgba(25,29,27,0.85) 100%)',
               }}
             />
           </div>
 
-          {/* Foreground Editorial Content Container */}
-          <div className="relative z-10 max-w-[1440px] mx-auto w-full px-4 sm:px-8 pt-14 pb-24 lg:pb-32">
+          <div className="relative z-10 max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-12 pb-24 lg:py-24">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-              {/* Left 8 Columns: Editorial Brand Positioning, Animated Typography & Dual CTAs */}
-              <div className="lg:col-span-8 space-y-6">
-                {/* Brand & Location Indicator */}
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  className="space-y-2"
-                >
-                  <div className="inline-flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.22em] text-[#C6A66B] font-semibold">
-                    <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                    <span>
-                      {lang === 'hi'
-                        ? 'होटल सत्या इंटरनेशनल · वैढ़न, सिंगरौली, मध्य प्रदेश'
-                        : 'HOTEL SATYA INTERNATIONAL · WAIDHAN, SINGRAULI'}
-                    </span>
-                  </div>
-                  <div className="h-[1px] w-20 bg-[#C6A66B]/60" />
-                </motion.div>
-
-                {/* Animated Hero Display Headline */}
-                <AnimatePresence mode="wait">
-                  <motion.h1
-                    key={lang}
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                    className="font-display text-white font-medium tracking-tight leading-[1.05] text-balance max-w-3xl"
-                    style={{ fontSize: 'clamp(2.4rem, 4.8vw, 4.35rem)' }}
-                  >
+              {/* Left 8 Columns: Editorial Typography & Primary CTAs */}
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, ease: 'easeOut' }}
+                className="lg:col-span-8 space-y-6"
+              >
+                {/* Location & Brand Kicker */}
+                <div className="inline-flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.22em] text-[#C6A66B] font-semibold">
+                  <MapPin className="w-3.5 h-3.5 shrink-0" />
+                  <span>
                     {lang === 'hi'
-                      ? 'जहाँ आराम और उत्कृष्ट आतिथ्य का संगम होता है'
-                      : 'Where Comfort Meets Exceptional Hospitality'}
-                  </motion.h1>
-                </AnimatePresence>
+                      ? 'होटल सत्या इंटरनेशनल · बेलौंजी मेन रोड, वैढ़न, सिंगरौली (म.प्र.)'
+                      : 'HOTEL SATYA INTERNATIONAL · Waidhan, Singrauli, Madhya Pradesh'}
+                  </span>
+                </div>
 
-                {/* Supporting Copy */}
-                <motion.p
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-base sm:text-lg text-[#F8F6F0]/90 max-w-2xl leading-relaxed font-normal"
+                {/* Main Hero Headline */}
+                <h1
+                  className="font-display text-white font-medium tracking-tight leading-[1.06] text-balance"
+                  style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}
                 >
                   {lang === 'hi'
-                    ? 'वैढ़न, सिंगरौली के हृदय में एक स्वागतपूर्ण प्रवास, यादगार डाइनिंग और भव्य समारोहों का अनुभव करें।'
-                    : 'Discover a welcoming stay, memorable dining and elegant celebrations in the heart of Waidhan, Singrauli.'}
-                </motion.p>
+                    ? 'जहाँ आराम और उत्कृष्ट आतिथ्य का संगम होता है'
+                    : 'Where Comfort Meets Exceptional Hospitality'}
+                </h1>
 
-                {/* Primary & Secondary Action Hierarchy */}
-                <motion.div
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex flex-wrap items-center gap-4 pt-2"
-                >
-                  {/* Primary CTA: Explore Rooms (Champagne Gold #C6A66B) */}
+                {/* Supporting Copy */}
+                <p className="text-base sm:text-lg text-[#F8F6F0]/90 max-w-2xl leading-relaxed font-normal">
+                  {lang === 'hi'
+                    ? 'वैढ़न, सिंगरौली के हृदय में एक स्वागतपूर्ण प्रवास, यादगार डाइनिंग और भव्य समारोहों का अनुभव करें — ७ सुइट और रूम श्रेणियों, शारदा रेस्टोरेंट, ब्लू डायमंड बार और स्विमिंग पूल के साथ।'
+                    : 'Discover a welcoming stay, memorable dining and elegant celebrations in the heart of Waidhan, Singrauli.'}
+                </p>
+
+                {/* Primary & Secondary CTAs */}
+                <div className="flex flex-wrap items-center gap-4 pt-2">
                   <a
                     href="#rooms"
                     onClick={() => trackEvent('book_stay_click', { source: 'hero_explore_rooms' })}
-                    className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#C6A66B] hover:bg-[#d4b67c] text-[#191D1B] text-xs uppercase tracking-[0.16em] font-bold transition-colors whitespace-nowrap shrink-0 shadow-sm"
+                    className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#C6A66B] hover:bg-[#b59457] text-[#191D1B] text-xs uppercase tracking-[0.16em] font-bold transition-colors shadow-sm"
                   >
                     <span>{lang === 'hi' ? 'रूम्स और सुइट्स देखें' : 'Explore Rooms'}</span>
-                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    <ArrowRight className="w-4 h-4" />
                   </a>
 
-                  {/* Secondary CTA: Book Your Stay (Forest Green #183D32) */}
                   <a
                     href="#booking-widget"
                     onClick={() => trackEvent('book_stay_click', { source: 'hero_book_stay' })}
-                    className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-[#F8F6F0] border border-[#C6A66B]/50 text-xs uppercase tracking-[0.16em] font-semibold transition-colors whitespace-nowrap shrink-0"
+                    className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white border border-[#C6A66B]/40 text-xs uppercase tracking-[0.16em] font-semibold transition-colors"
                   >
-                    <Calendar className="w-4 h-4 text-[#C6A66B]" aria-hidden="true" />
+                    <Calendar className="w-4 h-4 text-[#C6A66B]" />
                     <span>{lang === 'hi' ? 'प्रवास बुक करें' : 'Book Your Stay'}</span>
                   </a>
-                </motion.div>
 
-                {/* Unboxed Editorial Trust Line (Zero-Pill Discipline) */}
-                <div className="pt-5 border-t border-white/15 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[#F8F6F0]/80">
-                  <span className="text-[#C6A66B] font-semibold">Main Road, Belaunji, Waidhan</span>
-                  <span aria-hidden="true">·</span>
-                  <span className="price-tabular">4 km from NTPC Vindhyanagar</span>
-                  <span aria-hidden="true">·</span>
-                  <span>7 Room & Suite Tiers</span>
-                  <span aria-hidden="true">·</span>
-                  <span>Sharda Restaurant & Blue Diamond Bar</span>
+                  <a
+                    href={`tel:${HOTEL_INFO.phones[0]}`}
+                    onClick={() => trackEvent('call_click', { source: 'hero_phone' })}
+                    className="inline-flex items-center gap-2 px-4 py-3.5 text-xs font-semibold text-[#F8F6F0]/90 hover:text-[#C6A66B] transition-colors price-tabular"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-[#C6A66B]" />
+                    <span>24×7 Desk: {HOTEL_INFO.phones[0]}</span>
+                  </a>
                 </div>
-              </div>
 
-              {/* Right 4 Columns: Interactive Property Perspective Switcher with Animated Caption */}
-              <div className="lg:col-span-4 flex flex-col justify-end">
-                <div className="bg-[#191D1B]/85 backdrop-blur-md border border-[#C6A66B]/30 rounded-xl p-5 space-y-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="price-tabular text-xs uppercase tracking-[0.18em] text-[#C6A66B] font-semibold">
-                      0{slideIdx + 1} / 0{HERO_CAROUSEL_SLIDES.length} · {currentSlide.badge}
+                {/* Key Factual Highlights Row (Clean Unboxed Editorial Metadata) */}
+                <div className="pt-4 border-t border-white/15 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#F8F6F0]/80">
+                  <span>Est. 2011 in Waidhan</span>
+                  <span aria-hidden="true" className="text-[#C6A66B]">·</span>
+                  <span>7 Room & Suite Categories</span>
+                  <span aria-hidden="true" className="text-[#C6A66B]">·</span>
+                  <span>Sharda Multi-Cuisine Restaurant & Bakery</span>
+                  <span aria-hidden="true" className="text-[#C6A66B]">·</span>
+                  <span>Outdoor Swimming Pool & Lawn</span>
+                </div>
+              </motion.div>
+
+              {/* Right 4 Columns: Authentic Property Photo Caption & Slide Switcher */}
+              <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-end">
+                <div className="w-full max-w-sm bg-[#191D1B]/85 backdrop-blur-md border border-white/15 rounded-xl p-4 space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[11px] uppercase tracking-[0.16em] text-[#C6A66B] font-semibold">
+                      Authentic Property View · {slideIdx + 1}/{HERO_CAROUSEL_SLIDES.length}
                     </span>
                     <div className="flex items-center gap-1.5">
                       <button
@@ -462,68 +405,48 @@ export function HeroSection({
                               HERO_CAROUSEL_SLIDES.length
                           )
                         }
-                        aria-label="Previous property view"
-                        className="w-8 h-8 rounded-lg border border-white/20 flex items-center justify-center text-white hover:border-[#C6A66B] hover:text-[#C6A66B] transition-colors cursor-pointer"
+                        aria-label="Previous property photograph"
+                        className="w-7 h-7 rounded-md border border-white/20 flex items-center justify-center text-white hover:bg-white/10 cursor-pointer"
                       >
-                        <ChevronLeft className="w-4 h-4" />
+                        <ChevronLeft className="w-3.5 h-3.5" />
                       </button>
                       <button
                         type="button"
                         onClick={() =>
                           setSlideIdx((prev) => (prev + 1) % HERO_CAROUSEL_SLIDES.length)
                         }
-                        aria-label="Next property view"
-                        className="w-8 h-8 rounded-lg border border-white/20 flex items-center justify-center text-white hover:border-[#C6A66B] hover:text-[#C6A66B] transition-colors cursor-pointer"
+                        aria-label="Next property photograph"
+                        className="w-7 h-7 rounded-md border border-white/20 flex items-center justify-center text-white hover:bg-white/10 cursor-pointer"
                       >
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
 
-                  {/* Animated Slide Title & Caption */}
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={currentSlide.id}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 0.25 }}
-                      className="min-h-[68px]"
-                    >
-                      <p className="font-display text-xl font-medium text-white leading-snug">
-                        {currentSlide.title}
-                      </p>
-                      <p className="text-xs text-[#F8F6F0]/75 mt-1 leading-relaxed">
-                        {currentSlide.caption}
-                      </p>
-                    </motion.div>
-                  </AnimatePresence>
+                  <div>
+                    <p className="font-display text-lg font-medium text-white leading-snug">
+                      {currentSlide.badge} — {currentSlide.title}
+                    </p>
+                    <p className="text-xs text-[#F8F6F0]/75 mt-1 leading-relaxed">
+                      {currentSlide.caption}
+                    </p>
+                  </div>
 
-                  {/* Interactive Thumbnail Strip for All 7 Authentic Property Views */}
-                  <div className="grid grid-cols-7 gap-1.5 pt-2 border-t border-white/10">
-                    {HERO_CAROUSEL_SLIDES.map((s, idx) => {
-                      const active = idx === slideIdx;
-                      return (
-                        <button
-                          key={s.id}
-                          type="button"
-                          onClick={() => setSlideIdx(idx)}
-                          title={s.badge}
-                          aria-label={`Preview ${s.badge}`}
-                          className={`relative aspect-square rounded-md overflow-hidden border transition-all cursor-pointer ${
-                            active
-                              ? 'border-[#C6A66B] ring-1 ring-[#C6A66B] opacity-100'
-                              : 'border-white/15 opacity-55 hover:opacity-90'
-                          }`}
-                        >
-                          <SafeImage
-                            src={s.image}
-                            alt={s.badge}
-                            className="w-full h-full object-cover"
-                          />
-                        </button>
-                      );
-                    })}
+                  {/* Slide Indicator Dots */}
+                  <div className="flex items-center gap-1.5 pt-1">
+                    {HERO_CAROUSEL_SLIDES.map((s, idx) => (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => setSlideIdx(idx)}
+                        aria-label={`View ${s.badge} photograph`}
+                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                          idx === slideIdx
+                            ? 'w-6 bg-[#C6A66B]'
+                            : 'w-2 bg-white/30 hover:bg-white/60'
+                        }`}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
@@ -532,35 +455,38 @@ export function HeroSection({
         </div>
 
         {/* ===================================================================
-            INTEGRATED BOOKING SEARCH INTERFACE (#booking-widget)
+            SECTION 3C — INTEGRATED BOOKING SEARCH INTERFACE (#booking-widget)
             =================================================================== */}
         <div
           id="booking-widget"
-          className="relative z-20 max-w-[1440px] mx-auto px-4 sm:px-8 -mt-12 pb-14 scroll-mt-24"
+          className="relative z-20 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 -mt-12 pb-12 scroll-mt-24"
         >
-          <div className="bg-white text-[#191D1B] rounded-xl border border-[#E9E2D5] shadow-xl overflow-hidden">
-            {/* Forest Green & Champagne Gold Header Strip */}
-            <div className="bg-[#183D32] text-[#F8F6F0] px-5 sm:px-7 py-4 flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-[#C6A66B]/30">
-              <div className="flex items-center gap-2.5">
-                <Compass className="w-4 h-4 text-[#C6A66B] shrink-0" aria-hidden="true" />
-                <h2 className="font-display text-xl sm:text-2xl font-medium text-white">
+          <div className="bg-white text-[#191D1B] rounded-xl border border-[#E9E2D5] shadow-xl p-5 sm:p-7">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 mb-5 border-b border-[#E9E2D5]">
+              <div>
+                <span className="text-[11px] uppercase tracking-[0.18em] text-[#183D32] font-bold block">
+                  {lang === 'hi'
+                    ? 'डायरेक्ट बुकिंग अनुरोध और टैरिफ कैलकुलेटर'
+                    : 'Direct Stay Enquiry & Tariff Estimator'}
+                </span>
+                <h2 className="font-display text-2xl sm:text-3xl font-semibold text-[#191D1B]">
                   {t.sections.bookingTitle}
                 </h2>
               </div>
-              <p className="text-xs text-[#F8F6F0]/80 price-tabular">
+              <p className="text-xs text-[#525854]">
                 {lang === 'hi'
-                  ? 'चेक-इन 2:00 PM · चेक-आउट 12:00 PM · रिसेप्शन द्वारा उपलब्धता की पुष्टि'
-                  : 'Check-In 2:00 PM · Check-Out 12:00 PM · Synchronized with Room Tariffs Below'}
+                  ? 'चयनित रूम और मील प्लान नीचे सभी सेक्शन में स्वतः सिंक होते हैं · चेक-इन 2:00 PM / चेक-आउट 12:00 PM'
+                  : 'Selections synchronize with our room tariff table below · Check-in 2:00 PM / Check-out 12:00 PM'}
               </p>
             </div>
 
-            <form onSubmit={handleWidgetSubmit} className="p-5 sm:p-7 space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+            <form onSubmit={handleWidgetSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3.5">
                 {/* Check-in Date */}
                 <div>
                   <label
                     htmlFor="widget-checkin"
-                    className="block text-xs font-semibold text-[#525854] mb-1.5"
+                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#525854] mb-1.5"
                   >
                     {lang === 'hi' ? 'चेक-इन तारीख' : 'Check-In Date'}
                   </label>
@@ -570,7 +496,7 @@ export function HeroSection({
                     value={checkIn}
                     min={new Date().toISOString().split('T')[0]}
                     onChange={(e) => handleCheckInChange(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-medium focus:outline-none focus:border-[#183D32]"
+                    className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-medium focus:outline-none focus:border-[#183D32]"
                     required
                   />
                 </div>
@@ -579,7 +505,7 @@ export function HeroSection({
                 <div>
                   <label
                     htmlFor="widget-checkout"
-                    className="block text-xs font-semibold text-[#525854] mb-1.5"
+                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#525854] mb-1.5"
                   >
                     {lang === 'hi' ? 'चेक-आउट तारीख' : 'Check-Out Date'}
                   </label>
@@ -589,7 +515,7 @@ export function HeroSection({
                     value={checkOut}
                     min={checkIn}
                     onChange={(e) => handleCheckOutChange(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-medium focus:outline-none focus:border-[#183D32]"
+                    className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-medium focus:outline-none focus:border-[#183D32]"
                     required
                   />
                 </div>
@@ -598,7 +524,7 @@ export function HeroSection({
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="widget-room-category"
-                    className="block text-xs font-semibold text-[#525854] mb-1.5"
+                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#525854] mb-1.5"
                   >
                     {lang === 'hi' ? 'रूम / सुइट श्रेणी' : 'Room Category'}
                   </label>
@@ -606,7 +532,7 @@ export function HeroSection({
                     id="widget-room-category"
                     value={selectedRoomId}
                     onChange={(e) => onSelectRoomId(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-semibold focus:outline-none focus:border-[#183D32]"
+                    className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-semibold focus:outline-none focus:border-[#183D32]"
                   >
                     {ROOM_CATEGORIES.map((r) => (
                       <option key={r.id} value={r.id}>
@@ -620,11 +546,11 @@ export function HeroSection({
                 <div>
                   <label
                     htmlFor="widget-occupancy"
-                    className="block text-xs font-semibold text-[#525854] mb-1.5"
+                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#525854] mb-1.5"
                   >
                     {lang === 'hi' ? 'ऑक्यूपेंसी और रूम' : 'Occupancy & Rooms'}
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-1.5">
                     <select
                       id="widget-occupancy"
                       value={occupancy}
@@ -654,7 +580,7 @@ export function HeroSection({
                 <div>
                   <label
                     htmlFor="widget-mealplan"
-                    className="block text-xs font-semibold text-[#525854] mb-1.5"
+                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#525854] mb-1.5"
                   >
                     {lang === 'hi' ? 'मील प्लान' : 'Meal Plan'}
                   </label>
@@ -662,7 +588,7 @@ export function HeroSection({
                     id="widget-mealplan"
                     value={mealPlan}
                     onChange={(e) => onChangeMealPlan(e.target.value as MealPlanCode)}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-semibold focus:outline-none focus:border-[#183D32]"
+                    className="w-full px-3 py-2.5 text-xs sm:text-sm bg-[#F8F6F0] border border-[#E9E2D5] rounded-lg text-[#191D1B] font-semibold focus:outline-none focus:border-[#183D32]"
                   >
                     {MEAL_PLANS.map((m) => (
                       <option key={m.code} value={m.code}>
@@ -674,16 +600,16 @@ export function HeroSection({
               </div>
 
               {dateError && (
-                <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3.5 py-2.5">
+                <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
                   {dateError}
                 </p>
               )}
 
-              {/* Bottom Bar: Guests + Live Tariff Estimate + Submit Action */}
-              <div className="pt-4 border-t border-[#E9E2D5] flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div className="flex flex-wrap items-center gap-5 text-xs text-[#525854]">
+              {/* Bottom Bar: Guests + Live Tariff Estimate + Request Booking Button */}
+              <div className="pt-3 border-t border-[#E9E2D5] flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="flex flex-wrap items-center gap-4 text-xs text-[#525854]">
                   <div className="inline-flex items-center gap-2">
-                    <Users className="w-3.5 h-3.5 text-[#183D32]" aria-hidden="true" />
+                    <Users className="w-3.5 h-3.5 text-[#183D32]" />
                     <label htmlFor="widget-adults" className="font-semibold text-[#191D1B]">
                       Adults:
                     </label>
@@ -691,7 +617,7 @@ export function HeroSection({
                       id="widget-adults"
                       value={adults}
                       onChange={(e) => setAdults(Number(e.target.value))}
-                      className="px-2.5 py-1 rounded-md border border-[#E9E2D5] bg-[#F8F6F0] text-[#191D1B] font-semibold"
+                      className="px-2 py-1 rounded border border-[#E9E2D5] bg-[#F8F6F0] text-[#191D1B] font-semibold"
                     >
                       {[1, 2, 3, 4, 6, 8].map((n) => (
                         <option key={n} value={n}>
@@ -709,7 +635,7 @@ export function HeroSection({
                       id="widget-children"
                       value={children}
                       onChange={(e) => setChildren(Number(e.target.value))}
-                      className="px-2.5 py-1 rounded-md border border-[#E9E2D5] bg-[#F8F6F0] text-[#191D1B] font-semibold"
+                      className="px-2 py-1 rounded border border-[#E9E2D5] bg-[#F8F6F0] text-[#191D1B] font-semibold"
                     >
                       {[0, 1, 2, 3, 4].map((n) => (
                         <option key={n} value={n}>
@@ -719,7 +645,7 @@ export function HeroSection({
                     </select>
                   </div>
 
-                  <label className="inline-flex items-center gap-2 cursor-pointer font-medium text-[#191D1B]">
+                  <label className="inline-flex items-center gap-1.5 cursor-pointer font-medium text-[#191D1B]">
                     <input
                       type="checkbox"
                       checked={includeExtraBed}
@@ -734,9 +660,9 @@ export function HeroSection({
 
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="text-left sm:text-right">
-                    <div className="flex items-baseline sm:justify-end gap-2">
-                      <span className="text-xs text-[#525854]">Estimated Stay Total:</span>
-                      <span className="price-tabular text-2xl font-bold text-[#191D1B]">
+                    <div className="flex items-baseline sm:justify-end gap-1.5">
+                      <span className="text-xs text-[#525854]">Estimated Total:</span>
+                      <span className="price-tabular text-xl sm:text-2xl font-bold text-[#191D1B]">
                         ₹{estimatedTotal.toLocaleString('en-IN')}
                       </span>
                     </div>
@@ -749,7 +675,7 @@ export function HeroSection({
 
                   <button
                     type="submit"
-                    className="px-6 py-3.5 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.15em] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    className="px-6 py-3.5 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.15em] font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-xs"
                   >
                     {lang === 'hi' ? 'बुकिंग अनुरोध भेजें' : 'Proceed to Booking Request'}
                   </button>
@@ -761,76 +687,79 @@ export function HeroSection({
       </section>
 
       {/* =====================================================================
-          ASYMMETRIC EDITORIAL BENTO GRID — FOUR HOTEL HIGHLIGHTS
+          SECTION 3D — FOUR CURATED HOTEL HIGHLIGHTS
           ===================================================================== */}
       <section className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#F8F6F0]">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-12">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.2em] text-[#183D32] font-semibold">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-[#183D32] font-semibold mb-2">
                 {lang === 'hi'
                   ? 'होटल सत्या इंटरनेशनल की प्रमुख विशेषताएं'
-                  : 'Curated Hospitality Experiences'}
+                  : 'Signature Hospitality Pillars'}
               </p>
               <h2
-                className="font-display text-[#191D1B] font-medium leading-[1.12] text-balance"
-                style={{ fontSize: 'clamp(2rem, 3.4vw, 3.1rem)' }}
+                className="font-display text-[#191D1B] font-medium leading-[1.12]"
+                style={{ fontSize: 'clamp(2rem, 3.3vw, 3rem)' }}
               >
                 {lang === 'hi'
                   ? 'प्रवास, भोजन और उत्सव का संपूर्ण संगम'
-                  : 'Refined Stays, Multi-Cuisine Dining & Grand Celebrations'}
+                  : 'Designed for Business Stays, Fine Dining & Grand Celebrations'}
               </h2>
             </div>
             <p className="text-sm text-[#525854] max-w-md leading-relaxed">
               {lang === 'hi'
                 ? 'बेलौंजी मेन रोड, वैढ़न पर स्थित हमारा परिसर सिंगरौली के औद्योगिक और पारिवारिक मेहमानों के लिए सभी आधुनिक सुविधाएं प्रदान करता है।'
-                : 'Situated on Belaunji Main Road in Waidhan, our property brings together seven room categories, Sharda Restaurant & Bakery, Blue Diamond Bar, and expansive celebration venues.'}
+                : 'Located on Belaunji Main Road in Waidhan, our property brings together comfortable suites, multi-cuisine dining, a lounge bar, and expansive celebration venues.'}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-            {hotelHighlights.map((item) => (
-              <article
-                key={item.id}
-                className={`${item.spanClass} group bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-xl overflow-hidden flex flex-col justify-between transition-colors duration-300`}
-              >
-                <div>
-                  <div className="aspect-[16/9] w-full bg-[#EFECE4] overflow-hidden relative">
-                    <SafeImage
-                      src={item.image}
-                      alt={`${item.title} — Hotel Satya International, Waidhan`}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {hotelHighlights.map((item) => {
+              const IconComp = item.icon;
+              return (
+                <article
+                  key={item.id}
+                  className="group bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-xl overflow-hidden flex flex-col justify-between transition-all duration-300 shadow-2xs hover:shadow-md"
+                >
+                  <div>
+                    <div className="aspect-[16/10] w-full bg-[#EFECE4] overflow-hidden relative">
+                      <SafeImage
+                        src={item.image}
+                        alt={`${item.title} — Hotel Satya International, Waidhan`}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute top-3 left-3 w-8 h-8 rounded-lg bg-[#191D1B]/80 backdrop-blur-xs text-[#C6A66B] flex items-center justify-center">
+                        <IconComp className="w-4 h-4" />
+                      </div>
+                    </div>
+
+                    <div className="p-5 sm:p-6 space-y-2.5">
+                      <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-[#8C6B32] font-semibold">
+                        <span className="price-tabular">{item.number}.</span>
+                        <span>{item.subtitle}</span>
+                      </div>
+                      <h3 className="font-display text-2xl font-semibold text-[#191D1B] leading-snug">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#525854] leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="p-6 sm:p-8 space-y-2.5">
-                    <p className="text-xs text-[#8C6B32] font-semibold">
-                      <span className="price-tabular mr-1.5">{item.number}</span>
-                      <span>{item.kicker}</span>
-                    </p>
-                    <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[#191D1B] leading-snug text-balance">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-[#525854] leading-relaxed max-w-2xl">
-                      {item.description}
-                    </p>
+                  <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-[#E9E2D5]/70">
+                    <a
+                      href={item.href}
+                      className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.14em] font-bold text-[#183D32] group-hover:text-[#8C6B32] transition-colors"
+                    >
+                      <span>{item.cta}</span>
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                    </a>
                   </div>
-                </div>
-
-                <div className="px-6 sm:px-8 pb-6 pt-4 border-t border-[#E9E2D5]/70 flex items-center justify-between">
-                  <a
-                    href={item.href}
-                    className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.14em] font-bold text-[#183D32] group-hover:text-[#8C6B32] transition-colors whitespace-nowrap"
-                  >
-                    <span>{item.cta}</span>
-                    <ArrowRight
-                      className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
