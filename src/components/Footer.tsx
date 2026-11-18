@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import {
   Phone,
   Mail,
@@ -523,32 +524,45 @@ export function Footer({ lang, onBookStay }: FooterProps) {
         </div>
       </footer>
 
-      {/* DESKTOP FLOATING ACTION BUTTONS (Bottom-Right — Compact & Non-Overlapping with Hero Card) */}
+      {/* DESKTOP FLOATING ACTION ICONS (Bottom-Right — Compact Circular Icons with Hover Tooltips) */}
       <div
-        className={`hidden lg:flex fixed bottom-5 right-5 z-30 flex-col gap-2 transition-all duration-300 ${
+        className={`hidden lg:flex fixed bottom-5 right-5 z-30 flex-col items-end gap-2.5 transition-all duration-300 ${
           showFloatingActions
             ? 'opacity-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 translate-y-3 pointer-events-none'
         }`}
       >
-        <a
+        <motion.a
           href={buildWhatsAppUrl(DEFAULT_WHATSAPP_GREETING)}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="WhatsApp Reception Desk"
+          title="WhatsApp Reception Desk"
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => trackEvent('whatsapp_click', { location: 'floating_desktop' })}
-          className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-[#183D32] text-white border border-[#C6A66B]/40 shadow-md hover:bg-[#122E25] transition-all text-[11px] font-bold uppercase tracking-[0.12em]"
+          className="group relative flex items-center justify-center w-11 h-11 rounded-full bg-[#183D32] text-[#C6A66B] border border-[#C6A66B]/45 shadow-lg hover:bg-[#122E25] hover:border-[#C6A66B] transition-colors"
         >
-          <MessageSquare className="w-3.5 h-3.5 text-[#C6A66B]" />
-          <span>WhatsApp Desk</span>
-        </a>
-        <a
+          <MessageSquare className="w-4 h-4" />
+          <span className="pointer-events-none absolute right-full mr-2.5 px-2.5 py-1 rounded-lg bg-[#191D1B] text-[#F8F6F0] border border-[#C6A66B]/30 text-[11px] font-semibold uppercase tracking-[0.12em] whitespace-nowrap opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 shadow-md">
+            WhatsApp Desk
+          </span>
+        </motion.a>
+
+        <motion.a
           href={`tel:${HOTEL_INFO.phones[0]}`}
+          aria-label={`Call Front Office ${HOTEL_INFO.phones[0]}`}
+          title={`Call Front Office ${HOTEL_INFO.phones[0]}`}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => trackEvent('call_click', { location: 'floating_desktop' })}
-          className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-[#191D1B] text-[#F8F6F0] border border-[#C6A66B]/40 shadow-md hover:bg-[#2E3330] transition-all text-[11px] font-bold uppercase tracking-[0.12em]"
+          className="group relative flex items-center justify-center w-11 h-11 rounded-full bg-[#191D1B] text-[#C6A66B] border border-[#C6A66B]/45 shadow-lg hover:bg-[#2E3330] hover:border-[#C6A66B] transition-colors"
         >
-          <Phone className="w-3.5 h-3.5 text-[#C6A66B]" />
-          <span className="price-tabular">{HOTEL_INFO.phones[0]}</span>
-        </a>
+          <Phone className="w-4 h-4" />
+          <span className="pointer-events-none absolute right-full mr-2.5 px-2.5 py-1 rounded-lg bg-[#191D1B] text-[#F8F6F0] border border-[#C6A66B]/30 text-[11px] font-bold price-tabular whitespace-nowrap opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 shadow-md">
+            {HOTEL_INFO.phones[0]}
+          </span>
+        </motion.a>
       </div>
 
       {/* MOBILE STICKY BOTTOM BAR (Call | WhatsApp | Book Now) */}
