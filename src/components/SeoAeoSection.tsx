@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { ChevronDown, HelpCircle, Phone } from 'lucide-react';
 import {
   AEO_FAQS,
@@ -6,6 +7,7 @@ import {
   Language,
   UI_TRANSLATIONS,
 } from '../data/hotelData';
+import { LUXURY_EASE, Reveal } from './MotionPrimitives';
 
 interface SeoAeoSectionProps {
   lang: Language;
@@ -137,40 +139,49 @@ export function SeoAeoSection({ lang }: SeoAeoSectionProps) {
             {filteredFaqs.map((faq, idx) => {
               const isOpen = openFaqIndex === idx;
               return (
-                <div
-                  key={faq.q}
-                  className="rounded-2xl bg-white border border-[#E9E2D5] overflow-hidden transition-all"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full px-6 py-4 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#F8F6F0]/60"
-                  >
-                    <div className="flex items-start gap-3">
-                      <span className="price-tabular text-xs font-bold text-[#183D32] bg-[#F8F6F0] px-2.5 py-1 rounded-md border border-[#E9E2D5] mt-0.5">
-                        Q{idx + 1}
-                      </span>
-                      <div>
-                        <span className="text-[10px] uppercase tracking-[0.14em] text-[#8C6B32] font-bold block mb-0.5">
-                          {faq.category}
+                <Reveal key={faq.q} delay={idx * 0.04} y={14}>
+                  <div className="rounded-2xl bg-white border border-[#E9E2D5] overflow-hidden transition-all">
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                      className="w-full px-6 py-4 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#F8F6F0]/60 transition-colors"
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="price-tabular text-xs font-bold text-[#183D32] bg-[#F8F6F0] px-2.5 py-1 rounded-md border border-[#E9E2D5] mt-0.5">
+                          Q{idx + 1}
                         </span>
-                        <span className="font-display text-lg sm:text-xl text-[#191D1B] font-semibold">
-                          {faq.q}
-                        </span>
+                        <div>
+                          <span className="text-[10px] uppercase tracking-[0.14em] text-[#8C6B32] font-bold block mb-0.5">
+                            {faq.category}
+                          </span>
+                          <span className="font-display text-lg sm:text-xl text-[#191D1B] font-semibold">
+                            {faq.q}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <ChevronDown
-                      className={`w-5 h-5 text-[#183D32] shrink-0 transition-transform ${
-                        isOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  {isOpen && (
-                    <div className="px-6 pb-5 pt-2 text-sm text-[#525854] leading-relaxed border-t border-[#E9E2D5]/60">
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
+                      <ChevronDown
+                        className={`w-5 h-5 text-[#183D32] shrink-0 transition-transform duration-300 ${
+                          isOpen ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: LUXURY_EASE }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-6 pb-5 pt-2 text-sm text-[#525854] leading-relaxed border-t border-[#E9E2D5]/60">
+                            {faq.a}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </Reveal>
               );
             })}
           </div>

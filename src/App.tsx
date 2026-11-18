@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FirebaseProvider } from './contexts/FirebaseContext';
 import { Header } from './components/Header';
@@ -16,6 +17,7 @@ import { ReviewsDashboardSection } from './components/ReviewsDashboardSection';
 import { LocationMapSection } from './components/LocationMapSection';
 import { SeoAeoSection } from './components/SeoAeoSection';
 import { Footer } from './components/Footer';
+import { LUXURY_EASE } from './components/MotionPrimitives';
 import {
   ROOM_CATEGORIES,
   OccupancyType,
@@ -23,7 +25,34 @@ import {
   Language,
 } from './data/hotelData';
 
+interface SectionRevealWrapperProps {
+  children: React.ReactNode;
+  shouldReduceMotion: boolean | null;
+}
+
+function SectionRevealWrapper({
+  children,
+  shouldReduceMotion,
+}: SectionRevealWrapperProps) {
+  return (
+    <motion.div
+      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.08 }}
+      transition={
+        shouldReduceMotion
+          ? { duration: 0 }
+          : { duration: 0.7, ease: LUXURY_EASE }
+      }
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function App() {
+  const shouldReduceMotion = useReducedMotion();
+
   // Bilingual Toggle State ('en' | 'hi')
   const [lang, setLang] = useState<Language>('en');
 
@@ -61,7 +90,7 @@ export default function App() {
           />
 
           <main className="flex-1">
-            {/* Top Announcement Strip + Hero + Integrated Booking Search Interface (#booking-widget) + 4 Hotel Highlights */}
+            {/* Hero + Parallax Background + Staggered Headlines + Integrated Booking Search Interface (#booking-widget) + 4 Hotel Highlights */}
             <HeroSection
               lang={lang}
               onToggleLang={setLang}
@@ -75,35 +104,49 @@ export default function App() {
             />
 
             {/* Rooms & Suites (#rooms) — 7 Verified Room Categories + Compare Drawer + Booking Request Modal */}
-            <RoomsAndBookingSection
-              lang={lang}
-              selectedRoomId={selectedRoomId}
-              onSelectRoomId={setSelectedRoomId}
-              occupancy={occupancy}
-              onChangeOccupancy={setOccupancy}
-              mealPlan={mealPlan}
-              onChangeMealPlan={setMealPlan}
-              bookingTrigger={bookingTrigger}
-              onClearTrigger={() => setBookingTrigger(null)}
-            />
+            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+              <RoomsAndBookingSection
+                lang={lang}
+                selectedRoomId={selectedRoomId}
+                onSelectRoomId={setSelectedRoomId}
+                occupancy={occupancy}
+                onChangeOccupancy={setOccupancy}
+                mealPlan={mealPlan}
+                onChangeMealPlan={setMealPlan}
+                bookingTrigger={bookingTrigger}
+                onClearTrigger={() => setBookingTrigger(null)}
+              />
+            </SectionRevealWrapper>
 
             {/* Dining (#dining-events: Sharda Restaurant & Blue Diamond Bar) + Banquets & Events (#banquets) */}
-            <DiningAndEventsSection lang={lang} />
+            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+              <DiningAndEventsSection lang={lang} />
+            </SectionRevealWrapper>
 
             {/* Facilities (#facilities) + Corporate (#corporate) + About Us & Leadership (#about) */}
-            <HeritageAndLeadershipSection lang={lang} />
+            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+              <HeritageAndLeadershipSection lang={lang} />
+            </SectionRevealWrapper>
 
             {/* Filterable Authentic Photo Gallery (#gallery) + Lightbox */}
-            <GallerySection lang={lang} />
+            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+              <GallerySection lang={lang} />
+            </SectionRevealWrapper>
 
             {/* Verified Guest Reviews & Google Maps Portal (#reviews) */}
-            <ReviewsDashboardSection lang={lang} />
+            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+              <ReviewsDashboardSection lang={lang} />
+            </SectionRevealWrapper>
 
             {/* Interactive Location Map & Verified Corridor Distance Matrix (#location) */}
-            <LocationMapSection lang={lang} />
+            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+              <LocationMapSection lang={lang} />
+            </SectionRevealWrapper>
 
             {/* Guest Policies & Frequently Asked Questions Accordion (#policies-faq) */}
-            <SeoAeoSection lang={lang} />
+            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+              <SeoAeoSection lang={lang} />
+            </SectionRevealWrapper>
           </main>
 
           {/* 24×7 Contact Form (#contact) + Global Footer + Floating/Sticky Action Bars */}

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Calendar, ChevronLeft, ChevronRight, Expand, MessageSquare, Phone, X } from 'lucide-react';
 import { GALLERY_ITEMS, HOTEL_INFO, Language, UI_TRANSLATIONS } from '../data/hotelData';
 import { buildWhatsAppUrl, trackEvent } from '../lib/analytics';
 import { SafeImage } from './SafeImage';
+import { LUXURY_EASE, Reveal } from './MotionPrimitives';
 
 interface GallerySectionProps {
   lang: Language;
@@ -69,84 +71,94 @@ export function GallerySection({ lang }: GallerySectionProps) {
       className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#EFECE4] scroll-mt-16"
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
-              {lang === 'hi'
-                ? `संपत्ति की प्रमाणित तस्वीरें (${GALLERY_ITEMS.length} फोटो)`
-                : `Property Photography Archive (${GALLERY_ITEMS.length} Verified Photos)`}
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#191D1B] text-balance">
-              {t.sections.galleryTitle}
-            </h2>
-          </div>
+        <Reveal>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
+                {lang === 'hi'
+                  ? `संपत्ति की प्रमाणित तस्वीरें (${GALLERY_ITEMS.length} फोटो)`
+                  : `Property Photography Archive (${GALLERY_ITEMS.length} Verified Photos)`}
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#191D1B] text-balance">
+                {t.sections.galleryTitle}
+              </h2>
+            </div>
 
-          <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-[#E9E2D5] rounded-2xl">
-            {GALLERY_CATEGORIES.map((cat) => {
-              const count =
-                cat === 'All'
-                  ? GALLERY_ITEMS.length
-                  : GALLERY_ITEMS.filter((g) => g.category === cat).length;
-              return (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => {
-                    setCategory(cat);
-                    setLightboxIdx(null);
-                  }}
-                  className={`px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    category === cat
-                      ? 'bg-[#183D32] text-white shadow-xs'
-                      : 'text-[#525854] hover:text-[#191D1B]'
-                  }`}
-                >
-                  {cat} ({count})
-                </button>
-              );
-            })}
+            <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-[#E9E2D5] rounded-2xl">
+              {GALLERY_CATEGORIES.map((cat) => {
+                const count =
+                  cat === 'All'
+                    ? GALLERY_ITEMS.length
+                    : GALLERY_ITEMS.filter((g) => g.category === cat).length;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => {
+                      setCategory(cat);
+                      setLightboxIdx(null);
+                    }}
+                    className={`px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      category === cat
+                        ? 'bg-[#183D32] text-white shadow-xs'
+                        : 'text-[#525854] hover:text-[#191D1B]'
+                    }`}
+                  >
+                    {cat} ({count})
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* High-Resolution Property Photo Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayedItems.map((item, i) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setLightboxIdx(i)}
-              className="group text-left bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl overflow-hidden flex flex-col justify-between shadow-2xs transition-all focus-visible:outline-2 focus-visible:outline-[#183D32] cursor-pointer"
-            >
-              <div className="aspect-[4/3] w-full bg-[#EFECE4] overflow-hidden relative">
-                <SafeImage
-                  src={item.src}
-                  alt={`${item.title} — ${item.subtitle}`}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
-                />
-                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-black/55 text-white text-[11px] font-semibold inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Expand className="w-3 h-3" aria-hidden="true" />
-                  Enlarge
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <AnimatePresence mode="popLayout">
+            {displayedItems.map((item, i) => (
+              <motion.button
+                key={item.id}
+                layout
+                type="button"
+                initial={{ opacity: 0, scale: 0.96, y: 14 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.35, ease: LUXURY_EASE }}
+                onClick={() => setLightboxIdx(i)}
+                className="group text-left bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl overflow-hidden flex flex-col justify-between shadow-2xs hover:shadow-md transition-colors focus-visible:outline-2 focus-visible:outline-[#183D32] cursor-pointer"
+              >
+                <div className="aspect-[4/3] w-full bg-[#EFECE4] overflow-hidden relative">
+                  <SafeImage
+                    src={item.src}
+                    alt={`${item.title} — ${item.subtitle}`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                  />
+                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-black/55 text-white text-[11px] font-semibold inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Expand className="w-3 h-3" aria-hidden="true" />
+                    Enlarge
+                  </div>
                 </div>
-              </div>
-              <div className="p-4 sm:p-5 w-full">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="text-xs font-bold text-[#183D32]">
-                    {item.category}
-                  </span>
-                  <span className="price-tabular text-[11px] text-[#525854]">
-                    Photo {i + 1}
-                  </span>
+                <div className="p-4 sm:p-5 w-full">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className="text-xs font-bold text-[#183D32]">
+                      {item.category}
+                    </span>
+                    <span className="price-tabular text-[11px] text-[#525854]">
+                      Photo {i + 1}
+                    </span>
+                  </div>
+                  <p className="font-display text-xl font-semibold text-[#191D1B]">
+                    {item.title}
+                  </p>
+                  <p className="text-xs text-[#525854] mt-1 leading-relaxed">
+                    {item.subtitle}
+                  </p>
                 </div>
-                <p className="font-display text-xl font-semibold text-[#191D1B]">
-                  {item.title}
-                </p>
-                <p className="text-xs text-[#525854] mt-1 leading-relaxed">
-                  {item.subtitle}
-                </p>
-              </div>
-            </button>
-          ))}
-        </div>
+              </motion.button>
+            ))}
+          </AnimatePresence>
+        </motion.div>
 
         {visibleItems.length > 12 && (
           <div className="text-center">

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
   Cake,
   Check,
@@ -22,6 +23,7 @@ import {
 import { useFirebase } from '../contexts/FirebaseContext';
 import { buildMailtoUrl, buildWhatsAppUrl, trackEvent } from '../lib/analytics';
 import { SafeImage } from './SafeImage';
+import { LUXURY_EASE, Reveal } from './MotionPrimitives';
 
 interface DiningAndEventsSectionProps {
   lang: Language;
@@ -31,6 +33,7 @@ const MENU_TABS = Object.keys(SHARDA_CULINARY_SPECIALTIES);
 
 export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
   const { user, createInquiry, inquiries } = useFirebase();
+  const shouldReduceMotion = useReducedMotion();
   const t = UI_TRANSLATIONS[lang];
 
   // Dining State: Tabbed Culinary Showcase & Reserve Table / Custom Cake Form
@@ -139,118 +142,134 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
       {/* =====================================================================
           DINING — SHARDA RESTAURANT, EUROPEAN BAKERY & BLUE DIAMOND BAR
           ===================================================================== */}
-      <section
+      <motion.section
         id="dining-events"
+        initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.08 }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: LUXURY_EASE }}
         className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#EFECE4] scroll-mt-16"
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
-                {lang === 'hi'
-                  ? 'पाक कला, यूरोपियन बेकरी और लाउंज बार'
-                  : 'Fine Dining, European-Technology Bakery & Colonial Lounge'}
-              </p>
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#191D1B] text-balance">
-                {t.sections.diningTitle}
-              </h2>
-            </div>
+          <Reveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div className="max-w-2xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
+                  {lang === 'hi'
+                    ? 'पाक कला, यूरोपियन बेकरी और लाउंज बार'
+                    : 'Fine Dining, European-Technology Bakery & Colonial Lounge'}
+                </p>
+                <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#191D1B] text-balance">
+                  {t.sections.diningTitle}
+                </h2>
+              </div>
 
-            <button
-              type="button"
-              onClick={handleRequestMenuWhatsApp}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-xl text-xs font-semibold text-[#191D1B] transition-colors shrink-0 cursor-pointer"
-            >
-              <MessageSquare className="w-4 h-4 text-[#183D32]" aria-hidden="true" />
-              Request Current Menu & Cake Catalogue on WhatsApp
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={handleRequestMenuWhatsApp}
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-xl text-xs font-semibold text-[#191D1B] transition-colors shrink-0 cursor-pointer"
+              >
+                <MessageSquare className="w-4 h-4 text-[#183D32]" aria-hidden="true" />
+                Request Current Menu & Cake Catalogue on WhatsApp
+              </button>
+            </div>
+          </Reveal>
 
           {/* 2-Card Showcase: Sharda Restaurant & Blue Diamond Bar */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             {/* Sharda Multi-Cuisine Restaurant & European Bakery */}
-            <article className="lg:col-span-7 bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs">
-              <div>
-                <div className="aspect-[16/9] bg-[#E9E2D5] overflow-hidden relative">
-                  <SafeImage
-                    src={DINING_AND_BAR.restaurant.image}
-                    alt="Sharda Multi-Cuisine Restaurant at Hotel Satya International, Waidhan"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent p-5 text-white">
-                    <p className="text-xs font-medium text-[#C6A66B]">
-                      {DINING_AND_BAR.restaurant.serviceNote}
+            <Reveal className="lg:col-span-7 flex" delay={0.05}>
+              <article className="bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs w-full">
+                <div>
+                  <div className="aspect-[16/9] bg-[#E9E2D5] overflow-hidden relative group">
+                    <SafeImage
+                      src={DINING_AND_BAR.restaurant.image}
+                      alt="Sharda Multi-Cuisine Restaurant at Hotel Satya International, Waidhan"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent p-5 text-white">
+                      <p className="text-xs font-medium text-[#C6A66B]">
+                        {DINING_AND_BAR.restaurant.serviceNote}
+                      </p>
+                      <h3 className="font-display text-2xl sm:text-3xl font-semibold mt-0.5">
+                        {DINING_AND_BAR.restaurant.name}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="p-6 sm:p-8">
+                    <p className="text-xs font-semibold text-[#183D32] uppercase tracking-wider mb-2">
+                      6 Verified Cuisines: {DINING_AND_BAR.restaurant.cuisines.join(' · ')}
                     </p>
-                    <h3 className="font-display text-2xl sm:text-3xl font-semibold mt-0.5">
-                      {DINING_AND_BAR.restaurant.name}
-                    </h3>
-                  </div>
-                </div>
+                    <p className="text-sm sm:text-base text-[#525854] leading-relaxed mb-6">
+                      {DINING_AND_BAR.restaurant.description}
+                    </p>
 
-                <div className="p-6 sm:p-8">
-                  <p className="text-xs font-semibold text-[#183D32] uppercase tracking-wider mb-2">
-                    6 Verified Cuisines: {DINING_AND_BAR.restaurant.cuisines.join(' · ')}
-                  </p>
-                  <p className="text-sm sm:text-base text-[#525854] leading-relaxed mb-6">
-                    {DINING_AND_BAR.restaurant.description}
-                  </p>
+                    {/* Interactive Culinary Repertoire Tabs */}
+                    <div className="border border-[#E9E2D5] rounded-xl overflow-hidden bg-[#F8F6F0]">
+                      <div className="p-2 bg-[#EFECE4] border-b border-[#E9E2D5] flex flex-wrap gap-1.5">
+                        {MENU_TABS.map((tab) => (
+                          <button
+                            key={tab}
+                            type="button"
+                            onClick={() => setActiveMenuTab(tab)}
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                              activeMenuTab === tab
+                                ? 'bg-[#183D32] text-white'
+                                : 'text-[#525854] hover:text-[#191D1B] bg-white/80'
+                            }`}
+                          >
+                            {tab}
+                          </button>
+                        ))}
+                      </div>
 
-                  {/* Interactive Culinary Repertoire Tabs */}
-                  <div className="border border-[#E9E2D5] rounded-xl overflow-hidden bg-[#F8F6F0]">
-                    <div className="p-2 bg-[#EFECE4] border-b border-[#E9E2D5] flex flex-wrap gap-1.5">
-                      {MENU_TABS.map((tab) => (
-                        <button
-                          key={tab}
-                          type="button"
-                          onClick={() => setActiveMenuTab(tab)}
-                          className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
-                            activeMenuTab === tab
-                              ? 'bg-[#183D32] text-white'
-                              : 'text-[#525854] hover:text-[#191D1B] bg-white/80'
-                          }`}
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={activeMenuTab}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          transition={{ duration: 0.22, ease: LUXURY_EASE }}
+                          className="p-4 divide-y divide-[#E9E2D5]"
                         >
-                          {tab}
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="p-4 divide-y divide-[#E9E2D5]">
-                      {(SHARDA_CULINARY_SPECIALTIES[activeMenuTab] || []).map((dish) => (
-                        <div
-                          key={dish.name}
-                          className="py-3 first:pt-0 last:pb-0 flex items-start justify-between gap-4"
-                        >
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span
-                                title={dish.isVeg ? 'Vegetarian Selection' : 'Vegetarian & Non-Vegetarian Options'}
-                                className={`inline-flex items-center justify-center w-4 h-4 rounded-xs border ${
-                                  dish.isVeg ? 'border-emerald-700' : 'border-red-700'
-                                } shrink-0`}
-                              >
-                                <span
-                                  className={`w-2 h-2 rounded-full ${
-                                    dish.isVeg ? 'bg-emerald-700' : 'bg-red-700'
-                                  }`}
-                                />
+                          {(SHARDA_CULINARY_SPECIALTIES[activeMenuTab] || []).map((dish) => (
+                            <div
+                              key={dish.name}
+                              className="py-3 first:pt-0 last:pb-0 flex items-start justify-between gap-4"
+                            >
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span
+                                    title={dish.isVeg ? 'Vegetarian Selection' : 'Vegetarian & Non-Vegetarian Options'}
+                                    className={`inline-flex items-center justify-center w-4 h-4 rounded-xs border ${
+                                      dish.isVeg ? 'border-emerald-700' : 'border-red-700'
+                                    } shrink-0`}
+                                  >
+                                    <span
+                                      className={`w-2 h-2 rounded-full ${
+                                        dish.isVeg ? 'bg-emerald-700' : 'bg-red-700'
+                                      }`}
+                                    />
+                                  </span>
+                                  <p className="text-xs sm:text-sm font-bold text-[#191D1B]">
+                                    {dish.name}
+                                  </p>
+                                </div>
+                                <p className="text-xs text-[#525854] mt-0.5 pl-6">
+                                  {dish.description}
+                                </p>
+                              </div>
+                              <span className="text-[11px] font-semibold text-[#183D32] bg-white px-2.5 py-1 rounded-md border border-[#E9E2D5] whitespace-nowrap shrink-0">
+                                {dish.cuisineTag}
                               </span>
-                              <p className="text-xs sm:text-sm font-bold text-[#191D1B]">
-                                {dish.name}
-                              </p>
                             </div>
-                            <p className="text-xs text-[#525854] mt-0.5 pl-6">
-                              {dish.description}
-                            </p>
-                          </div>
-                          <span className="text-[11px] font-semibold text-[#183D32] bg-white px-2.5 py-1 rounded-md border border-[#E9E2D5] whitespace-nowrap shrink-0">
-                            {dish.cuisineTag}
-                          </span>
-                        </div>
-                      ))}
+                          ))}
+                        </motion.div>
+                      </AnimatePresence>
                     </div>
                   </div>
                 </div>
-              </div>
 
               <div className="px-6 py-4 bg-[#F8F6F0] border-t border-[#E9E2D5] flex flex-wrap items-center justify-between gap-2 text-xs text-[#525854]">
                 <span className="inline-flex items-center gap-1.5 font-semibold text-[#191D1B]">
@@ -262,10 +281,11 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                   100% Original European-Technology Custom Bakery
                 </span>
               </div>
-            </article>
+              </article>
+            </Reveal>
 
             {/* Blue Diamond Colonial Bar + Reserve Table / Custom Cake WhatsApp Form */}
-            <div className="lg:col-span-5 flex flex-col gap-6">
+            <Reveal className="lg:col-span-5 flex flex-col gap-6" delay={0.12}>
               <article className="bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden shadow-xs">
                 <div className="aspect-[16/9] bg-[#E9E2D5] overflow-hidden relative">
                   <SafeImage
@@ -423,53 +443,64 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                   Reserve via WhatsApp
                 </button>
               </form>
-            </div>
+            </Reveal>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* =====================================================================
           BANQUETS, 3,000-GUEST LAWNS & CONFERENCES
           ===================================================================== */}
-      <section
+      <motion.section
         id="banquets"
+        initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.08 }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: LUXURY_EASE }}
         className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#F8F6F0] scroll-mt-16"
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
-              {lang === 'hi'
-                ? 'विवाह लॉन, बैंक्वेट हॉल और कॉन्फ्रेंस वेन्यू'
-                : 'Weddings, Banquets, Lawns & Conferences'}
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#191D1B] text-balance">
-              {t.sections.banquetsTitle}
-            </h2>
-            <p className="text-sm sm:text-base text-[#525854] mt-2 leading-relaxed">
-              From grand 3,000-guest weddings on our expansive Open-Air Lawn to 200-guest conferences in our indoor Banquet Hall, 40-guest celebrations in our Party Room, and 20-delegate board meetings in our Meeting Room.
-            </p>
-          </div>
+          <Reveal>
+            <div className="max-w-3xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
+                {lang === 'hi'
+                  ? 'विवाह लॉन, बैंक्वेट हॉल और कॉन्फ्रेंस वेन्यू'
+                  : 'Weddings, Banquets, Lawns & Conferences'}
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#191D1B] text-balance">
+                {t.sections.banquetsTitle}
+              </h2>
+              <p className="text-sm sm:text-base text-[#525854] mt-2 leading-relaxed">
+                From grand 3,000-guest weddings on our expansive Open-Air Lawn to 200-guest conferences in our indoor Banquet Hall, 40-guest celebrations in our Party Room, and 20-delegate board meetings in our Meeting Room.
+              </p>
+            </div>
+          </Reveal>
 
           {/* 4 Verified Venue Capacity Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {EVENT_VENUES.map((v, idx) => {
               const isSelected = venue === v.name;
               return (
-                <article
+                <motion.article
                   key={v.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.45, delay: idx * 0.06, ease: LUXURY_EASE }}
                   onClick={() => setVenue(v.name)}
-                  className={`cursor-pointer bg-white border rounded-2xl overflow-hidden flex flex-col justify-between transition-all ${
+                  className={`cursor-pointer bg-white border rounded-2xl overflow-hidden flex flex-col justify-between transition-colors ${
                     isSelected
                       ? 'border-[#183D32] ring-1 ring-[#183D32]'
                       : 'border-[#E9E2D5] hover:border-[#C6A66B]'
                   }`}
                 >
                   <div>
-                    <div className="aspect-[16/10] bg-[#EFECE4] overflow-hidden relative">
+                    <div className="aspect-[16/10] bg-[#EFECE4] overflow-hidden relative group">
                       <SafeImage
                         src={v.image || BANQUET_IMAGE}
                         alt={v.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3.5 py-2 text-white flex items-center justify-between text-xs">
                         <span className="font-bold price-tabular text-[#C6A66B]">{v.capacity}</span>
@@ -489,7 +520,7 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
                   <div className="px-4 py-2.5 bg-[#F8F6F0] border-t border-[#E9E2D5] text-xs font-semibold text-[#183D32]">
                     {isSelected ? 'Selected in Enquiry Form ✓' : 'Select Venue for Enquiry →'}
                   </div>
-                </article>
+                </motion.article>
               );
             })}
           </div>
@@ -740,7 +771,7 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

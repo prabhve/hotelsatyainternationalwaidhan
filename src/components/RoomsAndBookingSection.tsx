@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   CalendarCheck2,
   Check,
@@ -27,6 +28,7 @@ import { useFirebase } from '../contexts/FirebaseContext';
 import { buildMailtoUrl, buildWhatsAppUrl, trackEvent } from '../lib/analytics';
 import { QuickSearchParams } from './HeroSection';
 import { SafeImage } from './SafeImage';
+import { LUXURY_EASE, Reveal } from './MotionPrimitives';
 
 interface RoomsAndBookingSectionProps {
   lang: Language;
@@ -262,135 +264,149 @@ export function RoomsAndBookingSection({
     <section id="rooms" className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#F8F6F0] scroll-mt-16">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header + Global Synced Controls */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
-              {lang === 'hi'
-                ? 'आवास और आधिकारिक प्रकाशित टैरिफ'
-                : 'Accommodations & Published Tariffs'}
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#191D1B] text-balance">
-              {t.sections.roomsTitle}
-            </h2>
+        <Reveal>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
+                {lang === 'hi'
+                  ? 'आवास और आधिकारिक प्रकाशित टैरिफ'
+                  : 'Accommodations & Published Tariffs'}
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#191D1B] text-balance">
+                {t.sections.roomsTitle}
+              </h2>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2.5">
+              {/* Tier Filter Chips */}
+              <div className="inline-flex items-center p-1 bg-[#EFECE4] border border-[#E9E2D5] rounded-xl">
+                {(['All', 'Suite', 'Deluxe', 'Standard'] as const).map((tier) => (
+                  <button
+                    key={tier}
+                    type="button"
+                    onClick={() => setTierFilter(tier)}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      tierFilter === tier
+                        ? 'bg-white text-[#191D1B] shadow-xs'
+                        : 'text-[#525854] hover:text-[#191D1B]'
+                    }`}
+                  >
+                    {tier === 'All' ? 'All 7 Categories' : `${tier}s`}
+                  </button>
+                ))}
+              </div>
+
+              {/* Occupancy Toggle */}
+              <div className="inline-flex items-center p-1 bg-[#EFECE4] border border-[#E9E2D5] rounded-xl">
+                {(['Single', 'Double'] as const).map((occ) => (
+                  <button
+                    key={occ}
+                    type="button"
+                    onClick={() => onChangeOccupancy(occ)}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      occupancy === occ
+                        ? 'bg-[#191D1B] text-white'
+                        : 'text-[#525854] hover:text-[#191D1B]'
+                    }`}
+                  >
+                    {occ}
+                  </button>
+                ))}
+              </div>
+
+              {/* Meal Plan Preference Toggle */}
+              <div className="inline-flex items-center p-1 bg-[#EFECE4] border border-[#E9E2D5] rounded-xl">
+                {MEAL_PLANS.map((m) => (
+                  <button
+                    key={m.code}
+                    type="button"
+                    onClick={() => onChangeMealPlan(m.code)}
+                    title={m.note}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      mealPlan === m.code
+                        ? 'bg-[#183D32] text-white'
+                        : 'text-[#525854] hover:text-[#191D1B]'
+                    }`}
+                  >
+                    {m.code}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Tier Filter Chips */}
-            <div className="inline-flex items-center p-1 bg-[#EFECE4] border border-[#E9E2D5] rounded-xl">
-              {(['All', 'Suite', 'Deluxe', 'Standard'] as const).map((tier) => (
-                <button
-                  key={tier}
-                  type="button"
-                  onClick={() => setTierFilter(tier)}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    tierFilter === tier
-                      ? 'bg-white text-[#191D1B] shadow-xs'
-                      : 'text-[#525854] hover:text-[#191D1B]'
-                  }`}
-                >
-                  {tier === 'All' ? 'All 7 Categories' : `${tier}s`}
-                </button>
-              ))}
-            </div>
-
-            {/* Occupancy Toggle */}
-            <div className="inline-flex items-center p-1 bg-[#EFECE4] border border-[#E9E2D5] rounded-xl">
-              {(['Single', 'Double'] as const).map((occ) => (
-                <button
-                  key={occ}
-                  type="button"
-                  onClick={() => onChangeOccupancy(occ)}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    occupancy === occ
-                      ? 'bg-[#191D1B] text-white'
-                      : 'text-[#525854] hover:text-[#191D1B]'
-                  }`}
-                >
-                  {occ}
-                </button>
-              ))}
-            </div>
-
-            {/* Meal Plan Preference Toggle */}
-            <div className="inline-flex items-center p-1 bg-[#EFECE4] border border-[#E9E2D5] rounded-xl">
-              {MEAL_PLANS.map((m) => (
-                <button
-                  key={m.code}
-                  type="button"
-                  onClick={() => onChangeMealPlan(m.code)}
-                  title={m.note}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    mealPlan === m.code
-                      ? 'bg-[#183D32] text-white'
-                      : 'text-[#525854] hover:text-[#191D1B]'
-                  }`}
-                >
-                  {m.code}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+        </Reveal>
 
         {/* SPOTLIGHT ROOM INSPECTOR + COMPLETE 7-TIER VERIFIED TARIFF SCHEDULE */}
-        <div
-          id="inspect-room-panel"
-          className="mb-12 bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden shadow-xs scroll-mt-24"
-        >
-          {/* 7-Room Selector Tabs */}
-          <div className="px-4 sm:px-6 py-3.5 bg-[#EFECE4] border-b border-[#E9E2D5] flex items-center gap-2 overflow-x-auto">
-            <span className="text-xs font-bold text-[#525854] whitespace-nowrap shrink-0 mr-1">
-              Inspect Category:
-            </span>
-            {ROOM_CATEGORIES.map((r, idx) => {
-              const active = r.id === spotlightRoom.id;
-              return (
-                <button
-                  key={r.id}
-                  type="button"
-                  onClick={() => onSelectRoomId(r.id)}
-                  className={`px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    active
-                      ? 'bg-[#183D32] text-white shadow-xs'
-                      : 'bg-white text-[#525854] hover:text-[#191D1B] border border-[#E9E2D5]'
-                  }`}
-                >
-                  0{idx + 1}. {lang === 'hi' ? r.titleHi : r.title}
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
-            {/* Left: Multi-Photo Gallery with Lightbox Trigger */}
-            <div className="lg:col-span-6 p-5 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#E9E2D5] bg-[#F8F6F0]">
-              <div>
-                <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-[#EFECE4] border border-[#E9E2D5]">
-                  <SafeImage
-                    src={spotlightRoom.images[inspectPhotoIdx] || spotlightRoom.image}
-                    alt={`${spotlightRoom.title} — Photo ${inspectPhotoIdx + 1}`}
-                    className="w-full h-full object-cover"
-                  />
+        <Reveal delay={0.08}>
+          <div
+            id="inspect-room-panel"
+            className="mb-12 bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden shadow-xs scroll-mt-24"
+          >
+            {/* 7-Room Selector Tabs */}
+            <div className="px-4 sm:px-6 py-3.5 bg-[#EFECE4] border-b border-[#E9E2D5] flex items-center gap-2 overflow-x-auto">
+              <span className="text-xs font-bold text-[#525854] whitespace-nowrap shrink-0 mr-1">
+                Inspect Category:
+              </span>
+              {ROOM_CATEGORIES.map((r, idx) => {
+                const active = r.id === spotlightRoom.id;
+                return (
                   <button
+                    key={r.id}
                     type="button"
-                    onClick={() =>
-                      setLightboxImage({
-                        src: spotlightRoom.images[inspectPhotoIdx] || spotlightRoom.image,
-                        title: `${spotlightRoom.title} (${spotlightRoom.categoryLabel})`,
-                      })
-                    }
-                    aria-label="Open full photo in lightbox"
-                    className="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-black/60 hover:bg-black/80 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                    onClick={() => onSelectRoomId(r.id)}
+                    className={`px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      active
+                        ? 'bg-[#183D32] text-white shadow-xs'
+                        : 'bg-white text-[#525854] hover:text-[#191D1B] border border-[#E9E2D5]'
+                    }`}
                   >
-                    <Expand className="w-3.5 h-3.5" />
-                    Enlarge
+                    0{idx + 1}. {lang === 'hi' ? r.titleHi : r.title}
                   </button>
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent px-4 py-3 text-white">
-                    <p className="text-xs font-medium">
-                      {spotlightRoom.categoryLabel} · {spotlightRoom.bedType}
-                    </p>
+                );
+              })}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
+              {/* Left: Multi-Photo Gallery with Lightbox Trigger */}
+              <div className="lg:col-span-6 p-5 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#E9E2D5] bg-[#F8F6F0]">
+                <div>
+                  <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-[#EFECE4] border border-[#E9E2D5]">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`${spotlightRoom.id}-${inspectPhotoIdx}`}
+                        initial={{ opacity: 0, scale: 1.02 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.35, ease: LUXURY_EASE }}
+                        className="w-full h-full"
+                      >
+                        <SafeImage
+                          src={spotlightRoom.images[inspectPhotoIdx] || spotlightRoom.image}
+                          alt={`${spotlightRoom.title} — Photo ${inspectPhotoIdx + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setLightboxImage({
+                          src: spotlightRoom.images[inspectPhotoIdx] || spotlightRoom.image,
+                          title: `${spotlightRoom.title} (${spotlightRoom.categoryLabel})`,
+                        })
+                      }
+                      aria-label="Open full photo in lightbox"
+                      className="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-black/60 hover:bg-black/80 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <Expand className="w-3.5 h-3.5" />
+                      Enlarge
+                    </button>
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent px-4 py-3 text-white">
+                      <p className="text-xs font-medium">
+                        {spotlightRoom.categoryLabel} · {spotlightRoom.bedType}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
                 {/* Room Gallery Thumbnails */}
                 <div className="grid grid-cols-3 gap-2.5 mt-3">
@@ -576,7 +592,8 @@ export function RoomsAndBookingSection({
               </div>
             </div>
           </div>
-        </div>
+          </div>
+        </Reveal>
 
         {/* Compare Drawer (up to 3 rooms) */}
         {comparedRooms.length > 0 && (
@@ -664,15 +681,21 @@ export function RoomsAndBookingSection({
 
         {/* 3-Column Room Card Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {filteredRooms.map((room) => {
+          {filteredRooms.map((room, idx) => {
             const isComparing = compareIds.includes(room.id);
             const currentImgIdx = cardPhotoIdx[room.id] || 0;
             const currentImg = room.images[currentImgIdx] || room.image;
 
             return (
-              <article
+              <motion.article
                 key={room.id}
-                className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs transition-all duration-200 hover:-translate-y-0.5"
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.45, delay: idx * 0.05, ease: LUXURY_EASE }}
+                className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition-colors"
               >
                 <div>
                   {/* Room Image Slider */}
@@ -799,7 +822,7 @@ export function RoomsAndBookingSection({
                     </button>
                   </div>
                 </div>
-              </article>
+              </motion.article>
             );
           })}
         </div>

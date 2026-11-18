@@ -29,6 +29,7 @@ import {
   UI_TRANSLATIONS,
 } from '../data/hotelData';
 import { buildWhatsAppUrl, trackEvent } from '../lib/analytics';
+import { Reveal } from './MotionPrimitives';
 
 const API_KEY =
   process.env.GOOGLE_MAPS_PLATFORM_KEY ||
@@ -191,53 +192,55 @@ export function LocationMapSection({ lang }: LocationMapSectionProps) {
     <section id="location" className="py-20 lg:py-24 bg-[#F8F6F0] border-b border-[#E9E2D5] scroll-mt-16">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
-          <div>
-            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#183D32] font-semibold mb-3">
-              <MapPin className="w-3.5 h-3.5" />
-              <span>
-                {lang === 'hi'
-                  ? 'लोकेशन और प्रमुख स्थानों से प्रमाणित दूरी'
-                  : 'Singrauli Power Corridor & Verified Distances'}
-              </span>
+        <Reveal>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+            <div>
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#183D32] font-semibold mb-3">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>
+                  {lang === 'hi'
+                    ? 'लोकेशन और प्रमुख स्थानों से प्रमाणित दूरी'
+                    : 'Singrauli Power Corridor & Verified Distances'}
+                </span>
+              </div>
+              <h2
+                className="font-display text-[#191D1B] font-semibold leading-[1.12]"
+                style={{ fontSize: 'clamp(2rem, 3.5vw, 3.25rem)' }}
+              >
+                {t.sections.locationTitle}
+              </h2>
             </div>
-            <h2
-              className="font-display text-[#191D1B] font-semibold leading-[1.12]"
-              style={{ fontSize: 'clamp(2rem, 3.5vw, 3.25rem)' }}
-            >
-              {t.sections.locationTitle}
-            </h2>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={() => {
-                setShowCabModal(true);
-                trackEvent('cab_request', { action: 'open_modal' });
-              }}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#183D32] text-white hover:bg-[#122E25] text-xs uppercase tracking-[0.14em] font-semibold transition-colors cursor-pointer shadow-xs"
-            >
-              <Car className="w-4 h-4 text-[#C6A66B]" />
-              <span>
-                {lang === 'hi'
-                  ? 'ट्रैवल डेस्क / कैब सहायता'
-                  : 'Request Travel Desk / Cab Transfer'}
-              </span>
-            </button>
-            <a
-              href={GOOGLE_MAPS_PLACE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent('cab_request', { action: 'directions_click' })}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#191D1B] text-[#F8F6F0] hover:bg-[#2E3330] text-xs uppercase tracking-[0.14em] font-semibold transition-colors"
-            >
-              <Navigation className="w-4 h-4 text-[#C6A66B]" />
-              <span>Open in Google Maps</span>
-              <ExternalLink className="w-3.5 h-3.5 opacity-75" />
-            </a>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCabModal(true);
+                  trackEvent('cab_request', { action: 'open_modal' });
+                }}
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#183D32] text-white hover:bg-[#122E25] text-xs uppercase tracking-[0.14em] font-semibold transition-colors cursor-pointer shadow-xs"
+              >
+                <Car className="w-4 h-4 text-[#C6A66B]" />
+                <span>
+                  {lang === 'hi'
+                    ? 'ट्रैवल डेस्क / कैब सहायता'
+                    : 'Request Travel Desk / Cab Transfer'}
+                </span>
+              </button>
+              <a
+                href={GOOGLE_MAPS_PLACE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent('cab_request', { action: 'directions_click' })}
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#191D1B] text-[#F8F6F0] hover:bg-[#2E3330] text-xs uppercase tracking-[0.14em] font-semibold transition-colors"
+              >
+                <Navigation className="w-4 h-4 text-[#C6A66B]" />
+                <span>Open in Google Maps</span>
+                <ExternalLink className="w-3.5 h-3.5 opacity-75" />
+              </a>
+            </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Interactive Map + Verified Distance Table Split */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

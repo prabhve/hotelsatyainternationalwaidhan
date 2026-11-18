@@ -19,6 +19,7 @@ import {
   UI_TRANSLATIONS,
 } from '../data/hotelData';
 import { buildWhatsAppUrl, buildMailtoUrl, trackEvent } from '../lib/analytics';
+import { Reveal } from './MotionPrimitives';
 
 const DEFAULT_WHATSAPP_GREETING =
   'Namaste Hotel Satya International, I would like to inquire about direct room availability and tariffs in Waidhan.';
@@ -116,7 +117,7 @@ export function Footer({ lang, onBookStay }: FooterProps) {
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             {/* Left 5 Columns: Direct Reception Cards */}
-            <div className="lg:col-span-5 space-y-6">
+            <Reveal className="lg:col-span-5 space-y-6">
               <div>
                 <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#183D32] font-semibold mb-3">
                   <Phone className="w-3.5 h-3.5" />
@@ -220,10 +221,10 @@ export function Footer({ lang, onBookStay }: FooterProps) {
                   </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
 
             {/* Right 7 Columns: Direct Inquiry Form */}
-            <div className="lg:col-span-7">
+            <Reveal className="lg:col-span-7" delay={0.1}>
               <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#E9E2D5] shadow-xs">
                 <span className="text-[11px] uppercase tracking-[0.18em] text-[#183D32] font-bold block mb-1">
                   Direct Reception Message
@@ -348,7 +349,7 @@ export function Footer({ lang, onBookStay }: FooterProps) {
                   )}
                 </form>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>

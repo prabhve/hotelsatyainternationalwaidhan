@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import {
   Building2,
   Car,
@@ -31,6 +32,7 @@ import {
 } from '../data/hotelData';
 import { buildMailtoUrl, buildWhatsAppUrl, trackEvent } from '../lib/analytics';
 import { SafeImage } from './SafeImage';
+import { LUXURY_EASE, Reveal } from './MotionPrimitives';
 
 interface HeritageAndLeadershipSectionProps {
   lang: Language;
@@ -53,6 +55,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSectionProps) {
+  const shouldReduceMotion = useReducedMotion();
   const t = UI_TRANSLATIONS[lang];
 
   // Request Corporate Rate Form State
@@ -91,30 +94,41 @@ export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSect
       {/* =====================================================================
           VERIFIED THREE-STAR HOTEL FACILITIES & RESIDENT SERVICES
           ===================================================================== */}
-      <section
+      <motion.section
         id="facilities"
+        initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.08 }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: LUXURY_EASE }}
         className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#EFECE4] scroll-mt-16"
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
-              {lang === 'hi'
-                ? '३-स्टार होटल सुविधाएं और आतिथ्य सेवाएं'
-                : 'Three-Star Facilities & Resident Privileges'}
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#191D1B] text-balance">
-              {t.sections.facilitiesTitle}
-            </h2>
-          </div>
+          <Reveal>
+            <div className="max-w-3xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
+                {lang === 'hi'
+                  ? '३-स्टार होटल सुविधाएं और आतिथ्य सेवाएं'
+                  : 'Three-Star Facilities & Resident Privileges'}
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#191D1B] text-balance">
+                {t.sections.facilitiesTitle}
+              </h2>
+            </div>
+          </Reveal>
 
           {/* 12 Verified Facilities Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {FACILITIES_LIST.map((fac, idx) => {
               const IconComp = ICON_MAP[fac.icon] || ShieldCheck;
               return (
-                <div
+                <motion.div
                   key={fac.title}
-                  className="bg-white border border-[#E9E2D5] rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  whileHover={{ y: -3 }}
+                  transition={{ duration: 0.4, delay: idx * 0.035, ease: LUXURY_EASE }}
+                  className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs transition-colors"
                 >
                   <div className="w-10 h-10 rounded-xl bg-[#F8F6F0] border border-[#E9E2D5] flex items-center justify-center text-[#183D32] shrink-0">
                     <IconComp className="w-4 h-4" />
@@ -128,13 +142,14 @@ export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSect
                     </p>
                     <p className="text-xs text-[#525854] mt-1 leading-relaxed">{fac.detail}</p>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
 
           {/* Outdoor Swimming Pool & Health Club Showcase */}
-          <div className="bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-stretch shadow-xs">
+          <Reveal delay={0.1}>
+            <div className="bg-white border border-[#E9E2D5] rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-stretch shadow-xs">
             <div className="lg:col-span-5 relative min-h-[260px] bg-[#EFECE4]">
               <SafeImage
                 src={HOTEL_INFO.poolImage}
@@ -171,15 +186,20 @@ export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSect
                 For current seasonal pool hours or health club assistance, please contact our 24×7 Front Office at {HOTEL_INFO.phones[0]}.
               </p>
             </div>
-          </div>
+            </div>
+          </Reveal>
         </div>
-      </section>
+      </motion.section>
 
       {/* =====================================================================
           CORPORATE & EXECUTIVE HOSPITALITY (NTPC, RELIANCE, HINDALCO, NCL)
           ===================================================================== */}
-      <section
+      <motion.section
         id="corporate"
+        initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.08 }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: LUXURY_EASE }}
         className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#F8F6F0] scroll-mt-16"
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -389,46 +409,53 @@ export function HeritageAndLeadershipSection({ lang }: HeritageAndLeadershipSect
           </div>
 
           {/* Heritage & Leadership Messages (Est. 2011 · MD Mr. S. D. Singh & GM Mr. Rajan G.P.) */}
-          <div id="about" className="pt-12 border-t border-[#E9E2D5] scroll-mt-24">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#183D32] mb-2">
-              About Hotel Satya International · Est. {SINGRAULI_HERITAGE.foundingYear}
-            </p>
-            <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[#191D1B] mb-2">
-              {lang === 'hi'
-                ? 'हमारी विरासत और नेतृत्व संदेश'
-                : 'Our Waidhan Hospitality Heritage & Leadership'}
-            </h3>
-            <p className="text-sm text-[#525854] max-w-3xl mb-6 leading-relaxed">
-              {SINGRAULI_HERITAGE.narrative}
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {LEADERSHIP_PROFILES.map((leader) => (
-                <article
-                  key={leader.id}
-                  className="bg-white border border-[#E9E2D5] rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start shadow-2xs"
-                >
-                  <SafeImage
-                    src={leader.image}
-                    alt={`${leader.name} — ${leader.role}, Hotel Satya International`}
-                    className="w-20 h-24 sm:w-24 sm:h-28 rounded-xl object-cover border border-[#E9E2D5] shrink-0"
-                  />
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#183D32]">
-                      {leader.role} · {leader.motto}
-                    </p>
-                    <h4 className="font-display text-2xl font-semibold text-[#191D1B] mt-0.5 mb-2">
-                      {leader.name}
-                    </h4>
-                    <p className="text-xs sm:text-sm text-[#525854] leading-relaxed italic">
-                      “{leader.quote}”
-                    </p>
-                  </div>
-                </article>
-              ))}
+          <Reveal>
+            <div id="about" className="pt-12 border-t border-[#E9E2D5] scroll-mt-24">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#183D32] mb-2">
+                About Hotel Satya International · Est. {SINGRAULI_HERITAGE.foundingYear}
+              </p>
+              <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[#191D1B] mb-2">
+                {lang === 'hi'
+                  ? 'हमारी विरासत और नेतृत्व संदेश'
+                  : 'Our Waidhan Hospitality Heritage & Leadership'}
+              </h3>
+              <p className="text-sm text-[#525854] max-w-3xl mb-6 leading-relaxed">
+                {SINGRAULI_HERITAGE.narrative}
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {LEADERSHIP_PROFILES.map((leader, idx) => (
+                  <motion.article
+                    key={leader.id}
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    whileHover={{ y: -3 }}
+                    transition={{ duration: 0.45, delay: idx * 0.08, ease: LUXURY_EASE }}
+                    className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start shadow-2xs transition-colors"
+                  >
+                    <SafeImage
+                      src={leader.image}
+                      alt={`${leader.name} — ${leader.role}, Hotel Satya International`}
+                      className="w-20 h-24 sm:w-24 sm:h-28 rounded-xl object-cover border border-[#E9E2D5] shrink-0"
+                    />
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#183D32]">
+                        {leader.role} · {leader.motto}
+                      </p>
+                      <h4 className="font-display text-2xl font-semibold text-[#191D1B] mt-0.5 mb-2">
+                        {leader.name}
+                      </h4>
+                      <p className="text-xs sm:text-sm text-[#525854] leading-relaxed italic">
+                        “{leader.quote}”
+                      </p>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
             </div>
-          </div>
+          </Reveal>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

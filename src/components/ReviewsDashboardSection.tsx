@@ -13,6 +13,7 @@ import {
   UI_TRANSLATIONS,
 } from '../data/hotelData';
 import { useFirebase } from '../contexts/FirebaseContext';
+import { Reveal } from './MotionPrimitives';
 
 interface ReviewsDashboardSectionProps {
   lang: Language;
@@ -178,33 +179,35 @@ export function ReviewsDashboardSection({ lang }: ReviewsDashboardSectionProps) 
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
-              {lang === 'hi'
-                ? 'अतिथि अनुभव और सत्यापित समीक्षाएं'
-                : 'Authentic Guest Feedback & Google Maps Reviews'}
-            </p>
-            <h2
-              className="font-display text-[#191D1B] font-medium leading-[1.12]"
-              style={{ fontSize: 'clamp(2rem, 3.4vw, 3.1rem)' }}
-            >
-              {t.sections.reviewsTitle}
-            </h2>
-          </div>
+        <Reveal>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#183D32] mb-2">
+                {lang === 'hi'
+                  ? 'अतिथि अनुभव और सत्यापित समीक्षाएं'
+                  : 'Authentic Guest Feedback & Google Maps Reviews'}
+              </p>
+              <h2
+                className="font-display text-[#191D1B] font-medium leading-[1.12]"
+                style={{ fontSize: 'clamp(2rem, 3.4vw, 3.1rem)' }}
+              >
+                {t.sections.reviewsTitle}
+              </h2>
+            </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <a
-              href={GOOGLE_MAPS_REVIEWS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-3 bg-[#183D32] hover:bg-[#122E25] text-white rounded-lg text-xs uppercase tracking-[0.14em] font-semibold transition-colors shrink-0"
-            >
-              <span>Read & Write Reviews on Google Maps</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#C6A66B]" />
-            </a>
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href={GOOGLE_MAPS_REVIEWS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-3 bg-[#183D32] hover:bg-[#122E25] text-white rounded-lg text-xs uppercase tracking-[0.14em] font-semibold transition-colors shrink-0"
+              >
+                <span>Read & Write Reviews on Google Maps</span>
+                <ExternalLink className="w-3.5 h-3.5 text-[#C6A66B]" />
+              </a>
+            </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Live Metrics Bar (Only displayed when genuine Firestore reviews exist) */}
         {metrics && (
