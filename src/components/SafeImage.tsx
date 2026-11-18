@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Building2 } from 'lucide-react';
 
 interface SafeImageProps {
@@ -10,6 +10,10 @@ interface SafeImageProps {
 
 export function SafeImage({ src, alt, className = '', priority = false }: SafeImageProps) {
   const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [src]);
 
   if (failed || !src) {
     return (
@@ -30,7 +34,6 @@ export function SafeImage({ src, alt, className = '', priority = false }: SafeIm
       alt={alt}
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
-      referrerPolicy="no-referrer"
       onError={() => setFailed(true)}
       className={className}
     />

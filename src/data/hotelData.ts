@@ -9,6 +9,32 @@
  * ============================================================================
  */
 
+import imgLogo from '../assets/hotel/logo.png';
+import imgBuildingExterior from '../assets/hotel/pool-exterior.webp';
+import imgSuiteLuxury from '../assets/hotel/hero-exterior.jpg';
+import imgSuiteWood from '../assets/hotel/exterior-alt.jpg';
+import imgSuiteTriple from '../assets/hotel/lobby-main.jpg';
+import imgRoyalSuite from '../assets/hotel/royal-suite.jpg';
+import imgPresidentialSuite from '../assets/hotel/presidential-suite.webp';
+import imgExecutiveSuite from '../assets/hotel/executive-suite.webp';
+import imgSuperiorSuite from '../assets/hotel/superior-suite.webp';
+import imgSuperDeluxe from '../assets/hotel/super-deluxe.webp';
+import imgDeluxeRoom from '../assets/hotel/deluxe-room.webp';
+import imgStandardAc from '../assets/hotel/standard-ac.webp';
+import imgShardaDining from '../assets/hotel/sharda-restaurant.jpg';
+import imgShardaEntrance from '../assets/hotel/gallery-7.webp';
+import imgShardaTable from '../assets/hotel/gallery-8.webp';
+import imgBlueDiamondBar from '../assets/hotel/blue-diamond-bar.webp';
+import imgBlueDiamondSign from '../assets/hotel/banquet-hall.webp';
+import imgLawnCelebration1 from '../assets/hotel/gallery-1.webp';
+import imgLawnCelebration2 from '../assets/hotel/gallery-2.webp';
+import imgLawnCelebration3 from '../assets/hotel/gallery-3.webp';
+import imgLawnCelebration4 from '../assets/hotel/gallery-4.webp';
+import imgLawnCelebration5 from '../assets/hotel/gallery-5.webp';
+import imgLawnCelebration6 from '../assets/hotel/gallery-6.webp';
+import imgMdPortrait from '../assets/hotel/md-director.jpg';
+import imgGmPortrait from '../assets/hotel/gm-manager.jpg';
+
 export type Language = 'en' | 'hi';
 export type OccupancyType = 'Single' | 'Double';
 export type MealPlanCode = 'EP' | 'CP' | 'MAP' | 'AP';
@@ -56,10 +82,10 @@ export const UI_TRANSLATIONS: Record<
   }
 > = {
   en: {
-    brandSub: 'Waidhan · Singrauli · Est. 2011',
+    brandSub: 'WAIDHAN · SINGRAULI, M.P.',
     welcome: 'स्वागत है · Welcome to Singrauli’s First Classified 3-Star Luxury Hotel',
     announcement:
-      'Direct Reservation Desk · Free Wi-Fi Connectivity · Outdoor Swimming Pool · 24-Hour Room Service',
+      'Direct Reservation Assistance · Complimentary Wi-Fi & Swimming Pool Access',
     nav: {
       home: 'Home',
       rooms: 'Rooms & Suites',
@@ -71,14 +97,14 @@ export const UI_TRANSLATIONS: Record<
       reviews: 'Reviews',
       location: 'Location',
       contact: 'Contact',
-      bookStay: 'Book Now',
+      bookStay: 'Book Your Stay',
     },
     hero: {
-      eyebrow: 'Singrauli’s First Classified 3-Star Luxury Hotel · Est. 2011 · Waidhan, M.P.',
-      headline: 'Where Comfort Meets Exceptional Hospitality.',
+      eyebrow: 'HOTEL SATYA INTERNATIONAL · WAIDHAN, SINGRAULI, MADHYA PRADESH',
+      headline: 'Stay Comfortably. Dine Well. Celebrate Here.',
       subcopy:
-        'Seven thoughtfully appointed room and suite categories, Sharda Multi-Cuisine Restaurant & European-technology Bakery, Blue Diamond Colonial Bar, an outdoor swimming pool, and 3,000-guest celebration lawns on Belaunji Main Road.',
-      checkRatesBtn: 'Explore Rooms & Tariffs',
+        'Discover comfortable rooms, inviting dining and beautiful spaces for celebrations in Waidhan, Singrauli.',
+      checkRatesBtn: 'Explore Rooms',
       whatsappBtn: 'Book on WhatsApp',
       callBtn: 'Call 24×7 Reception',
     },
@@ -97,29 +123,29 @@ export const UI_TRANSLATIONS: Record<
     },
   },
   hi: {
-    brandSub: 'वैढ़न · सिंगरौली · स्थापना २०११',
+    brandSub: 'वैढ़न · सिंगरौली, म.प्र.',
     welcome: 'स्वागत है · सिंगरौली का प्रथम वर्गीकृत ३-स्टार लक्ज़री होटल',
     announcement:
-      'डायरेक्ट बुकिंग सहायता · निःशुल्क वाई-फाई · आउटडोर स्विमिंग पूल · २४ घंटे रूम सर्विस',
+      'डायरेक्ट बुकिंग सहायता · निःशुल्क वाई-फाई और स्विमिंग पूल सुविधा',
     nav: {
       home: 'होम',
-      rooms: 'सुइट्स और रूम्स',
-      dining: 'डाइनिंग और बार',
-      banquets: 'बैंक्वेट और इवेंट्स',
+      rooms: 'रूम्स और सुइट्स',
+      dining: 'डाइनिंग',
+      banquets: 'इवेंट्स और बैंक्वेट्स',
       facilities: 'सुविधाएं',
       gallery: 'गैलरी',
       about: 'हमारे बारे में',
       reviews: 'समीक्षाएं',
       location: 'लोकेशन',
       contact: 'संपर्क',
-      bookStay: 'रूम बुक करें',
+      bookStay: 'प्रवास बुक करें',
     },
     hero: {
-      eyebrow: 'सिंगरौली का प्रथम ३-स्टार लक्ज़री होटल · स्थापना २०११ · वैढ़न, मध्य प्रदेश',
-      headline: 'जहाँ आराम और उत्कृष्ट आतिथ्य का संगम होता है।',
+      eyebrow: 'होटल सत्या इंटरनेशनल · वैढ़न, सिंगरौली, मध्य प्रदेश',
+      headline: 'आरामदायक प्रवास। उत्कृष्ट भोजन। भव्य उत्सव।',
       subcopy:
-        'बेलौंजी मेन रोड, वैढ़न पर स्थित ७ सुइट और रूम श्रेणियां, शारदा मल्टी-कुज़ीन रेस्टोरेंट एवं बेकरी, ब्लू डायमंड बार, स्विमिंग पूल और ३,००० मेहमानों की क्षमता वाला भव्य लॉन।',
-      checkRatesBtn: 'रूम और टैरिफ देखें',
+        'वैढ़न, सिंगरौली में आरामदायक कमरे, स्वादिष्ट मल्टी-कुज़ीन डाइनिंग और समारोहों के लिए सुंदर स्थानों का अनुभव करें।',
+      checkRatesBtn: 'रूम्स देखें',
       whatsappBtn: 'व्हाट्सएप पर बुक करें',
       callBtn: '२४×७ रिसेप्शन कॉल करें',
     },
@@ -186,10 +212,10 @@ export const HOTEL_INFO = {
     'https://www.google.com/maps/place/Hotel+Satya+International/@24.0739924,82.6068803,2880m/data=!3m1!1e3!4m13!1m2!2m1!1sHotels!3m9!1s0x398f369a0ff99001:0xdb5aec929d36db90!5m2!4m1!1i2!8m2!3d24.072285!4d82.6206458!15sCgZIb3RlbHOSAQVob3RlbKoBOhABKgoiBmhvdGVscygAMh4QASIainsixGVQ51rDIRxGAWYdQunD1rZjbCyu2qAyChACIgZob3RlbHPgAQA!16s%2Fg%2F11b6lmtf04',
   checkInTime: '2:00 PM',
   checkOutTime: '12:00 PM',
-  logo: 'https://hotelsatyainternational.com/img/logo.png',
-  heroImage: 'https://hotelsatyainternational.com/img/slider-1.jpg',
-  exteriorNightImage: 'https://hotelsatyainternational.com/img/slider-2.jpg',
-  poolImage: 'https://hotelsatyainternational.com/img/pool.jpg',
+  logo: imgLogo,
+  heroImage: imgBuildingExterior,
+  exteriorNightImage: imgLawnCelebration2,
+  poolImage: imgBuildingExterior,
 };
 
 export interface HeroSlide {
@@ -202,53 +228,46 @@ export interface HeroSlide {
 
 export const HERO_CAROUSEL_SLIDES: HeroSlide[] = [
   {
-    id: 'facade-day',
-    title: 'Grand Exterior & Arrival Forecourt on Belaunji Main Road',
-    caption: 'Singrauli’s landmark 3-star classified hospitality destination since 2011',
-    image: 'https://hotelsatyainternational.com/img/slider-1.jpg',
-    badge: 'Landmark Facade',
+    id: 'hotel-exterior',
+    title: 'Hotel Exterior & Main Road Arrival',
+    caption: 'Located on Main Road, Belaunji, Waidhan · 4 Km from NTPC Vindhyanagar',
+    image: imgBuildingExterior,
+    badge: 'Hotel Exterior',
   },
   {
-    id: 'facade-evening',
-    title: 'Illuminated Evening Facade & Gated Parking',
-    caption: '4 Km from NTPC Vindhyanagar · 25 Km from Singrauli Railway Station',
-    image: 'https://hotelsatyainternational.com/img/slider-2.jpg',
-    badge: 'Evening View',
+    id: 'royal-suite-interior',
+    title: 'Spacious Suites & Guest Accommodations',
+    caption: 'Seven room and suite categories from ₹2,000 to ₹9,000 per night',
+    image: imgSuiteLuxury,
+    badge: 'Rooms & Suites',
   },
   {
-    id: 'royal-suite',
-    title: 'Royal Suite — Flagship VIP Residence',
-    caption: 'Published Tariff: Single ₹7,400 · Double ₹9,000 per night',
-    image: 'https://hotelsatyainternational.com/img/suite-royal.jpg',
-    badge: 'Royal Suite',
-  },
-  {
-    id: 'pool-oasis',
-    title: 'Outdoor Swimming Pool & Health Club',
-    caption: 'Complimentary access for resident guests',
-    image: 'https://hotelsatyainternational.com/img/pool.jpg',
-    badge: 'Swimming Pool',
+    id: 'executive-wood-suite',
+    title: 'Executive & Family Suites',
+    caption: 'Air-conditioned comfort with lounge seating, Wi-Fi, and 24-hour room service',
+    image: imgSuiteWood,
+    badge: 'Suite Interiors',
   },
   {
     id: 'sharda-dining',
-    title: 'Sharda Multi-Cuisine Restaurant & Custom Bakery',
-    caption: 'Indian, Mughlai, Chinese, Continental, Italian & Oriental cuisines',
-    image: 'https://hotelsatyainternational.com/img/restaurant.jpg',
-    badge: 'Sharda Dining',
+    title: 'Sharda Multi-Cuisine Restaurant & Bakery',
+    caption: 'Indian, Mughlai, Chinese, Continental, Italian & Oriental dining plus in-house bakery',
+    image: imgShardaDining,
+    badge: 'Sharda Restaurant',
   },
   {
     id: 'blue-diamond',
-    title: 'Blue Diamond Colonial-Style Bar & Lounge',
-    caption: 'Imported spirits, signature cocktails & mocktails (11:00 AM – 11:00 PM)',
-    image: 'https://hotelsatyainternational.com/img/bar.jpg',
+    title: 'Blue Diamond Lounge Bar',
+    caption: 'Colonial-style lounge open daily from 11:00 AM to 11:00 PM',
+    image: imgBlueDiamondBar,
     badge: 'Blue Diamond Bar',
   },
   {
     id: 'banquet-lawn',
-    title: 'Grand Banquet Hall & 3,000-Guest Open-Air Lawn',
-    caption: 'Premier destination for Singrauli weddings, receptions & corporate conferences',
-    image: 'https://hotelsatyainternational.com/img/banquet.jpg',
-    badge: 'Weddings & Events',
+    title: 'Open-Air Lawn & Banquet Venues',
+    caption: 'Outdoor lawn (up to 3,000 guests) and indoor Banquet Hall (up to 200 guests)',
+    image: imgLawnCelebration1,
+    badge: 'Events & Lawn',
   },
 ];
 
@@ -317,12 +336,8 @@ export const ROOM_CATEGORIES: RoomCategory[] = [
       single: 7400,
       double: 9000,
     },
-    image: 'https://hotelsatyainternational.com/img/suite-royal.jpg',
-    images: [
-      'https://hotelsatyainternational.com/img/suite-royal.jpg',
-      'https://hotelsatyainternational.com/img/gallery/1.jpg',
-      'https://hotelsatyainternational.com/img/gallery/2.jpg',
-    ],
+    image: imgRoyalSuite,
+    images: [imgRoyalSuite, imgSuiteLuxury, imgSuiteWood],
     description:
       'Our flagship suite crafted for visiting corporate leadership, dignitaries, and wedding families—featuring a spacious living and meeting area, plush king bedding, satellite television, and 24-hour room service.',
     highlights: [
@@ -347,12 +362,8 @@ export const ROOM_CATEGORIES: RoomCategory[] = [
       single: 6500,
       double: 7450,
     },
-    image: 'https://hotelsatyainternational.com/img/suite-presidential.jpg',
-    images: [
-      'https://hotelsatyainternational.com/img/suite-presidential.jpg',
-      'https://hotelsatyainternational.com/img/gallery/3.jpg',
-      'https://hotelsatyainternational.com/img/gallery/4.jpg',
-    ],
+    image: imgPresidentialSuite,
+    images: [imgPresidentialSuite, imgSuiteWood, imgSuiteLuxury],
     description:
       'Designed for senior power-sector executives and long-stay directors visiting Waidhan, offering a refined seating zone, executive work desk, satellite television, and priority housekeeping.',
     highlights: [
@@ -377,12 +388,8 @@ export const ROOM_CATEGORIES: RoomCategory[] = [
       single: 5500,
       double: 6500,
     },
-    image: 'https://hotelsatyainternational.com/img/suite-executive.jpg',
-    images: [
-      'https://hotelsatyainternational.com/img/suite-executive.jpg',
-      'https://hotelsatyainternational.com/img/gallery/5.jpg',
-      'https://hotelsatyainternational.com/img/gallery/6.jpg',
-    ],
+    image: imgExecutiveSuite,
+    images: [imgExecutiveSuite, imgSuiteTriple, imgSuiteWood],
     description:
       'Tailored for corporate consultants and project managers visiting NTPC, Reliance, Hindalco, and NCL, combining generous workspace with restful acoustic comfort.',
     highlights: [
@@ -407,12 +414,8 @@ export const ROOM_CATEGORIES: RoomCategory[] = [
       single: 4500,
       double: 5500,
     },
-    image: 'https://hotelsatyainternational.com/img/suite-superior.jpg',
-    images: [
-      'https://hotelsatyainternational.com/img/suite-superior.jpg',
-      'https://hotelsatyainternational.com/img/gallery/7.jpg',
-      'https://hotelsatyainternational.com/img/gallery/8.jpg',
-    ],
+    image: imgSuperiorSuite,
+    images: [imgSuperiorSuite, imgSuiteTriple, imgExecutiveSuite],
     description:
       'An inviting suite category with warm wooden accents, comfortable sofa seating, and complete three-star amenities for families and extended business stays.',
     highlights: [
@@ -437,12 +440,8 @@ export const ROOM_CATEGORIES: RoomCategory[] = [
       single: 3500,
       double: 4500,
     },
-    image: 'https://hotelsatyainternational.com/img/deluxe-super.jpg',
-    images: [
-      'https://hotelsatyainternational.com/img/deluxe-super.jpg',
-      'https://hotelsatyainternational.com/img/gallery/9.jpg',
-      'https://hotelsatyainternational.com/img/gallery/10.jpg',
-    ],
+    image: imgSuperDeluxe,
+    images: [imgSuperDeluxe, imgDeluxeRoom, imgSuperiorSuite],
     description:
       'Our preferred corporate deluxe room featuring climate-controlled air conditioning, ergonomic workspace, satellite TV, and 24-hour in-room dining from Sharda Restaurant.',
     highlights: [
@@ -467,12 +466,8 @@ export const ROOM_CATEGORIES: RoomCategory[] = [
       single: 2800,
       double: 3800,
     },
-    image: 'https://hotelsatyainternational.com/img/deluxe-standard.jpg',
-    images: [
-      'https://hotelsatyainternational.com/img/deluxe-standard.jpg',
-      'https://hotelsatyainternational.com/img/gallery/11.jpg',
-      'https://hotelsatyainternational.com/img/gallery/12.jpg',
-    ],
+    image: imgDeluxeRoom,
+    images: [imgDeluxeRoom, imgSuperDeluxe, imgStandardAc],
     description:
       'Well-appointed air-conditioned guest room ideal for business travellers, engineering teams, and families seeking dependable three-star hospitality on Waidhan Main Road.',
     highlights: [
@@ -497,12 +492,8 @@ export const ROOM_CATEGORIES: RoomCategory[] = [
       single: 2000,
       double: 2700,
     },
-    image: 'https://hotelsatyainternational.com/img/ac-standard.jpg',
-    images: [
-      'https://hotelsatyainternational.com/img/ac-standard.jpg',
-      'https://hotelsatyainternational.com/img/gallery/13.jpg',
-      'https://hotelsatyainternational.com/img/gallery/14.jpg',
-    ],
+    image: imgStandardAc,
+    images: [imgStandardAc, imgDeluxeRoom],
     description:
       'Clean, comfortable air-conditioned room with full access to Hotel Satya International’s 24-hour room service, Wi-Fi connectivity, and resident swimming pool.',
     highlights: [
@@ -522,7 +513,7 @@ export const DINING_AND_BAR = {
     tagline: 'Fine Family Dining & 100% Original European-Technology Custom Bakery',
     cuisines: ['Indian', 'Mughlai', 'Chinese', 'Continental', 'Italian', 'Oriental'],
     serviceNote: 'Family & Executive Dining · 24-Hour Room Service Available',
-    image: 'https://hotelsatyainternational.com/img/restaurant.jpg',
+    image: imgShardaDining,
     description:
       'Sharda Restaurant offers an extensive multi-cuisine culinary repertoire spanning authentic Indian, rich Mughlai, Chinese, Continental, Italian, and Oriental specialties. Our in-house Bakery uses 100% original European baking technologies to craft fresh breads, desserts, anniversary cakes, and custom multi-tier wedding cakes.',
   },
@@ -532,7 +523,7 @@ export const DINING_AND_BAR = {
     hours: '11:00 AM – 11:00 PM (Last Order at 10:30 PM)',
     phone: '+91-7415866637',
     serviceNote: 'Imported Liquor, Signature Cocktails & Mocktails with Complimentary Snacks',
-    image: 'https://hotelsatyainternational.com/img/bar.jpg',
+    image: imgBlueDiamondBar,
     description:
       'Designed with classic colonial-inspired wood interiors and ambient lighting, Blue Diamond Bar serves imported spirits, signature cocktails in crystal-clear glassware accompanied by complimentary lounge snacks, and refreshing mocktails.',
   },
@@ -610,7 +601,7 @@ export const SHARDA_CULINARY_SPECIALTIES: Record<string, CulinarySpecialtyItem[]
   ],
 };
 
-export const BANQUET_IMAGE = 'https://hotelsatyainternational.com/img/banquet.jpg';
+export const BANQUET_IMAGE = imgLawnCelebration1;
 
 export type VerifiedVenueName =
   | 'Open-Air Lawn (3000 Pax)'
@@ -637,7 +628,7 @@ export const EVENT_VENUES: EventVenue[] = [
     idealFor: 'Grand Weddings, Receptions & Cultural Galas',
     description:
       'One of Singrauli’s largest manicured open-air celebration lawns, accommodating up to 3,000 guests with custom mandap/stage setups, multi-cuisine Sharda catering, and gated parking.',
-    image: 'https://hotelsatyainternational.com/img/gallery/19.jpg',
+    image: imgLawnCelebration1,
   },
   {
     id: 'grand-banquet',
@@ -647,7 +638,7 @@ export const EVENT_VENUES: EventVenue[] = [
     idealFor: 'Conferences, Seminars, Ring Ceremonies & Corporate Events',
     description:
       'Fully air-conditioned indoor banquet venue for up to 200 guests, ideal for corporate seminars, engagement ceremonies, anniversary dinners, and official gatherings.',
-    image: 'https://hotelsatyainternational.com/img/banquet.jpg',
+    image: imgLawnCelebration3,
   },
   {
     id: 'party-room',
@@ -657,7 +648,7 @@ export const EVENT_VENUES: EventVenue[] = [
     idealFor: 'Birthday Parties, Kitty Parties & Family Dinners',
     description:
       'Intimate indoor celebration space for up to 40 guests with customized buffet dining and fresh celebration cakes from our European bakery.',
-    image: 'https://hotelsatyainternational.com/img/gallery/20.jpg',
+    image: imgShardaTable,
   },
   {
     id: 'meeting-room',
@@ -667,7 +658,7 @@ export const EVENT_VENUES: EventVenue[] = [
     idealFor: 'Board Meetings, Vendor Reviews & Interviews',
     description:
       'Quiet, air-conditioned executive meeting room for up to 20 delegates with Wi-Fi connectivity and prompt tea, coffee, and working lunch service.',
-    image: 'https://hotelsatyainternational.com/img/gallery/15.jpg',
+    image: imgExecutiveSuite,
   },
 ];
 
@@ -829,7 +820,7 @@ export const LEADERSHIP_PROFILES: LeadershipProfile[] = [
     motto: 'Atithi Devo Bhava (अतिथि देवो भव:)',
     quote:
       'Since establishing Hotel Satya International in 2011 as Singrauli’s first classified 3-star luxury hotel, our guiding philosophy has remained Atithi Devo Bhava—welcoming every corporate leader, engineer, and family guest with genuine warmth, spotless comfort, and uncompromising care.',
-    image: 'https://hotelsatyainternational.com/img/md.jpg',
+    image: imgMdPortrait,
   },
   {
     id: 'gm-rajan-gp',
@@ -838,7 +829,7 @@ export const LEADERSHIP_PROFILES: LeadershipProfile[] = [
     motto: 'Operational Excellence & Warm Service',
     quote:
       'Whether you are arriving in Waidhan for a power-project assignment at NTPC or Reliance, dining with family at Sharda Restaurant, or hosting a 3,000-guest celebration on our lawn, our 24×7 hospitality team is committed to making your experience effortless.',
-    image: 'https://hotelsatyainternational.com/img/gm.jpg',
+    image: imgGmPortrait,
   },
 ];
 
@@ -860,184 +851,163 @@ export interface GalleryItem {
 export const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 'gal-ext-1',
-    src: 'https://hotelsatyainternational.com/img/slider-1.jpg',
+    src: imgBuildingExterior,
     title: 'Hotel Satya International — Daytime Exterior',
     subtitle: 'Main Road, Belaunji, Waidhan, Singrauli',
     category: 'Exterior',
   },
   {
-    id: 'gal-ext-2',
-    src: 'https://hotelsatyainternational.com/img/slider-2.jpg',
-    title: 'Illuminated Evening Facade',
-    subtitle: 'Singrauli’s First Classified 3-Star Luxury Hotel (Est. 2011)',
-    category: 'Exterior',
-  },
-  {
-    id: 'gal-ext-3',
-    src: 'https://hotelsatyainternational.com/img/slider-3.jpg',
-    title: 'Arrival Forecourt & Main Entrance',
-    subtitle: '24×7 Reception & Secured On-Site Parking',
-    category: 'Exterior',
-  },
-  {
     id: 'gal-room-royal',
-    src: 'https://hotelsatyainternational.com/img/suite-royal.jpg',
+    src: imgRoyalSuite,
     title: 'Royal Suite (Suite Room Royal)',
     subtitle: 'Single ₹7,400 · Double ₹9,000 per night',
     category: 'Rooms',
   },
   {
+    id: 'gal-room-luxury-suite',
+    src: imgSuiteLuxury,
+    title: 'Royal Suite Bedroom & Lounge Seating',
+    subtitle: 'Spacious King Bed & Armchair Seating Area',
+    category: 'Rooms',
+  },
+  {
     id: 'gal-room-pres',
-    src: 'https://hotelsatyainternational.com/img/suite-presidential.jpg',
+    src: imgPresidentialSuite,
     title: 'Presidential Suite (Suite Room Presidential)',
     subtitle: 'Single ₹6,500 · Double ₹7,450 per night',
     category: 'Rooms',
   },
   {
+    id: 'gal-room-wood-suite',
+    src: imgSuiteWood,
+    title: 'Wood-Panelled Suite Bedroom & Sofa',
+    subtitle: 'Warm Interiors with 24-Hour Room Service',
+    category: 'Rooms',
+  },
+  {
     id: 'gal-room-exec',
-    src: 'https://hotelsatyainternational.com/img/suite-executive.jpg',
+    src: imgExecutiveSuite,
     title: 'Executive Suite (Suite Room Executive)',
     subtitle: 'Single ₹5,500 · Double ₹6,500 per night',
     category: 'Rooms',
   },
   {
     id: 'gal-room-sup',
-    src: 'https://hotelsatyainternational.com/img/suite-superior.jpg',
+    src: imgSuperiorSuite,
     title: 'Superior Suite (Suite Room Superior)',
     subtitle: 'Single ₹4,500 · Double ₹5,500 per night',
     category: 'Rooms',
   },
   {
+    id: 'gal-room-triple',
+    src: imgSuiteTriple,
+    title: 'Family Suite Accommodation',
+    subtitle: 'King Bed & Single Bed Configuration',
+    category: 'Rooms',
+  },
+  {
     id: 'gal-room-sdeluxe',
-    src: 'https://hotelsatyainternational.com/img/deluxe-super.jpg',
+    src: imgSuperDeluxe,
     title: 'Super Deluxe Room (Deluxe Room Super)',
     subtitle: 'Single ₹3,500 · Double ₹4,500 per night',
     category: 'Rooms',
   },
   {
     id: 'gal-room-deluxe',
-    src: 'https://hotelsatyainternational.com/img/deluxe-standard.jpg',
+    src: imgDeluxeRoom,
     title: 'Deluxe Room (Deluxe Room Standard)',
     subtitle: 'Single ₹2,800 · Double ₹3,800 per night',
     category: 'Rooms',
   },
   {
     id: 'gal-room-ac',
-    src: 'https://hotelsatyainternational.com/img/ac-standard.jpg',
+    src: imgStandardAc,
     title: 'Standard A/C Room (AC Room Standard)',
     subtitle: 'Single ₹2,000 · Double ₹2,700 per night',
     category: 'Rooms',
   },
   {
     id: 'gal-dining-1',
-    src: 'https://hotelsatyainternational.com/img/restaurant.jpg',
+    src: imgShardaDining,
     title: 'Sharda Multi-Cuisine Restaurant & Bakery',
     subtitle: 'Indian, Mughlai, Chinese, Continental, Italian & Oriental Cuisines',
     category: 'Dining',
   },
   {
+    id: 'gal-dining-2',
+    src: imgShardaEntrance,
+    title: 'Sharda Restaurant Entrance & Lobby',
+    subtitle: 'Welcoming Family & Executive Dining Ambience',
+    category: 'Dining',
+  },
+  {
+    id: 'gal-dining-3',
+    src: imgShardaTable,
+    title: 'Sharda Family & Group Dining Table',
+    subtitle: 'Multi-Cuisine Table Service & Custom Bakery',
+    category: 'Dining',
+  },
+  {
     id: 'gal-bar-1',
-    src: 'https://hotelsatyainternational.com/img/bar.jpg',
+    src: imgBlueDiamondBar,
     title: 'Blue Diamond Colonial-Style Bar',
     subtitle: 'Open 11:00 AM – 11:00 PM (Last Order 10:30 PM)',
     category: 'Bar',
   },
   {
+    id: 'gal-bar-2',
+    src: imgBlueDiamondSign,
+    title: 'Blue Diamond Lounge Entrance',
+    subtitle: 'Imported Spirits, Cocktails & Mocktails',
+    category: 'Bar',
+  },
+  {
     id: 'gal-pool-1',
-    src: 'https://hotelsatyainternational.com/img/pool.jpg',
-    title: 'Outdoor Swimming Pool & Health Club',
+    src: imgBuildingExterior,
+    title: 'Hotel Complex, Outdoor Pool & Health Club',
     subtitle: 'Resident Guest Recreation & Fitness',
     category: 'Pool',
   },
   {
-    id: 'gal-banquet-1',
-    src: 'https://hotelsatyainternational.com/img/banquet.jpg',
-    title: 'Indoor Banquet & Conference Hall',
-    subtitle: 'Accommodates Up to 200 Guests',
-    category: 'Lawn & Events',
-  },
-  {
-    id: 'gal-arch-1',
-    src: 'https://hotelsatyainternational.com/img/gallery/1.jpg',
-    title: 'Suite Interior & Seating Lounge',
-    subtitle: 'Thoughtfully Appointed Guest Accommodations',
-    category: 'Rooms',
-  },
-  {
-    id: 'gal-arch-2',
-    src: 'https://hotelsatyainternational.com/img/gallery/2.jpg',
-    title: 'Luxury Suite Bedroom View',
-    subtitle: 'Plush Bedding & Climate-Controlled Comfort',
-    category: 'Rooms',
-  },
-  {
-    id: 'gal-arch-3',
-    src: 'https://hotelsatyainternational.com/img/gallery/3.jpg',
-    title: 'Presidential Suite Living Space',
-    subtitle: 'Executive Hospitality in Waidhan',
-    category: 'Rooms',
-  },
-  {
-    id: 'gal-arch-4',
-    src: 'https://hotelsatyainternational.com/img/gallery/4.jpg',
-    title: 'Suite Furnishing & Decor',
-    subtitle: 'Warm Lighting & Spacious Layout',
-    category: 'Rooms',
-  },
-  {
-    id: 'gal-arch-5',
-    src: 'https://hotelsatyainternational.com/img/gallery/5.jpg',
-    title: 'Executive Suite Bedroom',
-    subtitle: 'Ideal for Corporate Stays',
-    category: 'Rooms',
-  },
-  {
-    id: 'gal-arch-6',
-    src: 'https://hotelsatyainternational.com/img/gallery/6.jpg',
-    title: 'Suite Lounge & Work Area',
-    subtitle: 'Complimentary Wi-Fi & 24-Hour Room Service',
-    category: 'Rooms',
-  },
-  {
-    id: 'gal-arch-15',
-    src: 'https://hotelsatyainternational.com/img/gallery/15.jpg',
-    title: 'Conference & Executive Meeting Setup',
-    subtitle: 'Corporate Seminars & Board Meetings',
-    category: 'Lawn & Events',
-  },
-  {
-    id: 'gal-arch-16',
-    src: 'https://hotelsatyainternational.com/img/gallery/16.jpg',
-    title: 'Sharda Restaurant Dining Hall',
-    subtitle: 'Multi-Cuisine Family & Executive Dining',
-    category: 'Dining',
-  },
-  {
-    id: 'gal-arch-17',
-    src: 'https://hotelsatyainternational.com/img/gallery/17.jpg',
-    title: 'Blue Diamond Lounge Ambience',
-    subtitle: 'Colonial-Inspired Evening Lounge',
-    category: 'Bar',
-  },
-  {
-    id: 'gal-arch-18',
-    src: 'https://hotelsatyainternational.com/img/gallery/18.jpg',
-    title: 'Swimming Pool Deck View',
-    subtitle: 'Outdoor Pool at Hotel Satya International',
-    category: 'Pool',
-  },
-  {
-    id: 'gal-arch-19',
-    src: 'https://hotelsatyainternational.com/img/gallery/19.jpg',
+    id: 'gal-lawn-1',
+    src: imgLawnCelebration1,
     title: 'Open-Air Celebration Lawn (3,000 Guests)',
     subtitle: 'Grand Weddings & Receptions in Waidhan',
     category: 'Lawn & Events',
   },
   {
-    id: 'gal-arch-20',
-    src: 'https://hotelsatyainternational.com/img/gallery/20.jpg',
-    title: 'Banquet & Celebration Setup',
-    subtitle: 'Custom Decor & Sharda Catering',
+    id: 'gal-lawn-2',
+    src: imgLawnCelebration2,
+    title: 'Evening Wedding Arrival & Illuminated Facade',
+    subtitle: 'Bespoke Celebration Setups on Belaunji Main Road',
+    category: 'Lawn & Events',
+  },
+  {
+    id: 'gal-lawn-3',
+    src: imgLawnCelebration3,
+    title: 'Banquet & Reception Stage Setup',
+    subtitle: 'Custom Decor & Sharda Multi-Cuisine Catering',
+    category: 'Lawn & Events',
+  },
+  {
+    id: 'gal-lawn-4',
+    src: imgLawnCelebration4,
+    title: 'Outdoor Lawn Evening Reception',
+    subtitle: 'Accommodates Up to 3,000 Guests',
+    category: 'Lawn & Events',
+  },
+  {
+    id: 'gal-lawn-5',
+    src: imgLawnCelebration5,
+    title: 'Celebration Lawn Mandap & Seating',
+    subtitle: 'Weddings, Ring Ceremonies & Cultural Galas',
+    category: 'Lawn & Events',
+  },
+  {
+    id: 'gal-lawn-6',
+    src: imgLawnCelebration6,
+    title: 'Decorated Event Walkway',
+    subtitle: 'Grand Celebrations at Hotel Satya International',
     category: 'Lawn & Events',
   },
 ];

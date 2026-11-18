@@ -12,7 +12,6 @@ import {
   Users,
   UtensilsCrossed,
   Wine,
-  X,
 } from 'lucide-react';
 import {
   HERO_CAROUSEL_SLIDES,
@@ -82,9 +81,6 @@ export function HeroSection({
 }: HeroSectionProps) {
   const t = UI_TRANSLATIONS[lang];
 
-  // Top announcement bar state
-  const [showAnnouncement, setShowAnnouncement] = useState(true);
-
   // Hero visual slide state
   const [slideIdx, setSlideIdx] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -102,7 +98,7 @@ export function HeroSection({
     if (isPaused) return;
     const timer = window.setInterval(() => {
       setSlideIdx((prev) => (prev + 1) % HERO_CAROUSEL_SLIDES.length);
-    }, 6000);
+    }, 6500);
     return () => window.clearInterval(timer);
   }, [isPaused]);
 
@@ -170,7 +166,7 @@ export function HeroSection({
     });
   };
 
-  // Four Hotel Highlights with authentic property photography
+  // Four Hotel Highlights with verified local property photography
   const hotelHighlights = [
     {
       id: 'rooms-highlight',
@@ -181,7 +177,7 @@ export function HeroSection({
         lang === 'hi'
           ? 'स्टैंडर्ड एसी रूम (₹2,000) से लेकर विशाल रॉयल सुइट (₹9,000) तक, शांत वातावरण, आधुनिक सुविधाओं और EP/CP/MAP/AP मील प्लान के साथ।'
           : 'Seven verified room and suite tiers from Standard A/C Rooms (₹2,000) to our flagship Royal Suite (₹9,000), tailored for corporate and family stays.',
-      image: HERO_CAROUSEL_SLIDES[2].image,
+      image: HERO_CAROUSEL_SLIDES[1].image,
       href: '#rooms',
       cta: lang === 'hi' ? 'सभी रूम देखें' : 'Explore Rooms',
       icon: BedDouble,
@@ -198,7 +194,7 @@ export function HeroSection({
         lang === 'hi'
           ? 'भारतीय, मुगलई, चाइनीज़, कॉन्टिनेंटल, इटालियन और ओरिएंटल व्यंजनों के साथ १००% ओरिजिनल यूरोपियन-टेक्नोलॉजी बेकरी।'
           : 'Savor Indian, Mughlai, Chinese, Continental, Italian, and Oriental delicacies alongside our 100% original European-technology custom bakery.',
-      image: HERO_CAROUSEL_SLIDES[4].image,
+      image: HERO_CAROUSEL_SLIDES[3].image,
       href: '#dining-events',
       cta: lang === 'hi' ? 'डाइनिंग देखें' : 'Discover Dining',
       icon: UtensilsCrossed,
@@ -212,7 +208,7 @@ export function HeroSection({
         lang === 'hi'
           ? 'सुबह 11:00 बजे से रात 11:00 बजे तक आयातित पेय, कॉकटेल्स और मॉकटेल्स का शांत और गरिमापूर्ण माहौल में आनंद लें।'
           : 'Unwind in our colonial-style lounge serving imported spirits, signature cocktails with complimentary snacks, and mocktails from 11:00 AM to 11:00 PM.',
-      image: HERO_CAROUSEL_SLIDES[5].image,
+      image: HERO_CAROUSEL_SLIDES[4].image,
       href: '#dining-events',
       cta: lang === 'hi' ? 'लाउंज देखें' : 'View Lounge Details',
       icon: Wine,
@@ -229,7 +225,7 @@ export function HeroSection({
         lang === 'hi'
           ? '३,००० मेहमानों के ओपन-एयर लॉन, २०० मेहमानों के बैंक्वेट हॉल, पार्टी रूम (४०) और मीटिंग रूम (२०) की सुविधा।'
           : 'Host grand weddings on our 3,000-guest Open-Air Lawn, conferences in our 200-guest Banquet Hall, or meetings in our Party (40) and Meeting Rooms (20).',
-      image: HERO_CAROUSEL_SLIDES[6].image,
+      image: HERO_CAROUSEL_SLIDES[5].image,
       href: '#banquets',
       cta: lang === 'hi' ? 'वेन्यू देखें' : 'Plan an Event',
       icon: Sparkles,
@@ -238,142 +234,134 @@ export function HeroSection({
 
   return (
     <div id="top" className="bg-[#F8F6F0]">
-      {/* Subtle Top Hospitality Strip (Dismissible) */}
-      {showAnnouncement && (
-        <div className="bg-[#183D32] text-[#F8F6F0] border-b border-[#C6A66B]/25 px-4 py-2 text-xs">
-          <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              <span className="font-semibold text-[#C6A66B]">
-                {lang === 'hi' ? 'अतिथि देवो भव:' : 'Atithi Devo Bhava'}
-              </span>
-              <span className="hidden sm:inline text-[#F8F6F0]/40">·</span>
-              <span className="text-[#F8F6F0]/90">{t.announcement}</span>
-            </div>
-            <div className="flex items-center gap-4 shrink-0">
-              <a
-                href={`tel:${HOTEL_INFO.phones[0]}`}
-                onClick={() => trackEvent('call_click', { source: 'announcement_bar' })}
-                className="hidden md:inline-flex items-center gap-1.5 price-tabular font-semibold text-[#C6A66B] hover:underline"
-              >
-                <Phone className="w-3 h-3" />
-                <span>{HOTEL_INFO.phones[0]}</span>
-              </a>
-              <button
-                type="button"
-                onClick={() => setShowAnnouncement(false)}
-                aria-label="Dismiss announcement"
-                className="text-[#F8F6F0]/70 hover:text-white p-0.5 cursor-pointer"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* =====================================================================
-          CINEMATIC HERO SECTION
+          HERO SECTION
           ===================================================================== */}
       <section className="relative bg-[#191D1B] text-[#F8F6F0] overflow-hidden">
         <div
-          className="relative min-h-[600px] lg:min-h-[680px] flex items-center"
+          className="relative min-h-[580px] lg:min-h-[660px] flex items-center"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
+          {/* Authentic Hotel Background Image + Balanced Editorial Overlay */}
           <div className="absolute inset-0 z-0">
             <SafeImage
               src={currentSlide.image}
               alt={`${currentSlide.title} — Hotel Satya International, Waidhan, Singrauli`}
               priority={true}
-              className="w-full h-full object-cover object-center transition-all duration-700 scale-[1.01]"
+              className="w-full h-full object-cover object-center transition-all duration-700"
             />
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(90deg, rgba(25,29,27,0.92) 0%, rgba(25,29,27,0.78) 52%, rgba(25,29,27,0.45) 100%), linear-gradient(180deg, rgba(25,29,27,0.35) 0%, rgba(25,29,27,0.85) 100%)',
+                  'linear-gradient(90deg, rgba(25,29,27,0.90) 0%, rgba(25,29,27,0.70) 48%, rgba(25,29,27,0.24) 100%), linear-gradient(180deg, rgba(25,29,27,0.22) 0%, rgba(25,29,27,0.76) 100%)',
               }}
             />
           </div>
 
           <div className="relative z-10 max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-12 pb-24 lg:py-24">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-              {/* Left 8 Columns: Editorial Typography & Primary CTAs */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+              {/* Left 7 Columns: Location Label, Editorial Heading, Description, CTAs & Trust Strip */}
               <motion.div
-                initial={{ opacity: 0, y: 18 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, ease: 'easeOut' }}
-                className="lg:col-span-8 space-y-6"
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="lg:col-span-7 space-y-6"
               >
-                <div className="inline-flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.22em] text-[#C6A66B] font-semibold">
+                {/* Location Label */}
+                <div className="inline-flex flex-wrap items-center gap-2 text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#C6A66B] font-semibold">
                   <MapPin className="w-3.5 h-3.5 shrink-0" />
-                  <span>
-                    {lang === 'hi'
-                      ? 'होटल सत्या इंटरनेशनल · बेलौंजी मेन रोड, वैढ़न, सिंगरौली (म.प्र.)'
-                      : 'HOTEL SATYA INTERNATIONAL · Main Road, Belaunji, Waidhan, Singrauli'}
-                  </span>
+                  <span>{t.hero.eyebrow}</span>
                 </div>
 
+                {/* Main Hero Heading */}
                 <h1
-                  className="font-display text-white font-medium tracking-tight leading-[1.06] text-balance"
-                  style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}
+                  className="font-display text-white font-medium tracking-tight leading-[1.06] max-w-[15ch]"
+                  style={{ fontSize: 'clamp(2.5rem, 4.8vw, 4.35rem)' }}
                 >
-                  {lang === 'hi'
-                    ? 'जहाँ आराम और उत्कृष्ट आतिथ्य का संगम होता है'
-                    : 'Where Comfort Meets Exceptional Hospitality'}
+                  {t.hero.headline}
                 </h1>
 
-                <p className="text-base sm:text-lg text-[#F8F6F0]/90 max-w-2xl leading-relaxed font-normal">
-                  {lang === 'hi'
-                    ? 'वैढ़न, सिंगरौली के हृदय में एक स्वागतपूर्ण प्रवास, यादगार डाइनिंग और भव्य समारोहों का अनुभव करें — ७ सुइट और रूम श्रेणियों, शारदा रेस्टोरेंट, ब्लू डायमंड बार और स्विमिंग पूल के साथ।'
-                    : 'Discover a welcoming stay, memorable dining, and elegant celebrations in Singrauli’s first classified 3-star luxury hotel, established in 2011 on Waidhan Main Road.'}
+                {/* Concise Hero Description (2 lines max) */}
+                <p className="text-base sm:text-lg text-[#F8F6F0]/90 max-w-xl leading-relaxed font-normal">
+                  {t.hero.subcopy}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-4 pt-2">
+                {/* Primary & Secondary Hero Call-to-Action Buttons */}
+                <div className="flex flex-wrap items-center gap-3.5 sm:gap-4 pt-1">
                   <a
                     href="#rooms"
-                    onClick={() => trackEvent('book_stay_click', { source: 'hero_explore_rooms' })}
-                    className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#C6A66B] hover:bg-[#b59457] text-[#191D1B] text-xs uppercase tracking-[0.16em] font-bold transition-colors shadow-sm"
+                    onClick={() =>
+                      trackEvent('book_stay_click', { source: 'hero_explore_rooms' })
+                    }
+                    className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#C6A66B] hover:bg-[#b59457] text-[#191D1B] text-xs uppercase tracking-[0.16em] font-bold transition-all duration-200 shadow-sm"
                   >
-                    <span>{lang === 'hi' ? 'रूम्स और सुइट्स देखें' : 'Explore Rooms'}</span>
+                    <span>{t.hero.checkRatesBtn}</span>
                     <ArrowRight className="w-4 h-4" />
                   </a>
 
                   <a
                     href="#booking-widget"
-                    onClick={() => trackEvent('book_stay_click', { source: 'hero_book_stay' })}
-                    className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white border border-[#C6A66B]/40 text-xs uppercase tracking-[0.16em] font-semibold transition-colors"
+                    onClick={() =>
+                      trackEvent('book_stay_click', { source: 'hero_book_stay' })
+                    }
+                    className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white border border-white/15 text-xs uppercase tracking-[0.16em] font-semibold transition-all duration-200 shadow-sm"
                   >
                     <Calendar className="w-4 h-4 text-[#C6A66B]" />
-                    <span>{lang === 'hi' ? 'प्रवास बुक करें' : 'Book Your Stay'}</span>
+                    <span>{t.nav.bookStay}</span>
                   </a>
 
                   <a
                     href={`tel:${HOTEL_INFO.phones[0]}`}
                     onClick={() => trackEvent('call_click', { source: 'hero_phone' })}
-                    className="inline-flex items-center gap-2 px-4 py-3.5 text-xs font-semibold text-[#F8F6F0]/90 hover:text-[#C6A66B] transition-colors price-tabular"
+                    className="inline-flex items-center gap-2 px-3 py-3 text-xs font-semibold text-[#F8F6F0]/90 hover:text-[#C6A66B] transition-colors price-tabular"
                   >
                     <Phone className="w-3.5 h-3.5 text-[#C6A66B]" />
-                    <span>24×7 Desk: {HOTEL_INFO.phones[0]}</span>
+                    <span>{HOTEL_INFO.phones[0]}</span>
                   </a>
                 </div>
 
-                {/* Key Factual Highlights Row */}
-                <div className="pt-4 border-t border-white/15 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#F8F6F0]/80">
-                  <span>Est. 2011 · First Classified 3-Star Hotel in Singrauli</span>
-                  <span aria-hidden="true" className="text-[#C6A66B]">·</span>
-                  <span>7 Room & Suite Categories (₹2,000 – ₹9,000)</span>
-                  <span aria-hidden="true" className="text-[#C6A66B]">·</span>
-                  <span>Sharda Restaurant, Custom Bakery & Blue Diamond Bar</span>
+                {/* Hero Trust & Information Strip */}
+                <div className="pt-5 border-t border-white/15 flex flex-wrap items-center gap-x-3.5 gap-y-2 text-xs text-[#F8F6F0]/85 tracking-wide">
+                  <span>
+                    {lang === 'hi'
+                      ? 'स्थापना २०११, वैढ़न'
+                      : 'Est. 2011 in Waidhan'}
+                  </span>
+                  <span aria-hidden="true" className="text-[#C6A66B]">
+                    ·
+                  </span>
+                  <span>
+                    {lang === 'hi'
+                      ? '७ रूम व सुइट श्रेणियां'
+                      : '7 Room & Suite Categories'}
+                  </span>
+                  <span aria-hidden="true" className="text-[#C6A66B]">
+                    ·
+                  </span>
+                  <span>
+                    {lang === 'hi'
+                      ? 'शारदा मल्टी-कुज़ीन रेस्टोरेंट और बेकरी'
+                      : 'Sharda Multi-Cuisine Restaurant & Bakery'}
+                  </span>
+                  <span aria-hidden="true" className="text-[#C6A66B]">
+                    ·
+                  </span>
+                  <span>
+                    {lang === 'hi'
+                      ? 'आउटडोर स्विमिंग पूल और लॉन'
+                      : 'Outdoor Swimming Pool & Lawn'}
+                  </span>
                 </div>
               </motion.div>
 
-              {/* Right 4 Columns: Authentic Property Photo Caption & Slide Switcher */}
-              <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-end">
-                <div className="w-full max-w-sm bg-[#191D1B]/85 backdrop-blur-md border border-white/15 rounded-xl p-4 space-y-3">
+              {/* Right 5 Columns: Hero Property Information Card (With safe spacing so floating buttons never overlap) */}
+              <div className="lg:col-span-5 flex flex-col items-start lg:items-end justify-end">
+                <div className="w-full max-w-md bg-[#191D1B]/82 backdrop-blur-md border border-white/15 rounded-xl p-5 space-y-3.5 shadow-2xl">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[11px] uppercase tracking-[0.16em] text-[#C6A66B] font-semibold">
-                      Authentic Property View · {slideIdx + 1}/{HERO_CAROUSEL_SLIDES.length}
+                    <span className="text-[11px] uppercase tracking-[0.16em] text-[#C6A66B] font-semibold price-tabular">
+                      {currentSlide.badge} · {slideIdx + 1} / {HERO_CAROUSEL_SLIDES.length}
                     </span>
                     <div className="flex items-center gap-1.5">
                       <button
@@ -385,8 +373,8 @@ export function HeroSection({
                               HERO_CAROUSEL_SLIDES.length
                           )
                         }
-                        aria-label="Previous property photograph"
-                        className="w-7 h-7 rounded-md border border-white/20 flex items-center justify-center text-white hover:bg-white/10 cursor-pointer"
+                        aria-label="Previous property view"
+                        className="w-7 h-7 rounded-md border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer"
                       >
                         <ChevronLeft className="w-3.5 h-3.5" />
                       </button>
@@ -395,8 +383,8 @@ export function HeroSection({
                         onClick={() =>
                           setSlideIdx((prev) => (prev + 1) % HERO_CAROUSEL_SLIDES.length)
                         }
-                        aria-label="Next property photograph"
-                        className="w-7 h-7 rounded-md border border-white/20 flex items-center justify-center text-white hover:bg-white/10 cursor-pointer"
+                        aria-label="Next property view"
+                        className="w-7 h-7 rounded-md border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer"
                       >
                         <ChevronRight className="w-3.5 h-3.5" />
                       </button>
@@ -404,28 +392,36 @@ export function HeroSection({
                   </div>
 
                   <div>
-                    <p className="font-display text-lg font-medium text-white leading-snug">
-                      {currentSlide.badge} — {currentSlide.title}
-                    </p>
-                    <p className="text-xs text-[#F8F6F0]/75 mt-1 leading-relaxed">
+                    <h2 className="font-display text-xl font-medium text-white leading-snug">
+                      {currentSlide.title}
+                    </h2>
+                    <p className="text-xs text-[#F8F6F0]/80 mt-1 leading-relaxed">
                       {currentSlide.caption}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-1.5 pt-1">
-                    {HERO_CAROUSEL_SLIDES.map((s, idx) => (
-                      <button
-                        key={s.id}
-                        type="button"
-                        onClick={() => setSlideIdx(idx)}
-                        aria-label={`View ${s.badge} photograph`}
-                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                          idx === slideIdx
-                            ? 'w-6 bg-[#C6A66B]'
-                            : 'w-2 bg-white/30 hover:bg-white/60'
-                        }`}
-                      />
-                    ))}
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="flex items-center gap-1.5">
+                      {HERO_CAROUSEL_SLIDES.map((s, idx) => (
+                        <button
+                          key={s.id}
+                          type="button"
+                          onClick={() => setSlideIdx(idx)}
+                          aria-label={`View ${s.badge}`}
+                          className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                            idx === slideIdx
+                              ? 'w-6 bg-[#C6A66B]'
+                              : 'w-2 bg-white/30 hover:bg-white/60'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <a
+                      href="#gallery"
+                      className="text-[11px] uppercase tracking-[0.14em] text-[#C6A66B] hover:text-white font-semibold transition-colors"
+                    >
+                      {lang === 'hi' ? 'सभी फोटो देखें →' : 'View Gallery →'}
+                    </a>
                   </div>
                 </div>
               </div>
@@ -438,7 +434,7 @@ export function HeroSection({
             =================================================================== */}
         <div
           id="booking-widget"
-          className="relative z-20 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 -mt-12 pb-12 scroll-mt-24"
+          className="relative z-20 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 -mt-10 pb-12 scroll-mt-24"
         >
           <div className="bg-white text-[#191D1B] rounded-xl border border-[#E9E2D5] shadow-xl p-5 sm:p-7">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 mb-5 border-b border-[#E9E2D5]">
@@ -452,7 +448,7 @@ export function HeroSection({
                   {t.sections.bookingTitle}
                 </h2>
               </div>
-              <p className="text-xs text-[#525854]">
+              <p className="text-xs text-[#77756F]">
                 {lang === 'hi'
                   ? 'चयनित रूम और मील प्लान नीचे सभी सेक्शन में स्वतः सिंक होते हैं · चेक-इन 2:00 PM / चेक-आउट 12:00 PM'
                   : 'Selections synchronize with our room tariff table below · Check-in 2:00 PM / Check-out 12:00 PM'}
@@ -465,7 +461,7 @@ export function HeroSection({
                 <div>
                   <label
                     htmlFor="widget-checkin"
-                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#525854] mb-1.5"
+                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#77756F] mb-1.5"
                   >
                     {lang === 'hi' ? 'चेक-इन तारीख' : 'Check-In Date'}
                   </label>
@@ -484,7 +480,7 @@ export function HeroSection({
                 <div>
                   <label
                     htmlFor="widget-checkout"
-                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#525854] mb-1.5"
+                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#77756F] mb-1.5"
                   >
                     {lang === 'hi' ? 'चेक-आउट तारीख' : 'Check-Out Date'}
                   </label>
@@ -503,7 +499,7 @@ export function HeroSection({
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="widget-room-category"
-                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#525854] mb-1.5"
+                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#77756F] mb-1.5"
                   >
                     {lang === 'hi' ? 'रूम / सुइट श्रेणी' : 'Room Category'}
                   </label>
@@ -525,7 +521,7 @@ export function HeroSection({
                 <div>
                   <label
                     htmlFor="widget-occupancy"
-                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#525854] mb-1.5"
+                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#77756F] mb-1.5"
                   >
                     {lang === 'hi' ? 'ऑक्यूपेंसी और रूम' : 'Occupancy & Rooms'}
                   </label>
@@ -559,7 +555,7 @@ export function HeroSection({
                 <div>
                   <label
                     htmlFor="widget-mealplan"
-                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#525854] mb-1.5"
+                    className="block text-[11px] uppercase tracking-[0.12em] font-bold text-[#77756F] mb-1.5"
                   >
                     {lang === 'hi' ? 'मील प्लान' : 'Meal Plan'}
                   </label>
@@ -586,7 +582,7 @@ export function HeroSection({
 
               {/* Bottom Bar: Guests + Published Room Tariff + Request Booking Button */}
               <div className="pt-3 border-t border-[#E9E2D5] flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div className="flex flex-wrap items-center gap-4 text-xs text-[#525854]">
+                <div className="flex flex-wrap items-center gap-4 text-xs text-[#77756F]">
                   <div className="inline-flex items-center gap-2">
                     <Users className="w-3.5 h-3.5 text-[#183D32]" />
                     <label htmlFor="widget-adults" className="font-semibold text-[#191D1B]">
@@ -638,12 +634,12 @@ export function HeroSection({
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="text-left sm:text-right">
                     <div className="flex items-baseline sm:justify-end gap-1.5">
-                      <span className="text-xs text-[#525854]">Published Room Tariff:</span>
+                      <span className="text-xs text-[#77756F]">Published Room Tariff:</span>
                       <span className="price-tabular text-xl sm:text-2xl font-bold text-[#191D1B]">
                         ₹{baseRoomTotal.toLocaleString('en-IN')}
                       </span>
                     </div>
-                    <p className="text-[11px] text-[#525854] price-tabular">
+                    <p className="text-[11px] text-[#77756F] price-tabular">
                       {nights} {nights === 1 ? 'Night' : 'Nights'} × {roomsCount}{' '}
                       {roomsCount === 1 ? 'Room' : 'Rooms'} ({occupancy} · ₹
                       {perNightRate.toLocaleString('en-IN')}/night + applicable taxes · {mealPlan} Plan)
@@ -684,7 +680,7 @@ export function HeroSection({
                   : 'Designed for Business Stays, Fine Dining & Grand Celebrations'}
               </h2>
             </div>
-            <p className="text-sm text-[#525854] max-w-md leading-relaxed">
+            <p className="text-sm text-[#77756F] max-w-md leading-relaxed">
               {lang === 'hi'
                 ? 'बेलौंजी मेन रोड, वैढ़न पर स्थित हमारा परिसर सिंगरौली के औद्योगिक और पारिवारिक मेहमानों के लिए सभी आधुनिक सुविधाएं प्रदान करता है।'
                 : 'Located on Belaunji Main Road in Waidhan, our property brings together comfortable suites, multi-cuisine dining, a colonial lounge bar, and expansive celebration venues.'}
@@ -719,7 +715,7 @@ export function HeroSection({
                       <h3 className="font-display text-2xl font-semibold text-[#191D1B] leading-snug">
                         {item.title}
                       </h3>
-                      <p className="text-xs sm:text-sm text-[#525854] leading-relaxed">
+                      <p className="text-xs sm:text-sm text-[#77756F] leading-relaxed">
                         {item.description}
                       </p>
                     </div>
