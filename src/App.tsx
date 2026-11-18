@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FirebaseProvider } from './contexts/FirebaseContext';
 import { Header } from './components/Header';
@@ -18,6 +18,7 @@ import { LocationMapSection } from './components/LocationMapSection';
 import { SeoAeoSection } from './components/SeoAeoSection';
 import { Footer } from './components/Footer';
 import {
+  OpeningWelcomeCurtain,
   sectionChildSpringVariants,
   sectionContainerSpringVariants,
 } from './components/MotionPrimitives';
@@ -30,19 +31,15 @@ import {
 
 interface SectionRevealWrapperProps {
   children: React.ReactNode;
-  shouldReduceMotion: boolean | null;
 }
 
-function SectionRevealWrapper({
-  children,
-  shouldReduceMotion,
-}: SectionRevealWrapperProps) {
+function SectionRevealWrapper({ children }: SectionRevealWrapperProps) {
   return (
     <motion.div
       variants={sectionContainerSpringVariants}
-      initial={shouldReduceMotion ? 'visible' : 'hidden'}
+      initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.08, margin: '0px 0px -48px 0px' }}
+      viewport={{ once: false, amount: 0.07, margin: '0px 0px -48px 0px' }}
     >
       {React.Children.map(children, (child, index) => (
         <motion.div key={index} variants={sectionChildSpringVariants}>
@@ -54,8 +51,6 @@ function SectionRevealWrapper({
 }
 
 export default function App() {
-  const shouldReduceMotion = useReducedMotion();
-
   // Bilingual Toggle State ('en' | 'hi')
   const [lang, setLang] = useState<Language>('en');
 
@@ -85,6 +80,9 @@ export default function App() {
     <ErrorBoundary>
       <FirebaseProvider>
         <div className="min-h-screen bg-[#F8F6F0] text-[#191D1B] flex flex-col selection:bg-[#183D32] selection:text-[#F8F6F0]">
+          {/* Luxury Opening Crest & Curtain Reveal on Page Start */}
+          <OpeningWelcomeCurtain />
+
           {/* Sticky Header with Active Scroll Tracking & Language Switcher */}
           <Header
             lang={lang}
@@ -107,7 +105,7 @@ export default function App() {
             />
 
             {/* Rooms & Suites (#rooms) — 7 Verified Room Categories + Compare Drawer + Booking Request Modal */}
-            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+            <SectionRevealWrapper>
               <RoomsAndBookingSection
                 lang={lang}
                 selectedRoomId={selectedRoomId}
@@ -122,32 +120,32 @@ export default function App() {
             </SectionRevealWrapper>
 
             {/* Dining (#dining-events: Sharda Restaurant & Blue Diamond Bar) + Banquets & Events (#banquets) */}
-            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+            <SectionRevealWrapper>
               <DiningAndEventsSection lang={lang} />
             </SectionRevealWrapper>
 
             {/* Facilities (#facilities) + Corporate (#corporate) + About Us & Leadership (#about) */}
-            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+            <SectionRevealWrapper>
               <HeritageAndLeadershipSection lang={lang} />
             </SectionRevealWrapper>
 
             {/* Filterable Authentic Photo Gallery (#gallery) + Lightbox */}
-            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+            <SectionRevealWrapper>
               <GallerySection lang={lang} />
             </SectionRevealWrapper>
 
             {/* Verified Guest Reviews & Google Maps Portal (#reviews) */}
-            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+            <SectionRevealWrapper>
               <ReviewsDashboardSection lang={lang} />
             </SectionRevealWrapper>
 
             {/* Interactive Location Map & Verified Corridor Distance Matrix (#location) */}
-            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+            <SectionRevealWrapper>
               <LocationMapSection lang={lang} />
             </SectionRevealWrapper>
 
             {/* Guest Policies & Frequently Asked Questions Accordion (#policies-faq) */}
-            <SectionRevealWrapper shouldReduceMotion={shouldReduceMotion}>
+            <SectionRevealWrapper>
               <SeoAeoSection lang={lang} />
             </SectionRevealWrapper>
           </main>

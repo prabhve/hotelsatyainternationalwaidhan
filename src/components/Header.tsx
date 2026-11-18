@@ -107,12 +107,14 @@ export function Header({ lang, onToggleLang, onBookStay }: HeaderProps) {
 
   return (
     <>
-      <ScrollProgressBar />
-      <header
-        className={`sticky top-0 z-40 transition-all duration-300 ${
+      <motion.header
+        initial={{ y: -44, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.75, delay: 0.4, ease: LUXURY_EASE }}
+        className={`sticky top-0 z-40 transition-colors duration-300 ${
           scrolled
-            ? 'bg-[#F8F6F0]/95 backdrop-blur-md shadow-[0_6px_24px_rgba(25,29,27,0.08)] border-b border-[#E9E2D5]'
-            : 'bg-[#F8F6F0] border-b border-[#E9E2D5]'
+            ? 'bg-[#F8F6F0]/95 backdrop-blur-md shadow-[0_6px_24px_rgba(25,29,27,0.08)]'
+            : 'bg-[#F8F6F0]'
         }`}
       >
         {/* Top Announcement Bar (Hidden on very small mobile screens to avoid clutter, dismissible with smooth animation) */}
@@ -311,14 +313,14 @@ export function Header({ lang, onToggleLang, onBookStay }: HeaderProps) {
               {/* Primary CTA Button: BOOK YOUR STAY */}
               <motion.button
                 type="button"
-                whileHover={{ y: -1 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.16, ease: LUXURY_EASE }}
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.18, ease: LUXURY_EASE }}
                 onClick={() => {
                   trackEvent('book_stay_click', { location: 'header_desktop' });
                   onBookStay();
                 }}
-                className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.14em] font-semibold transition-colors shadow-xs hover:shadow-md cursor-pointer whitespace-nowrap shrink-0"
+                className="btn-gold-sheen hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.14em] font-semibold transition-colors shadow-xs hover:shadow-md cursor-pointer whitespace-nowrap shrink-0"
               >
                 <Calendar className="w-3.5 h-3.5 text-[#C6A66B]" />
                 <span>{t.nav.bookStay}</span>
@@ -337,6 +339,9 @@ export function Header({ lang, onToggleLang, onBookStay }: HeaderProps) {
             </div>
           </div>
         </div>
+
+        {/* Subtle Scroll Progress Indicator Bar Directly Beneath Sticky Header */}
+        <ScrollProgressBar />
 
         {/* Mobile Navigation Drawer */}
         <AnimatePresence>
@@ -434,7 +439,7 @@ export function Header({ lang, onToggleLang, onBookStay }: HeaderProps) {
             </motion.div>
           )}
         </AnimatePresence>
-      </header>
+      </motion.header>
     </>
   );
 }

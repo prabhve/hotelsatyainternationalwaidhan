@@ -23,7 +23,7 @@ import {
 import { useFirebase } from '../contexts/FirebaseContext';
 import { buildMailtoUrl, buildWhatsAppUrl, trackEvent } from '../lib/analytics';
 import { SafeImage } from './SafeImage';
-import { LUXURY_EASE, Reveal } from './MotionPrimitives';
+import { LUXURY_EASE, LUXURY_SPRING, Reveal } from './MotionPrimitives';
 
 interface DiningAndEventsSectionProps {
   lang: Language;
@@ -33,7 +33,6 @@ const MENU_TABS = Object.keys(SHARDA_CULINARY_SPECIALTIES);
 
 export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
   const { user, createInquiry, inquiries } = useFirebase();
-  const shouldReduceMotion = useReducedMotion();
   const t = UI_TRANSLATIONS[lang];
 
   // Dining State: Tabbed Culinary Showcase & Reserve Table / Custom Cake Form
@@ -144,10 +143,10 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
           ===================================================================== */}
       <motion.section
         id="dining-events"
-        initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 38 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.08 }}
-        transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: LUXURY_EASE }}
+        viewport={{ once: false, amount: 0.08 }}
+        transition={LUXURY_SPRING}
         className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#EFECE4] scroll-mt-16"
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -453,10 +452,10 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
           ===================================================================== */}
       <motion.section
         id="banquets"
-        initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 38 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.08 }}
-        transition={{ duration: shouldReduceMotion ? 0 : 0.65, ease: LUXURY_EASE }}
+        viewport={{ once: false, amount: 0.08 }}
+        transition={LUXURY_SPRING}
         className="py-16 sm:py-24 border-b border-[#E9E2D5] bg-[#F8F6F0] scroll-mt-16"
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -483,13 +482,13 @@ export function DiningAndEventsSection({ lang }: DiningAndEventsSectionProps) {
               return (
                 <motion.article
                   key={v.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.1 }}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.45, delay: idx * 0.06, ease: LUXURY_EASE }}
+                  initial={{ opacity: 0, y: 36, scale: 0.96 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: false, amount: 0.1 }}
+                  whileHover={{ y: -7, scale: 1.015 }}
+                  transition={{ ...LUXURY_SPRING, delay: idx * 0.07 }}
                   onClick={() => setVenue(v.name)}
-                  className={`cursor-pointer bg-white border rounded-2xl overflow-hidden flex flex-col justify-between transition-colors ${
+                  className={`cursor-pointer bg-white border rounded-2xl overflow-hidden flex flex-col justify-between transition-colors shadow-xs hover:shadow-lg ${
                     isSelected
                       ? 'border-[#183D32] ring-1 ring-[#183D32]'
                       : 'border-[#E9E2D5] hover:border-[#C6A66B]'

@@ -61,14 +61,35 @@
   background: #183D32;
 }
 
-/* Accessibility: Respect reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+/* Luxury Golden Sheen & Ambient Micro-Animations */
+@keyframes goldSheenSweep {
+  0% {
+    transform: translateX(-130%) skewX(-18deg);
   }
+  45%, 100% {
+    transform: translateX(220%) skewX(-18deg);
+  }
+}
+
+.btn-gold-sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gold-sheen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 42%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  transform: translateX(-130%) skewX(-18deg);
+  animation: goldSheenSweep 5.5s ease-in-out infinite;
+  pointer-events: none;
 }

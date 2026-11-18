@@ -28,7 +28,7 @@ import { useFirebase } from '../contexts/FirebaseContext';
 import { buildMailtoUrl, buildWhatsAppUrl, trackEvent } from '../lib/analytics';
 import { QuickSearchParams } from './HeroSection';
 import { SafeImage } from './SafeImage';
-import { LUXURY_EASE, Reveal } from './MotionPrimitives';
+import { LUXURY_EASE, LUXURY_SPRING, Reveal } from './MotionPrimitives';
 
 interface RoomsAndBookingSectionProps {
   lang: Language;
@@ -580,7 +580,7 @@ export function RoomsAndBookingSection({
                   <button
                     type="button"
                     onClick={() => openModalForRoom(spotlightRoom)}
-                    className="px-6 py-3.5 bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.14em] font-semibold rounded-xl shadow-xs transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    className="btn-gold-sheen px-6 py-3.5 bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.14em] font-semibold rounded-xl shadow-xs transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     Request Booking ({occupancy} · {mealPlan})
                   </button>
@@ -690,12 +690,12 @@ export function RoomsAndBookingSection({
               <motion.article
                 key={room.id}
                 layout
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.1 }}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.45, delay: idx * 0.05, ease: LUXURY_EASE }}
-                className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition-colors"
+                initial={{ opacity: 0, y: 36, scale: 0.96 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: false, amount: 0.1 }}
+                whileHover={{ y: -7, scale: 1.015 }}
+                transition={{ ...LUXURY_SPRING, delay: idx * 0.06 }}
+                className="bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-lg transition-colors"
               >
                 <div>
                   {/* Room Image Slider */}

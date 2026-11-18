@@ -34,6 +34,7 @@ import { trackEvent } from '../lib/analytics';
 import { SafeImage } from './SafeImage';
 import {
   LUXURY_EASE,
+  LUXURY_SPRING,
   Reveal,
   staggerContainerVariants,
   staggerItemVariants,
@@ -104,12 +105,12 @@ export function HeroSection({
   const backgroundParallaxY = useTransform(
     scrollYProgress,
     [0, 1],
-    shouldReduceMotion ? ['0%', '0%'] : ['0%', '14%']
+    ['0%', '16%']
   );
   const backgroundParallaxScale = useTransform(
     scrollYProgress,
     [0, 1],
-    shouldReduceMotion ? [1, 1] : [1, 1.06]
+    [1, 1.08]
   );
 
   // Hero visual slide state
@@ -150,27 +151,50 @@ export function HeroSection({
       ? ['आरामदायक प्रवास।', 'उत्कृष्ट भोजन।', 'भव्य उत्सव।']
       : ['Stay Comfortably.', 'Dine Well.', 'Celebrate Here.'];
 
-  const headlineStaggerVariants: Variants = {
-    hidden: { opacity: shouldReduceMotion ? 1 : 0 },
+  const heroLeftContainerVariants: Variants = {
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: shouldReduceMotion ? 0 : 0.14,
-        delayChildren: shouldReduceMotion ? 0 : 0.08,
+        staggerChildren: 0.18,
+        delayChildren: 0.52,
+      },
+    },
+  };
+
+  const heroLeftItemVariants: Variants = {
+    hidden: { opacity: 0, y: 36, scale: 0.97 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: LUXURY_SPRING,
+    },
+  };
+
+  const headlineStaggerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.22,
+        delayChildren: 0.58,
       },
     },
   };
 
   const headlineWordVariants: Variants = {
-    hidden: shouldReduceMotion
-      ? { opacity: 1, y: 0 }
-      : { opacity: 0, y: 22 },
+    hidden: { opacity: 0, y: 46, scale: 0.94 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: shouldReduceMotion
-        ? { duration: 0 }
-        : { duration: 0.65, ease: LUXURY_EASE },
+      scale: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 72,
+        damping: 17,
+        mass: 0.9,
+      },
     },
   };
 
@@ -318,19 +342,13 @@ export function HeroSection({
             <AnimatePresence mode="popLayout">
               <motion.div
                 key={currentSlide.id}
-                initial={
-                  shouldReduceMotion ? { opacity: 1 } : { opacity: 0, scale: 1.04 }
-                }
+                initial={{ opacity: 0, scale: 1.14 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0 }}
-                transition={
-                  shouldReduceMotion
-                    ? { duration: 0 }
-                    : {
-                        opacity: { duration: 0.85, ease: LUXURY_EASE },
-                        scale: { duration: 6.5, ease: 'linear' },
-                      }
-                }
+                exit={{ opacity: 0 }}
+                transition={{
+                  opacity: { duration: 0.95, ease: LUXURY_EASE },
+                  scale: { duration: 6.5, ease: 'easeOut' },
+                }}
                 className="absolute inset-0 w-full h-full"
               >
                 <SafeImage
@@ -354,16 +372,22 @@ export function HeroSection({
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
               {/* Left 7 Columns: Location Label, Staggered Headline Phrases, Description, CTAs & Trust Strip */}
               <motion.div
-                variants={staggerContainerVariants}
-                initial={shouldReduceMotion ? 'visible' : 'hidden'}
+                variants={heroLeftContainerVariants}
+                initial="hidden"
                 animate="visible"
                 className="lg:col-span-7 space-y-6"
               >
                 {/* Location Label */}
                 <motion.div
-                  variants={staggerItemVariants}
-                  className="inline-flex flex-wrap items-center gap-2 text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#C6A66B] font-semibold"
+                  variants={heroLeftItemVariants}
+                  className="inline-flex flex-wrap items-center gap-2.5 text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#C6A66B] font-semibold"
                 >
+                  <motion.span
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.7, delay: 0.65, ease: LUXURY_EASE }}
+                    className="hidden sm:inline-block w-8 h-[1.5px] bg-[#C6A66B] origin-left"
+                  />
                   <MapPin className="w-3.5 h-3.5 shrink-0" />
                   <span>{t.hero.eyebrow}</span>
                 </motion.div>
@@ -372,7 +396,7 @@ export function HeroSection({
                 <motion.h1
                   key={lang}
                   variants={headlineStaggerVariants}
-                  initial={shouldReduceMotion ? 'visible' : 'hidden'}
+                  initial="hidden"
                   animate="visible"
                   aria-label={t.hero.headline}
                   className="font-display text-white font-medium tracking-tight leading-[1.06] max-w-[15ch] text-balance"
@@ -392,7 +416,7 @@ export function HeroSection({
 
                 {/* Concise Hero Description (2 lines max) */}
                 <motion.p
-                  variants={staggerItemVariants}
+                  variants={heroLeftItemVariants}
                   className="text-base sm:text-lg text-[#F8F6F0]/90 max-w-xl leading-relaxed font-normal"
                 >
                   {t.hero.subcopy}
@@ -400,18 +424,18 @@ export function HeroSection({
 
                 {/* Primary & Secondary Hero Call-to-Action Buttons */}
                 <motion.div
-                  variants={staggerItemVariants}
+                  variants={heroLeftItemVariants}
                   className="flex flex-wrap items-center gap-3.5 sm:gap-4 pt-1"
                 >
                   <motion.a
                     href="#rooms"
-                    whileHover={shouldReduceMotion ? undefined : { y: -2 }}
-                    whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-                    transition={{ duration: 0.18, ease: LUXURY_EASE }}
+                    whileHover={{ y: -3, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={LUXURY_SPRING}
                     onClick={() =>
                       trackEvent('book_stay_click', { source: 'hero_explore_rooms' })
                     }
-                    className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#C6A66B] hover:bg-[#b59457] text-[#191D1B] text-xs uppercase tracking-[0.16em] font-bold transition-colors shadow-sm whitespace-nowrap shrink-0"
+                    className="btn-gold-sheen inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#C6A66B] hover:bg-[#b59457] text-[#191D1B] text-xs uppercase tracking-[0.16em] font-bold transition-colors shadow-sm whitespace-nowrap shrink-0"
                   >
                     <span>{t.hero.checkRatesBtn}</span>
                     <ArrowRight className="w-4 h-4" />
@@ -419,13 +443,13 @@ export function HeroSection({
 
                   <motion.a
                     href="#booking-widget"
-                    whileHover={shouldReduceMotion ? undefined : { y: -2 }}
-                    whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-                    transition={{ duration: 0.18, ease: LUXURY_EASE }}
+                    whileHover={{ y: -3, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={LUXURY_SPRING}
                     onClick={() =>
                       trackEvent('book_stay_click', { source: 'hero_book_stay' })
                     }
-                    className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white border border-white/15 text-xs uppercase tracking-[0.16em] font-semibold transition-colors shadow-sm whitespace-nowrap shrink-0"
+                    className="btn-gold-sheen inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white border border-white/15 text-xs uppercase tracking-[0.16em] font-semibold transition-colors shadow-sm whitespace-nowrap shrink-0"
                   >
                     <Calendar className="w-4 h-4 text-[#C6A66B]" />
                     <span>{t.nav.bookStay}</span>
@@ -443,7 +467,7 @@ export function HeroSection({
 
                 {/* Hero Trust & Information Strip */}
                 <motion.div
-                  variants={staggerItemVariants}
+                  variants={heroLeftItemVariants}
                   className="pt-5 border-t border-white/15 flex flex-wrap items-center gap-x-3.5 gap-y-2 text-xs text-[#F8F6F0]/85 tracking-wide"
                 >
                   <span>
@@ -480,13 +504,12 @@ export function HeroSection({
 
               {/* Right 5 Columns: Hero Property Information Card */}
               <motion.div
-                initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={
-                  shouldReduceMotion
-                    ? { duration: 0 }
-                    : { duration: 0.65, delay: 0.2, ease: LUXURY_EASE }
-                }
+                initial={{ opacity: 0, x: 44, y: 24, scale: 0.94 }}
+                animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+                transition={{
+                  ...LUXURY_SPRING,
+                  delay: 0.72,
+                }}
                 className="lg:col-span-5 flex flex-col items-start lg:items-end justify-end"
               >
                 <div className="w-full max-w-md bg-[#191D1B]/82 backdrop-blur-md border border-white/15 rounded-xl p-5 space-y-3.5 shadow-2xl">
@@ -575,11 +598,14 @@ export function HeroSection({
         {/* ===================================================================
             INTEGRATED BOOKING SEARCH INTERFACE (#booking-widget)
             =================================================================== */}
-        <div
+        <motion.div
           id="booking-widget"
+          initial={{ opacity: 0, y: 48, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ ...LUXURY_SPRING, delay: 0.82 }}
           className="relative z-20 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 -mt-10 pb-12 scroll-mt-24"
         >
-          <Reveal y={26} delay={0.1}>
+          <div>
             <div className="bg-white text-[#191D1B] rounded-xl border border-[#E9E2D5] shadow-xl p-5 sm:p-7">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 mb-5 border-b border-[#E9E2D5]">
                 <div>
@@ -792,10 +818,10 @@ export function HeroSection({
 
                     <motion.button
                       type="submit"
-                      whileHover={shouldReduceMotion ? undefined : { y: -1 }}
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-                      transition={{ duration: 0.16, ease: LUXURY_EASE }}
-                      className="px-6 py-3.5 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.15em] font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-xs"
+                      whileHover={{ y: -2, scale: 1.02 }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={LUXURY_SPRING}
+                      className="btn-gold-sheen px-6 py-3.5 rounded-lg bg-[#183D32] hover:bg-[#122E25] text-white text-xs uppercase tracking-[0.15em] font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-xs"
                     >
                       {lang === 'hi' ? 'बुकिंग अनुरोध भेजें' : 'Proceed to Booking Request'}
                     </motion.button>
@@ -803,8 +829,8 @@ export function HeroSection({
                 </div>
               </form>
             </div>
-          </Reveal>
-        </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* =====================================================================
@@ -839,9 +865,9 @@ export function HeroSection({
 
           <motion.div
             variants={staggerContainerVariants}
-            initial={shouldReduceMotion ? 'visible' : 'hidden'}
+            initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.12 }}
+            viewport={{ once: false, amount: 0.12 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {hotelHighlights.map((item) => {
@@ -850,9 +876,9 @@ export function HeroSection({
                 <motion.article
                   key={item.id}
                   variants={staggerItemVariants}
-                  whileHover={shouldReduceMotion ? undefined : { y: -5 }}
-                  transition={{ duration: 0.25, ease: LUXURY_EASE }}
-                  className="group bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-xl overflow-hidden flex flex-col justify-between transition-colors shadow-2xs hover:shadow-md"
+                  whileHover={{ y: -8, scale: 1.015 }}
+                  transition={LUXURY_SPRING}
+                  className="group bg-white border border-[#E9E2D5] hover:border-[#C6A66B] rounded-xl overflow-hidden flex flex-col justify-between transition-colors shadow-2xs hover:shadow-lg"
                 >
                   <div>
                     <div className="aspect-[16/10] w-full bg-[#EFECE4] overflow-hidden relative">
